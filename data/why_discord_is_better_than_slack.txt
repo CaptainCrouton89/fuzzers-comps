@@ -1,2 +1,5 @@
 - Easy integration with github
+- Free
+- Role assignment for selective announcements
+- Advanced permissions assignment
 - 
