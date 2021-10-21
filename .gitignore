@@ -133,3 +133,6 @@ dmypy.json
 
 # encodings
 embedding/
+
+# network_saves
+*.tar
