@@ -1,0 +1,2237 @@
+{
+    "columns": [
+        "appName",
+        "userName",
+        "content",
+        "score",
+        "thumbsUpCount",
+        "replyContent"
+    ],
+    "index": [
+        41,
+        42,
+        43,
+        45,
+        46,
+        49,
+        50,
+        53,
+        55,
+        56,
+        61,
+        70,
+        79,
+        82,
+        86,
+        87,
+        90,
+        91,
+        97,
+        102,
+        107,
+        110,
+        111,
+        125,
+        138,
+        192,
+        200,
+        204,
+        209,
+        218,
+        223,
+        233,
+        261,
+        263,
+        275,
+        287,
+        303,
+        312,
+        316,
+        317,
+        318,
+        325,
+        332,
+        334,
+        335,
+        336,
+        337,
+        339,
+        341,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353,
+        354,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        361,
+        362,
+        363,
+        364,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        373,
+        374,
+        375,
+        376,
+        377,
+        378,
+        379,
+        380,
+        381,
+        382,
+        383,
+        384,
+        385,
+        386,
+        387,
+        388,
+        389,
+        390,
+        391,
+        392,
+        393,
+        394,
+        395,
+        396,
+        397,
+        398,
+        399,
+        400,
+        401,
+        402,
+        403,
+        404,
+        405,
+        406,
+        407,
+        408,
+        409,
+        410,
+        411,
+        412,
+        413,
+        414,
+        415,
+        416,
+        417,
+        418,
+        419,
+        420,
+        421,
+        422,
+        423,
+        424,
+        425,
+        426,
+        427,
+        428,
+        429,
+        430,
+        431,
+        432,
+        434,
+        436,
+        437,
+        438,
+        439,
+        440,
+        441,
+        442,
+        443,
+        444,
+        445,
+        446,
+        447,
+        448,
+        449,
+        450,
+        451,
+        452,
+        453,
+        454,
+        455,
+        456,
+        457,
+        458,
+        459,
+        460,
+        461,
+        462,
+        463,
+        464,
+        465,
+        466,
+        467,
+        468,
+        469,
+        470,
+        471,
+        472,
+        473,
+        474,
+        475,
+        476,
+        477,
+        478,
+        479,
+        480,
+        481,
+        482,
+        483,
+        484,
+        485,
+        486,
+        488,
+        489,
+        490,
+        491,
+        493,
+        494,
+        495,
+        496,
+        497,
+        498,
+        499,
+        500,
+        501,
+        502,
+        503,
+        504,
+        505,
+        506,
+        507,
+        508,
+        509,
+        510,
+        511,
+        512,
+        514,
+        515,
+        516,
+        517,
+        518,
+        519,
+        520,
+        521,
+        522,
+        523,
+        524,
+        525,
+        526,
+        527,
+        528,
+        529,
+        530,
+        531,
+        532,
+        533,
+        534,
+        535,
+        536,
+        537,
+        538,
+        539,
+        541,
+        542,
+        543,
+        546,
+        547,
+        548,
+        549
+    ],
+    "data": [
+        [
+            "busuu: learn english",
+            "shayan talha",
+            "before i gave one start but after raising a ticket the forgot password button worked and i was able to learn english it is amazing sorry musuu for giving you a bad review in the past but it is very super app for learning english and grammar must install",
+            5,
+            16,
+            "hi shayan! this is quite unusual if you haven't already can you please make sure you get in touch with us at team@busuu.com so we can look into this for you many thanks team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "maria elena allegue cruces",
+            "excelent aplicacion para recorder y mejorar tu novel de inglese puedes marcar las palabra nueva y repasarlas las veces que quieras. adamas de vocabulario ensena a construire frases,gramatica, writing y listening los anuncio son facile de controlar o se basin en tue preferencias personals.ademas en ultimo caso puedes pagar para que the los retiren(pero no es necesario:son facile de dominar).",
+            5,
+            0,
+            "hola maria nos allegra ver que estas disfrutando mientras aprendes con busuu. buena suerte con tu futuro aprendizaje! equipo de musuu"
+        ],
+        [
+            "busuu: learn english",
+            "rohan malhotra",
+            "good app but lower the price subscription is insanely expensive for indians",
+            3,
+            13,
+            "hi rohan thank you for your feedback your comment has been forwarded to the relevant department although we cannot guarantee that such changes will be made immediately but rest assured your opinion will be taken into account if you have further suggestions feel free to contact us at team@busuu.com. many thanks musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "ismail skoreb ahana",
+            "amazing application",
+            4,
+            0,
+            "hi ismail we're happy to see that you're enjoying learning with busuu. good luck with your further studies all the best musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "anisha",
+            "nice app",
+            2,
+            0,
+            "his we're happy to see that you're enjoying learning with busuu. good luck with your further studies all the best musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "rebeca fernandes",
+            "i like",
+            3,
+            0,
+            "hi rebeca we're happy to see that you're enjoying learning with busuu. good luck with your further studies all the best musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "rachel scott",
+            "looking for another appro learn scots gaelic besides duolingo but not many good apps offer it maybe if you add it i'll be back",
+            3,
+            0,
+            "hi rachel sorry we don't teach scottish gaelic at the moment we've made a note of your request and will share it with the team thank you team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "davoud fazaeli",
+            "i forgot my password and when i want to reset my password , it shows that they sent me the link but nothing happen i have tried many time without any result?!@!",
+            1,
+            27,
+            "his we are really keen to assist you could you please make sure to get in contact with us at team@busuu.com? many thanks team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "arwa kishk",
+            "a best app really much is wanted to me to do another account because i want because i do one account and i use it is the word with app how to learni'm from america in they're making me not how to learn british where's app \ud83d\ude20\ud83d\ude20\ud83d\ude20\ud83d\ude20\ud83e\udd2c\ud83e\udd2c",
+            1,
+            0,
+            "we teach english in multiple accents it allows you to understand even more i"
+        ],
+        [
+            "busuu: learn english",
+            "muhammad dawood",
+            "this is good app for learning of english",
+            1,
+            0,
+            "5 i"
+        ],
+        [
+            "busuu: learn english",
+            "neil murray",
+            "bad the email address is not recognised for any queries or problems once you have paid an annual feel",
+            1,
+            0,
+            "hi there this is quite unusual if you haven't already can you please make sure you get in touch with us at team@busuu.com so we can look into this for you many thanks team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "guadalupe paez",
+            "me cargo todo menos la estrada principal para comenzar a aprender.",
+            1,
+            0,
+            "hola guadalupe sentimos or estoy te aconsejamos que reinstates la app si el problema persisted estamos a tu disposici\u00f3n por email en team@busuu.com. un cordial salud - el equipo musuu"
+        ],
+        [
+            "busuu: learn english",
+            "gehhad anwer",
+            "it's really a good app but i can't found dutch language to learn it",
+            2,
+            0,
+            "hi there sorry we don't teach dutch at the moment we've made a note of your request and will share it with the team thank you team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "danger scout",
+            "i like this app",
+            2,
+            0,
+            "hi mehran, thank you for your review we would appreciate it if you could update your review if you are already satisfied with the app :) please remember that you can always contact us at team@busuu.com if you have any recommendations many thanks musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "andr\u00e9 baconcelo",
+            "i think the app could be a little bit more optimized but i found your learning method very good",
+            4,
+            35,
+            "thank you for the great feedback and enjoy using our app musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "rajani sharma",
+            "i love this app.it is very helpful...",
+            4,
+            0,
+            "thank you for the great feedback and enjoy using our app musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "jul",
+            "good app i'm improving my english b2, there we got",
+            4,
+            0,
+            "thank you for the great feedback and enjoy using our app musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "ne\u015fe \u015fahin",
+            "uygulamada arkada\u015f\u0131nla payla\u015ft\u0131\u011f\u0131mda ve kabul etti\u011finde hem arkada\u015f\u0131ma hem de bana 30 g\u00fcnl\u00fck \u00fccretsiz deneme hakka tamamlanaca\u011f\u0131n\u0131 bildiriliyor fakt ben ve arkada\u015f\u0131m yapt\u0131\u011f\u0131m\u0131zda ikimize de bu deneme hakka tanimlanmadi.neden?",
+            3,
+            0,
+            "merhaba ne\u015fe, de\u011ferli yorumunuz iin te\u015fekk\u00fcr ederiz. size data ii yard\u0131mc\u0131 olabilmemiz ad\u0131na team@busuu.com adresinden size ula\u015fman\u0131z\u0131 bekliyor olaca\u011f\u0131z. musuu ekibi"
+        ],
+        [
+            "busuu: learn english",
+            "mostafa helal",
+            "there is offer in the app it says - if i invite 1 friend i will get 1 month premium plus - when i did it and i got nothing - no free learn you force me to pay",
+            1,
+            9,
+            "his we are really keen to assist you could you please make sure to get in contact with us at team@busuu.com? many thanks team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "djodjo rider",
+            "why you don't test the learners to fit your study plan can i begin studying wherever i want",
+            2,
+            0,
+            "hello thank you for your comment please contact our team at team@busuu.com and we will look into your request musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "l1f34su1c1d3",
+            "unable to install i",
+            1,
+            0,
+            "hello thank you for your comment please contact our team at team@busuu.com and we will look into your request musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "uaren",
+            "i sent invite link to my friends but i couldnt understand how i earn premium days please help me !",
+            4,
+            0,
+            "feel free to get in touch team@busuu.com in order for us to assist you"
+        ],
+        [
+            "busuu: learn english",
+            "priya j",
+            "hai musuu team today i have tried to do the payment but it does not accept regarding this i sent mail bit it return like couldn't be deliver to receiptent.",
+            3,
+            2,
+            "hello thank you for your comments please contact our team at team@busuu.com and we will look into your request musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "shereen sherif",
+            "\ud83e\udd47\ud83e\udd47\ud83e\udd47\ud83e\udd47\ud83e\udd47\ud83e\udd47",
+            1,
+            0,
+            "hello thank you for your comment if there is anything we can do for you please contact our team at team@busuu.com and we will look into your request musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "razaque abdul",
+            "it's not at all free to complete all exercises payment is demanded",
+            2,
+            5,
+            "hi there thank you for your review why not give premium a try we are sure you are going to love it we somehow have to pay the efforts of all the amazing people that are behind busuu. many thanks team musuu"
+        ],
+        [
+            "busuu: learn english",
+            "valentina sanchez j",
+            "lo nico que me molesta, es el hecho que constantemente ofrezca su version premium y que est cabbie el curse que ya se tenga personalizado, del restof super",
+            4,
+            2,
+            "valentina nos esforzamos cada vez mes para proporcionar un servicio de calidad a un precis asequible. por supuesto, puede utilizar nuestro libre en el idiom que prefiera. si usted tiene alguna pregunta p\u00f3ngase en contact con nosotros por team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "keerthi bairu",
+            "good",
+            4,
+            0,
+            "hello keerthi thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best debra"
+        ],
+        [
+            "busuu: learn english",
+            "diego gonz\u00e1lez rojas",
+            "nice !",
+            4,
+            0,
+            "diego brilliant we are so glad to have you on board :) debra"
+        ],
+        [
+            "busuu: learn english",
+            "mehdi jebali",
+            "great app",
+            4,
+            1,
+            "medi we really appreciate the feedback ! hope you continue to enjoy learning with us if you need contact us team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "pallabi pramanik",
+            "good but need to improve more",
+            4,
+            1,
+            "hi pallabi, thanks for your feedback could we kindly request a few extra details in regards to what we can improve get in touch here team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "ahmed abdelhalim",
+            "some words not clear",
+            3,
+            0,
+            "hi ahmed we do apologise if some words were not clear it would be great to know what words you are referring to could please get in contact with our support team here team@busuu.com? many thanks"
+        ],
+        [
+            "busuu: learn english",
+            "amr aly",
+            "nice app",
+            4,
+            0,
+            "hi there glad to hear you're enjoying busuu. best of luck with your studies :)"
+        ],
+        [
+            "busuu: learn english",
+            "hashim awayh",
+            "please add american english",
+            5,
+            0,
+            "\u0634\u0643\u0631\u0627 \u0644\u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a\u0643\u0645!"
+        ],
+        [
+            "busuu: learn english",
+            "eslam raheem10",
+            "why can't i open the next lesson i and why do you force me to be premium i didn't like it",
+            1,
+            6,
+            "hi eslam, as a free user you can still access some of our basic lessons however if you want to make the most of musuu i recommend you upgrade to premium since you will be able to access through grammar lessons that are so crucial when learning a new language and access material that would help you with your purpose"
+        ],
+        [
+            "busuu: learn english",
+            "le-331 deepika",
+            "very helpful for leaders",
+            3,
+            0,
+            "his thank you so much for your kind review we are so glad you are enjoying busuu. keep up the good work and do not ever lose the motivation to learn a new language have a lovely day the musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "ng\u1ecdc h\u00e0 v\u0169",
+            "can't choose your native language i am vietnamese and i set my phone language to english and the apps told me can speak english when i open apps for the first time and after that if i ok the questions and the answers are same in english",
+            4,
+            1,
+            "thank you for your feedback the app automatically sets the interface language as your phone's language you can change it from the setting section of your profile"
+        ],
+        [
+            "busuu: learn english",
+            "ali war",
+            "mean it free for 7 days please",
+            3,
+            1,
+            "hello ali thank you for contacting busuu. if you register as a free new user on our app version you can get a week of free trial of our fantastic premium features i hope you will enjoy it best wishes"
+        ],
+        [
+            "busuu: learn english",
+            "aya muhammed",
+            "good",
+            5,
+            0,
+            "hello aya thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best debra"
+        ],
+        [
+            "busuu: learn english",
+            "\u0430\u043d\u0434\u0440\u0435\u0439 \u043a\u0443\u0437\u044c\u043c\u0438\u043d\u0435\u0446",
+            "\u043e\u0442\u043b\u0438\u0447\u043d\u0430\u044f \u0438\u0434\u0435\u044f, \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442 \u043b\u0435\u0433\u043a\u043e i \u043f\u043e\u043d\u044f\u0442\u043d\u043e.",
+            5,
+            3,
+            "\u0430\u043d\u0434\u0440\u0435\u0439, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u0441\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0432\u0430\u0448 \u043e\u0442\u0437\u044b\u0432 ) \u043c\u044b \u0440\u0430\u0434\u044b, \u0447\u0442\u043e \u0432\u0430\u043c \u043d\u0440\u0430\u0432\u0438\u0442\u0441\u044f \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u0435 i busuu! i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "zizo xico",
+            "good app but too much",
+            3,
+            1,
+            "his ahmad thank you for your review we hope you will decide to try musuu premium at least for 7 days we are sure you are going to love it we somehow have to pay the efforts of all the amazing people that are behind musuu and this is why we charge subscriptions have a lovely day the musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "waleed marzouk",
+            "very poor application and not professional at all i paid for premium membership but regret it",
+            1,
+            39,
+            "we are so sorry to hear that could you please drop us a line at team@busuu.com so we can check what is happening thanks"
+        ],
+        [
+            "busuu: learn english",
+            "niirmou yacine",
+            "please , used advertising as the place of cash payment",
+            1,
+            5,
+            "thanks for the feedback this is not the option we felt was convenient for our learners but i will make sure to escalate this to our team"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "good program",
+            3,
+            0,
+            "thanks a lot for your fantastic feedback wishing you all the best if you need to contact us team@busuu.com musuu"
+        ],
+        [
+            "busuu: learn english",
+            "ahmad maarouf",
+            "great",
+            5,
+            0,
+            "ahmad thanks so much for the encouraging comment keep up the good work"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "it is good but it isn't free",
+            3,
+            0,
+            "dear user thank you for your positive ratings we are very glad you are enjoying learning languages with busuu! keep up with the good work"
+        ],
+        [
+            "busuu: learn english",
+            "amir mohammad kazerouni",
+            "you should pay for it :(",
+            1,
+            3,
+            "thanks for the review our app is free to download and used but to unlock premium features you need a premium subscription"
+        ],
+        [
+            "busuu: learn english",
+            "himal chhetri",
+            "overwhelming",
+            5,
+            0,
+            "hello himal! thanks a lot for your feedback all the best the buu team"
+        ],
+        [
+            "busuu: learn english",
+            "j m",
+            "absolutely great app",
+            5,
+            1,
+            "i i thanks so much for the encouraging comment keep up the good work"
+        ],
+        [
+            "busuu: learn english",
+            "juan esteban",
+            "la mejor de todas las aplicaciones para prender un idioma, se las recomiendo 100%, saber que me voy a comprar el premium de un a\u00f1o, porque se lo merecen. la mejor de todas",
+            5,
+            1,
+            "estimado juan gracias de nuevo por tus maravillosos comentarios. como te indiqu\u00e9 en el mensaje anterior quedo a la espera de que nos envies un corre electr\u00f3nico a la direcci\u00f3n team@busuu.com para que podemos ayudarte. saludos de parte de el equipo de busuu."
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "nice",
+            5,
+            0,
+            "thanks a lot for your fantastic feedback wishing you all the best if you need to contact us team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "vitito",
+            "easy",
+            5,
+            0,
+            "hello victory thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best claudia"
+        ],
+        [
+            "busuu: learn english",
+            "carlos felipe ardila",
+            "la aplicaci\u00f3n es buena y la din\u00e1mica de prender ingles tambi\u00e9n, pero lo que me molest es que para hacer una lecci\u00f3n tenga que comprar una suscripci\u00f3n, descargue la aplicaci\u00f3n con la esperanza de que fuera gratis y as prender ingl\u00e9s, pero me voy decepcionado.",
+            3,
+            1,
+            "tenemos dos tips de suscripciones, gratuity y premium por favor contact con team@busuu.com para mayor informaci\u00f3n. gracias"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "this is too good i love this app",
+            5,
+            0,
+            "thanks so much for your kind comments"
+        ],
+        [
+            "busuu: learn english",
+            "\u1233\u121d\u1236\u1295 yemane",
+            "i don't have any idea about it but i wish to fine thanks",
+            5,
+            2,
+            "thanks samson please feel free to send any queries to team@busuu.com :)"
+        ],
+        [
+            "busuu: learn english",
+            "antelope on water",
+            "woah yay i can improve my english for i'm italian,grazie for this app :) psi grazie means thank you if you didn't know :)",
+            5,
+            0,
+            "ciao well done on your excellent work in the italian course"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "it is very good aplication.",
+            5,
+            3,
+            "we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "cristian tabares",
+            "es exelente y muy completa, estoy muy feliz con la aplicaci\u00f3n y por eso compr\u00e9 la version premium me gustaria que implementaran una parte en la cual hacer preguntas a la comunidad ya sea premium o no como en duolingo, por que a veces hay cosas que la app no explica bien y no tienes manera de como salir de esta duda y tambien que sean mas explicitos con los huevos ejercicos de completer palabra que a\u00f1adieron por que no son muy claro",
+            5,
+            4,
+            "andto tu sugerencia!! muchas gracias!!"
+        ],
+        [
+            "busuu: learn english",
+            "walaa imam",
+            "it makes learning more effective and more fun too",
+            5,
+            5,
+            "walla we really appreciate the feedback ! hope you continue to enjoy learning with us if you need contact us team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "fabio garcia",
+            "como accede a las lecciones c1?",
+            4,
+            0,
+            "porfavor escribenos a team@busuu.com, estaremos felines de ayudarte!"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "it's good dictionary but some words are not available please try to improve it clearly thanks",
+            5,
+            0,
+            "thanks a lot for your feedback"
+        ],
+        [
+            "busuu: learn english",
+            "mandeep singh",
+            "love it",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings"
+        ],
+        [
+            "busuu: learn english",
+            "\u0430\u043d\u0434\u0440\u0435\u0439 \u043b\u0435\u043e\u043d\u0442\u044c\u0435\u0432",
+            "\u043f\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u044c \u0441\u043b\u043e\u0432\u0430 \u043d\u0430 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u0438\u043c \u043f\u0435\u0440\u0435\u0432\u043e\u0434 - i \u044d\u0442\u0438\u043c\u0438 \u0437\u0430\u0434\u0430\u043d\u0438\u044f\u043c\u0438 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0430: \u0447\u0430\u0441\u0442\u043e \u043f\u043e\u043f\u0430\u0434\u0430\u0435\u0442\u0441\u044f \u043f\u043e 2 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b \u0441\u043b\u043e\u0432\u0430 i \u0437\u0430\u0434\u0430\u043d\u0438\u0438 i \u043f\u0440\u0438 \u0440\u0430\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0441\u043b\u043e\u0432 - \u043d\u0438\u0447\u0435\u0433\u043e i \u0438\u0442\u043e\u0433\u0435 \u043d\u0435 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442. i \u0438\u0442\u043e\u0433\u0435 \u043f\u0440\u0438\u0445\u043e\u0434\u0438\u0442\u0441\u044f \u043e\u0442\u043c\u0435\u043d\u044f\u0442\u044c \u0437\u0430\u0434\u0430\u043d\u0438\u0435 i \u043f\u0440\u043e\u0445\u043e\u0434\u0438\u0442\u044c \u043f\u043e \u043d\u043e\u0432\u043e\u0439, \u043d\u043e \u044d\u0442\u043e \u0440\u0435\u0434\u043a\u043e \u043a\u043e\u0433\u0434\u0430 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442 \u0443\u0441\u043f\u0435\u0448\u043d\u043e.",
+            2,
+            7,
+            "\u0430\u043d\u0434\u0440\u0435\u0439, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u043d\u0430\u043c \u043e\u0447\u0435\u043d\u044c \u0436\u0430\u043b\u044c, \u0447\u0442\u043e \u0432\u044b \u0441\u0442\u043e\u043b\u043a\u043d\u0443\u043b\u0438\u0441\u044c i \u0442\u0440\u0443\u0434\u043d\u043e\u0441\u0442\u044f\u043c\u0438 \u043f\u0440\u0438 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0438 \u043d\u0430\u0448\u0435\u0433\u043e \u0440\u0435\u0441\u0443\u0440\u0441\u0430. \u043f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u043d\u0430\u043c i \u0441\u043b\u0443\u0436\u0431\u0443 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0438. i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "maher alsanter",
+            "great app",
+            5,
+            0,
+            "thanks a lot maher!"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "this is programmer very good i like",
+            5,
+            0,
+            "thanks a lot keep up the great work"
+        ],
+        [
+            "busuu: learn english",
+            "rian mokoginta",
+            "good",
+            5,
+            0,
+            "hi there thanks a lot for your feedback all the best the musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "trc1ty",
+            "i \u043c\u0435\u043d\u044f \u0441\u0430\u043c\u043e\u0432\u043e\u043b\u044c\u043d\u043e \u0441\u043d\u044f\u043b\u0438 \u0434\u0435\u043d\u044c\u0433\u0438. \u043a\u0430\u043a\u043e\u0433\u043e \u0447\u0435\u0440\u0442\u0430 \u0432\u043e\u043e\u0431\u0449\u0435? i \u043d\u0435 \u0441\u043e\u0431\u0438\u0440\u0430\u043b\u0441\u044f \u043f\u043b\u0430\u0442\u0438\u0442\u044c \u0437\u0430 \u044d\u0442\u043e \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435",
+            1,
+            8,
+            "\u043f\u0430\u0432\u0435\u043b, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0430 \u043f\u0440\u043e\u0434\u043b\u0435\u0432\u0430\u0435\u0442\u0441\u044f \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438, \u043f\u043e\u043a\u0430 \u0432\u044b \u043d\u0435 \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u0435 \u043f\u0440\u043e\u0434\u043b\u0435\u043d\u0438\u0435. \u0447\u0442\u043e\u0431\u044b \u0443\u043f\u0440\u0430\u0432\u043b\u044f\u0442\u044c \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u043e\u0439 \u0438\u043b\u0438 \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0438 \u0447\u0435\u0440\u0435\u0437 \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u043e android \u043f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0441\u043b\u0435\u0434\u0443\u0439\u0442\u0435 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u0439 \u0438\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u0438: https:\/\/support.google.com\/googleplay\/answer\/2476088?hl=ru i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "meskine abdelilah",
+            "good",
+            5,
+            0,
+            "hello meskine abdelilah, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "cop iy",
+            5,
+            0,
+            "te\u015fekk\u00fcr ederiz! musuu"
+        ],
+        [
+            "busuu: learn english",
+            "cc cc",
+            "rubish, an app for kids under 7 with no proper grammar and exercises",
+            1,
+            5,
+            "thanks for your comments we will take them on board"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "great",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "ok iyiymi\u015f bee!!!",
+            5,
+            1,
+            "5 y\u0131ld\u0131z yorumunuz iin ok te\u015fekk\u00fcr ederiz. mutlu ogrenmeler."
+        ],
+        [
+            "busuu: learn english",
+            "shahab bagheri",
+            "please add language persian (farsi)",
+            5,
+            0,
+            "hello shahab, thanks a lot for sharing your ideas with us - we really appreciate it we take all our users suggestions and comments into account and discuss them internally as we improve our products all the best shaymaa"
+        ],
+        [
+            "busuu: learn english",
+            "alem guadu",
+            "wow thanks",
+            5,
+            0,
+            "hello ale guadu, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "bestest app",
+            5,
+            0,
+            "hello thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "willian moreno",
+            "eu paguei para ter o encino complete e no funciona direito, sem costar que nos exerc\u00edcios para repetir o audio ele tava e pula impossibilitando finalizar a fase. estou inconformado, isso porque paguei um ano inaceit\u00e1vel!!!!",
+            1,
+            0,
+            "old willian nos cantate pelo team@busuu.com e tenemos satisfa\u00e7\u00e3o em te ayudar ! posso lhe auxiliary com alguna procedimentos para verificarmos se a performance de seu aparelho desenvolva melhor nossa plataforma de ensino. renato"
+        ],
+        [
+            "busuu: learn english",
+            "hend salah eldeen",
+            "there is a lot of loading problem i tried more than 5 times to update my preferences but nothing also during learning a lot of problems occurs that force me to close the app if these problems were solved i will give it the 5 stars",
+            3,
+            0,
+            "hi hend! if you could send us over some more details of these issues to team@busuu.com and we can then take a look for you thanks :)"
+        ],
+        [
+            "busuu: learn english",
+            "hembram shashana",
+            "its a great app to learn english",
+            4,
+            0,
+            "thanks so much for the great feedback hembram!"
+        ],
+        [
+            "busuu: learn english",
+            "mohamed chakour",
+            "the worst app i have ever seen",
+            1,
+            0,
+            "hey mohamed i am sorry that you feel this way and if you have any further feedback for us please just let us know at team@busuu.com. thanks :)"
+        ],
+        [
+            "busuu: learn english",
+            "umar gifari",
+            "there are some error in beginner 2 subject 6 in the class\". in first section even i already match the words it not continue i think because there are 2 words has same meaning in bahasa indonesian please fix it thank you",
+            1,
+            5,
+            "hey umar if you could please send us a screenshot and more information of this issue to team@busuu.com, we would be most grateful all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "mishal hussain",
+            "i really like it",
+            5,
+            0,
+            "thanks a lot mishal! keep learning on busuu!"
+        ],
+        [
+            "busuu: learn english",
+            "\u0432\u0441\u0435\u0432\u043e\u043b\u043e\u0434 \u043a\u0438\u0440\u0438\u043b\u0435\u043d\u043a\u043e",
+            "\u043d\u0430\u0440\u043e\u0434 \u043f\u043e\u0434\u0441\u043a\u0430\u0436\u0438\u0442\u0435 \u0434\u0430\u043b\u044c\u0448\u0435 \u0431\u0443\u0434\u0443\u0442 \u0437\u0430\u0434\u0430\u043d\u0438\u0435 \u0441\u043b\u043e\u0436\u043d\u0435\u0435 \u0438\u043b\u0438 \u0432\u0441\u0435 \u043d\u0430 \u0434\u043e\u0448\u043a\u043e\u043b\u044c\u043d\u043e\u043c \u0443\u0440\u043e\u0432\u043d\u0435?",
+            1,
+            1,
+            "\u0432\u0441\u0435\u0432\u043e\u043b\u043e\u0434, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u043c\u044b \u043f\u0440\u0435\u0434\u043b\u0430\u0433\u0430\u0435\u043c \u0443\u0440\u043e\u0432\u043d\u0438 a1, a2, be i b2. \u0435\u0441\u043b\u0438 \u0432\u044b \u043d\u0435 \u043d\u043e\u0432\u0438\u0447\u043e\u043a, \u0442\u043e \u0432\u0430\u043c \u0441\u043e\u0432\u0441\u0435\u043c \u043d\u0435 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u043d\u0430\u0447\u0438\u043d\u0430\u0442\u044c i \u0441\u0430\u043c\u043e\u0433\u043e \u043d\u0430\u0447\u0430\u043b\u0430, \u043f\u0440\u043e\u0441\u0442\u043e \u043f\u0435\u0440\u0435\u0439\u0434\u0438\u0442\u0435 \u043d\u0430 \u043d\u0443\u0436\u043d\u044b\u0439 \u0443\u0440\u043e\u0432\u0435\u043d\u044c i \u043d\u0430\u0447\u043d\u0438\u0442\u0435 \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u0435 i \u043d\u0435\u0433\u043e. i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "fatalityx switcher",
+            "cant log in with google account server error",
+            1,
+            0,
+            "hello lucas thanks for your message please contact us via team@busuu.com so we can assist you thanks musuu"
+        ],
+        [
+            "busuu: learn english",
+            "pratham aggarwal8434",
+            "error occur while connection with server then why is this app on playstore",
+            1,
+            0,
+            "hello thanks for your message try to install again the app if you get again the same error please contact us at team@busuu.com sa that we can have a look into your issue regards the musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "priya patel",
+            "it's really nice",
+            5,
+            0,
+            "hello priya patel thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "mandeep vaghela",
+            "good app",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings mandeep!"
+        ],
+        [
+            "busuu: learn english",
+            "victor alomia",
+            "excelent aplicaci\u00f3n, please verify the audio test in the third chapter of the a level",
+            5,
+            0,
+            "hola victory gracias por tus comentarios :) un salud"
+        ],
+        [
+            "busuu: learn english",
+            "esraa selim",
+            "it's great & useful application",
+            5,
+            0,
+            "thanks for your kind comment esraa! keep learning with busuu!"
+        ],
+        [
+            "busuu: learn english",
+            "thanh chu thi",
+            "domo arigato go zaimasu",
+            5,
+            0,
+            "thanks a lot for the 5 stars"
+        ],
+        [
+            "busuu: learn english",
+            "johan stewart",
+            "excellent app",
+            5,
+            0,
+            "johan thanks a lot for your fantastic feedback wishing you all the best if you need contact us team@busuu.com musuu"
+        ],
+        [
+            "busuu: learn english",
+            "long nguy\u1ec5n",
+            "god bless you",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings long"
+        ],
+        [
+            "busuu: learn english",
+            "fay moha",
+            "it's great i just finished all the free lessons and i'm about to get the premium subscription thank you musuu \u0645\u0631\u0647 \u0645\u0645\u062a\u0627\u0632. \u0623\u062a\u0645\u0645\u062a \u0643\u0644 \u0627\u0644\u062f\u0631\u0648\u0633 \u0627\u0644\u0645\u062c\u0627\u0646\u064a\u0629 i \u0627\u0644\u0623\u0646 \u0623\u0646\u0627 \u0639\u0644\u0649 \u0648\u0634\u0643 \u0627\u0646 \u0627\u0642\u0645 \u0628\u0625\u0634\u062a\u0631\u0627\u0643 \u0628\u0631\u064a\u0645\u064a\u0631\u0645. \u0634\u0643\u0631\u0627\u064b \u0628\u0648\u0633\u0648\u0648",
+            5,
+            4,
+            "fantastic fayez! we hope you enjoy learning with our premium subscription eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "ana",
+            "nem conseguir faze login",
+            4,
+            0,
+            "old elizabeth represent o suporte ao cliente e pelo email team@busuu.com posso lhe dar alguma dicks de como aproveitar ainda mais nossa plataforma de encino e esclarecer eventuais d\u00favidas que tenho . guardo renato"
+        ],
+        [
+            "busuu: learn english",
+            "arjun senguttuvan",
+            "good app to learn english",
+            5,
+            0,
+            "hello thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "abdilah aboudig",
+            "thank you for this",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "pawneet star",
+            "amazing app",
+            5,
+            0,
+            "thanks so much ishqbaaz!"
+        ],
+        [
+            "busuu: learn english",
+            "alex paulo",
+            "very good this app",
+            5,
+            0,
+            "we are glad that you are enjoying our app alex"
+        ],
+        [
+            "busuu: learn english",
+            "tushar pradhan",
+            "ok",
+            5,
+            0,
+            "thanks so much for the great ratings"
+        ],
+        [
+            "busuu: learn english",
+            "monica aguiara",
+            "this app is very good",
+            5,
+            0,
+            "thanks a lot monica :)"
+        ],
+        [
+            "busuu: learn english",
+            "noor alashraaf",
+            "it is very good",
+            5,
+            0,
+            "thanks a lot noor"
+        ],
+        [
+            "busuu: learn english",
+            "mo sabra",
+            "its okay",
+            5,
+            0,
+            "much appreciated motasm!"
+        ],
+        [
+            "busuu: learn english",
+            "vinod kk",
+            "fantastic application for beginners",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings"
+        ],
+        [
+            "busuu: learn english",
+            "\u0430\u0440\u0442\u0435\u043c \u0441\u043a\u0440\u0435\u0431\u0446\u043e\u0432",
+            "i \u043d\u0435 \u0437\u043d\u0430\u044e \u0437\u0430\u0447\u0435\u043c \u043f\u0438\u0448\u0443\u0442 \u0447\u0442\u043e \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \"\u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0435\". \u043d\u0430 \u043a\u0430\u0436\u0434\u043e\u043c \u0448\u0430\u0433\u0443 \u043f\u0440\u043e\u0441\u044f\u0442 \u043e\u043f\u043b\u0430\u0442\u0438\u0442\u044c \u043a\u0443\u0440\u0441. \u0447\u0443\u0432\u0441\u0442\u0432\u0443\u044e \u0441\u0435\u0431\u044f \u043e\u0431\u043c\u0430\u043d\u0443\u0442\u044b\u043c.",
+            2,
+            0,
+            "\u0430\u0440\u0442\u0435\u043c, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u043c\u044b \u043f\u0440\u0435\u0434\u043b\u0430\u0433\u0430\u0435\u043c i \u043a\u0430\u0436\u0434\u043e\u043c \u0443\u0440\u043e\u043a\u0435 \u0447\u0430\u0441\u0442\u044c \u0443\u043f\u0440\u0430\u0436\u043d\u0435\u043d\u0438\u0439 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e i \u0447\u0430\u0441\u0442\u044c \u0434\u043b\u044f \u043f\u0440\u0435\u043c\u0438\u0443\u043c. \u0432\u044b \u043c\u043e\u0436\u0435\u0442\u0435 \u043e\u0431\u0443\u0447\u0430\u0442\u044c\u0441\u044f \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e, \u043d\u043e i \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u043c\u0438 \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f\u043c\u0438 \u0438\u043b\u0438 \u0436\u0435 \u043f\u0440\u0438\u043e\u0431\u0440\u0435\u0441\u0442\u0438 \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0443. i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "valber martins",
+            "excellent",
+            5,
+            0,
+            "thanks a lot for the 5 stars vladimir"
+        ],
+        [
+            "busuu: learn english",
+            "ravikumar devarakonda",
+            "i have a great use",
+            5,
+            0,
+            "thanks a lot for your comment ravi"
+        ],
+        [
+            "busuu: learn english",
+            "johnny silva",
+            "good",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings johnny eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "mikk uueda",
+            "i think this is good start to learn english language",
+            5,
+            0,
+            "thanks a lot mikk!"
+        ],
+        [
+            "busuu: learn english",
+            "gamer plaza",
+            "it's nice",
+            5,
+            0,
+            "thanks a lot for the 5 stars omar"
+        ],
+        [
+            "busuu: learn english",
+            "ashutosh shukla",
+            "this is a ny app to learn english where it provides a wider platform to interact or learn with many people from different countries",
+            5,
+            1,
+            "hey ashutosh! glad that you are enjoying our new conversations feature have a great week :) musuu"
+        ],
+        [
+            "busuu: learn english",
+            "sabir lahcen",
+            "cool app thank's",
+            5,
+            0,
+            "you are more than welcome happy busuuing! :)"
+        ],
+        [
+            "busuu: learn english",
+            "rgk",
+            "best app for those who like to improve english english to english is also available only problem is purchases",
+            5,
+            0,
+            "thanks a lot for your 5 star ratings rgk! if you are looking to purchase our premium package with a discount just let us know at team@busuu.com and we can assist you :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "great",
+            5,
+            0,
+            "thanks a lot for the great 5 star rating :)"
+        ],
+        [
+            "busuu: learn english",
+            "camillia mcnata",
+            "that's the best app used to play",
+            5,
+            0,
+            "thanks so much for the 5 star feedback kruakan!"
+        ],
+        [
+            "busuu: learn english",
+            "\u0645\u062d\u0645\u062f \u0639\u0645\u0627\u0631\u0647",
+            "\u062d\u0644\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648\u0648",
+            5,
+            0,
+            "\u0634\u0643\u0631\u0627 \u0644\u062a\u0642\u064a\u064a\u0645\u0643"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "it's a good app , but i can't make use of all exercises cuz i'm not a user that pays",
+            1,
+            1,
+            "thanks a lot for your comment and sign up today and you will receive a 50% discount off any of our premium subscriptions :)"
+        ],
+        [
+            "busuu: learn english",
+            "joseph chourio",
+            "muy bien me gusta pero hay cosas que deben mejorar. usualmente studio es por la laptop en su pagina web veces presenta que cuando paso de un activada a otra la comienza a mita cuando terming me dice 5 corrects de 8 cuando vuelva a repetir me sales otras que no habla hecho me gustaria que adamas cuando realize la actividad de voice recording que alguna persona me corrigiera la pronunciaci\u00f3n. algun ejecutivo de buss tambien personas de la comunidad mundial. lo videos de leo , por la app no los puedo ver seria bueno incluirlos.",
+            4,
+            19,
+            "hola joseph gracias por tus comentarios. tenemos en cuenta tu opini\u00f3n. un salud"
+        ],
+        [
+            "busuu: learn english",
+            "jaiver maya",
+            "excelent aplicaci\u00f3n para prender ingl\u00e9s. hay ex\u00e1menes de novel con certificado. e interact\u00faas con otras personas",
+            5,
+            0,
+            "hola jaiver! gracias por tus comentarios :) un salud"
+        ],
+        [
+            "busuu: learn english",
+            "panyanouvong lai",
+            "good",
+            4,
+            0,
+            "thanks a lot panyanouvong! :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "ooooooooh",
+            5,
+            0,
+            "thanks a lot for the 5 star rating :)"
+        ],
+        [
+            "busuu: learn english",
+            "renato hasko",
+            "very helpful",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "joseph canales",
+            "awesome",
+            5,
+            0,
+            "we are glad that you are enjoying learning with us joseph"
+        ],
+        [
+            "busuu: learn english",
+            "ismail hashemi",
+            "very impressive",
+            5,
+            0,
+            "hello seed email hashemi, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "anil kumar",
+            "the app is awesome",
+            5,
+            3,
+            "thanks a lot musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "sanjaykumar bind",
+            "very good",
+            5,
+            0,
+            "thanks a lot :)"
+        ],
+        [
+            "busuu: learn english",
+            "rafael ramones",
+            "it's a great app maybe one of the best i've used",
+            5,
+            1,
+            "cheers for the 5 star ratings rafael happy busuuing :)"
+        ],
+        [
+            "busuu: learn english",
+            "preethi sundaraman",
+            "varun balaji thankyou",
+            5,
+            0,
+            "you're welcome preethi! have a great weekend ahead eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "imad oukacha",
+            "je veux r\u00e9initialiser l'application avec le mime compte aide moi",
+            4,
+            1,
+            "bonjour imad, je vous invite i contacted directement le service client fin que nous puissions suivre votre demanded cordialement, aur\u00e9lie"
+        ],
+        [
+            "busuu: learn english",
+            "amna_art _shop",
+            "i can't see what the people comment in my page",
+            4,
+            15,
+            "hi amena! thanks for your message in order to do this you will need to upgrade to premium thanks"
+        ],
+        [
+            "busuu: learn english",
+            "judith yasmika",
+            "i love this application",
+            5,
+            2,
+            "thanks a lot for the 5 star ratings judith"
+        ],
+        [
+            "busuu: learn english",
+            "3la2 ahmed",
+            "very good app",
+            5,
+            1,
+            "thanks a lot for the 5 star feedback musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "reinhard heydrich",
+            "thanks,gracias,obrigado,danke,grazie,mercie",
+            5,
+            0,
+            "thanks a lot for the 5 star feedback danke"
+        ],
+        [
+            "busuu: learn english",
+            "just bory",
+            "its a lovely app . thank you . :)",
+            5,
+            6,
+            "hello borislav prodanov, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "rute oliveira cintra",
+            "i loved this app but i can do all the exercises because i'm not a user that pays :(",
+            3,
+            20,
+            "hello rute, thank you for your feedback - we'll pass this on internally if you would like to provide any additional feedback then you can reach us out via team@busuu.com. regards musuu"
+        ],
+        [
+            "busuu: learn english",
+            "charlie carreras",
+            "is really great...",
+            5,
+            1,
+            "hello charlie thanks a lot for your fantastic feedback wishing you all the best if you need contact us team@busuu.com musuu"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "i love this app",
+            5,
+            0,
+            "many thanks for the 5 star ratings musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "edwin torres sanchez",
+            "i think the structure and content are quite useful :d. the activities are awesome",
+            5,
+            5,
+            "hello edwin torres sanchez thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "the conceptual mind",
+            "good",
+            5,
+            0,
+            "thanks a lot for the 5 star feedback anurag! musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "good",
+            5,
+            3,
+            "hello thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "barbara szl\u00e1vik",
+            "having fun with learning i love it",
+            5,
+            1,
+            "great to have you on board fidelma! best wishes eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "abdul zakaria",
+            "it's wonderful app thanks",
+            4,
+            0,
+            "thanks a lot for the lovely comments abdul eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "rodrigo silva santos",
+            "the best language app easy and interactive :)",
+            5,
+            0,
+            "hi there thanks a lot for your message with any of our premium subscriptions you can learn up to 12 languages at the same time for the same price if you message us at team@busuu.com, we can happily provide you with a discount to start learning with our premium service musuu"
+        ],
+        [
+            "busuu: learn english",
+            "abebayehu amare",
+            "wow the best app i love it",
+            5,
+            0,
+            "hello abebayehu amare, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "spankey sword spankey swors",
+            "spanked",
+            5,
+            0,
+            "thanks for the 5 star ratings we really appreciate it"
+        ],
+        [
+            "busuu: learn english",
+            "dagmawit mulat",
+            "good app thanks",
+            4,
+            0,
+            "hello dagmawit mulat, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "tesfame tube",
+            "i am so happy",
+            5,
+            20,
+            "hello tesfay gidey, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "mundo premium",
+            "quiero prender ingles americano por favor...",
+            5,
+            0,
+            "hola german tenemos en cuenta tu sugerencia. gracias por tus comentarios. un saludo,"
+        ],
+        [
+            "busuu: learn english",
+            "osama",
+            "\u0647\u0630\u0627 \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062c \u0645\u0646 \u0627\u0641\u0636\u0644 \u0628\u0631\u0627\u0645\u062c \u062a\u0639\u0644\u064a\u0645 \u0627\u0644\u0644\u063a\u0647 \u0627\u0644\u062a\u064a \u0627\u0633\u062a\u0639\u0645\u0644\u062a\u0647\u0627 \u0644\u0627\u062d\u062a\u0648\u0627\u0626\u0647 \u0639\u0644\u0649 \u0627\u0644\u0639\u062f\u064a\u062f \u0645\u0646 \u0627\u0644\u0645\u0645\u064a\u0632\u0627\u062a \u0648\u0644\u0643\u0646 \u0627\u062a\u0645\u0646\u0627 \u0627\u0646 \u062a\u0636\u064a\u0641\u0648\u0627 \u0642\u0627\u0645\u0648\u0633 \u0644\u0644\u0643\u0644\u0645\u0627\u062a \u0641\u064a \u062d\u0627\u0644\u0647 \u0627\u0644\u0628\u062d\u062b \u0639\u0646 \u0643\u0644\u0645\u0647 \u0645\u062d\u062f\u062f\u0647",
+            5,
+            0,
+            "\u0634\u0643\u0631\u0627 \u0644\u062a\u0642\u064a\u064a\u0645\u0643. \u0634\u0643\u0631\u064b\u0627 \u062c\u0632\u064a\u0644\u064e\u0627 \u0644\u0645\u0634\u0627\u0631\u0643\u0629 \u0623\u0641\u0643\u0627\u0631\u0643 \u0645\u0639\u0646\u0627 - \u0646\u064f\u0642\u062f\u0631\u064f \u0644\u0643 \u0630\u0644\u0643 \u062d\u0642\u064b\u0651\u0627! \u0646\u0623\u062e\u0630 \u062c\u0645\u064a\u0639 \u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a \u0648\u062a\u0639\u0644\u064a\u0642\u0627\u062a \u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646\u0627 \u0628\u0639\u064a\u0646 \u0627\u0644\u0627\u0639\u062a\u0628\u0627\u0631\u060c \u0648\u0646\u0639\u0645\u0644 \u0639\u0644\u0649 \u0645\u0646\u0627\u0642\u0634\u062a\u0647\u0627 \u062f\u0627\u062e\u0644\u064a\u064b\u0651\u0627 \u0641\u064a \u0623\u062b\u0646\u0627\u0621 \u062a\u0637\u0648\u064a\u0631 \u0645\u0646\u062a\u062c\u0627\u062a\u0646\u0627."
+        ],
+        [
+            "busuu: learn english",
+            "stas",
+            "didn't get it when i am on the page see plans month's sub costs 367 rub but when i press it google play shows it's actually 433, on the website price is even more",
+            3,
+            0,
+            "hi stand thanks a lot for your message if you do need further assistance with pricing please contact us at team@busuu.com and we can assist you all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "sensei isa",
+            "good",
+            5,
+            0,
+            "thanks so much for the 5 star ratings sensei musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "akhil patel",
+            "awsome app",
+            5,
+            0,
+            "thanks a lot for the 5 star feedback akhil! musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "abderrahim aissi",
+            "thanks",
+            5,
+            0,
+            "cheers for the 5 star ratings musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "humeira taher",
+            "h\u00fcbsch",
+            4,
+            0,
+            "hallo humeira, danke for deine positive bewertung! wir fremen uns dass musuu dir gef\u00e4llt. viele gr\u00fc\u00dfe, anja"
+        ],
+        [
+            "busuu: learn english",
+            "paulo andre",
+            "his i'm brazilians and i study english through youtube apps and other things thanks very much !!!!!!!!!!! i love you app",
+            4,
+            0,
+            "thanks so much for your great feedback keep up the great work musuu team :)"
+        ],
+        [
+            "busuu: learn english",
+            "miguel cuevas",
+            "es exelente y fail",
+            5,
+            0,
+            "hola miguel muchas gracias por las cinco estrellas lo agradecemos mucho musuu"
+        ],
+        [
+            "busuu: learn english",
+            "dharmaraj kapse",
+            "usefull",
+            5,
+            0,
+            "hello dharmaraj kapse, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "i really like the idea of this app it's unique idea.in my opinion this app has everything to speak english fluently... thanks for credits...",
+            5,
+            0,
+            "thanks a lot for the lovely comments we really appreciate it eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "good",
+            4,
+            1,
+            "thanks a lot for your lovely feedback :) musuu"
+        ],
+        [
+            "busuu: learn english",
+            "gothgirl mcq",
+            "useless you're learning arabic but arabic that is so formal its not even understood by arabs",
+            1,
+            5,
+            "thanks for your review if you have any recommendations we will be more than happy to hear from you thanks shaymaa"
+        ],
+        [
+            "busuu: learn english",
+            "k\u04bd\u028b\u03b9\u0273 s\u04bd\u027e\u027e\u03b1\u0273\u03c3",
+            "genial total",
+            5,
+            0,
+            "old kevin o musuu se esfor\u00e7a cotidianamente para prove um ambient de aprendizagem cada vez mais interessante e enriquecedor. obrigado pelo seu feedback caso precise nos cantate pelo team@busuu.com renato"
+        ],
+        [
+            "busuu: learn english",
+            "nagaraju gouni94",
+            "good app",
+            4,
+            0,
+            "thanks a lot for the lovely comment nagaraju! musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "c. celestino",
+            "i bomb mas tem muitas li\u00e7\u00f5es bloqueadas. tenho novel avan\u00e7ado de ingles e em pouco tempo aprendi coisas novas com a app deberia ter mais li\u00e7\u00f5es free podia ser mais barato.",
+            4,
+            1,
+            "old cristian nos esfor\u00e7amos cada vez mais para prestar um servi\u00e7o de qualidade, por um prego acess\u00edvel . e claro pode utilizar nosso adesso gratuito, no idiom que preferir. caso tenho alguma d\u00favida nos cantate pelo team@busuu.com sua colabora\u00e7\u00e3o i muito importante para n\u00f3s. obrigado ! renato"
+        ],
+        [
+            "busuu: learn english",
+            "mike redi",
+            "ferry helpful and easy to learn i'm more enjoy it love it",
+            5,
+            0,
+            "glad you are loving our service mike have a lovely rest of the day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "it is a great way to learn more english",
+            5,
+            0,
+            "thanks for your lovely comment we are glad you are enjoying learning with us eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "miran k. amin samson",
+            "very good",
+            4,
+            1,
+            "thanks a lot for your comment miran! best wishes eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "vivek bhaisare",
+            "it's easy to learning english language",
+            4,
+            0,
+            "thanks a lot for the lovely feedback vivek! have a great day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "ashish kumar",
+            "can u tell me,,how can i speak to native speakers thru this app ?. i was looking for similar features",
+            3,
+            2,
+            "hey ashish at the moment we do not have a chat function but we are hoping to implement a more enhanced chat feature in the future musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "manoo sri dj",
+            "the best . thanks musuu",
+            5,
+            1,
+            "thank you for rating us the best we love receiving lovely feedback like this :) musuu"
+        ],
+        [
+            "busuu: learn english",
+            "lucas pinheiro",
+            "perfecto",
+            5,
+            0,
+            "lucas obrigado pelo seu feedback . a partir del a equip musuu se espera em aprimorar ainda mais nosso material de estudo. caso precise nos cantate pelo team@busuu.com"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "the best app cheers",
+            5,
+            0,
+            "hello thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "mohammed anwar",
+            "awesome way of learning and improving !",
+            5,
+            1,
+            "hello mohammed anwar thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "restyarno nugroho",
+            "i have subscribed this premium of buss exercise but i can not extend my subscription since 26 december 2016, dear musuu team please help for it thanks",
+            2,
+            16,
+            "hi restyarno, thanks for your message please reach us out via team@busuu.com! thanks musuu"
+        ],
+        [
+            "busuu: learn english",
+            "\u0434\u0435\u043d\u0438\u0441 \u043b\u0443\u043d\u043e\u0447\u043a\u0438\u043d",
+            "very good this program teaches me everyday!)))",
+            5,
+            2,
+            "hello \u0434\u0435\u043d\u0438\u0441 \u043b\u0443\u043d\u043e\u0447\u043a\u0438\u043d, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "william calderon valverde",
+            "excelent",
+            5,
+            1,
+            "thanks a lot for the 5 star feedback william have a great day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "hanthu lwin",
+            "this app is for whoever wanna to learn using with app really useful",
+            5,
+            0,
+            "brilliant glad you are getting a lot out of our app hanthu! musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "tamiris pinheiro",
+            "is so helpful",
+            5,
+            0,
+            "thank you so much for the 5 star ratings tamiris! all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "maritza huerta",
+            "good",
+            5,
+            0,
+            "thanks a lot maritza! much appreciated musuu :)"
+        ],
+        [
+            "busuu: learn english",
+            "varun gurram",
+            "its better than best",
+            5,
+            0,
+            "thanks a lot for your message varun best wishes eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "elmigdad karrar",
+            "there is problem when i want to purchase premium",
+            3,
+            8,
+            "hi mogdad, thanks a lot for your message please could you send us an email with details of your problem to team@busuu.com and we can assist you best wishes eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "antonio carlos da silva ferreira",
+            "i use every days",
+            5,
+            0,
+            "thanks antonio we are glad you are enjoying our service daily eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "erick macgon",
+            "i didn't expect this app was good but then suddenly it's just amazing it has grammar vocabulary listening i'd recommend this app to people who's learning improving or even starting with a new language but not at all because you gotta pay for the premium membership since the beginning could you guys just let us try it out for free at least one day",
+            3,
+            27,
+            "thanks so much for your great feedback erick! we really appreciate the high praise eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "miguel medina",
+            "looks great",
+            5,
+            0,
+            "hi miguel thanks a lot for your message our team are currently looking into the issue with huawei devices and hopefully it will be resolved soon many thanks for your patience in the interim eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "f\u00e9lix mart\u00ednez",
+            "es muy fail prender con esta metodologia",
+            5,
+            1,
+            "buenas f\u00e9lix, por favor nos manda un corre a team@busuu.com con una prueba de copra y podemos agregarte el premium manualmente saludos, eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "shagun sharma",
+            "great",
+            4,
+            1,
+            "hello shogun sharma thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "manish purohit",
+            "you guys are awesome \ud83d\ude4f, thank you very much",
+            5,
+            0,
+            "hello manish purohit, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "jonathan viana dos santos",
+            "musuu is an excellent app for learning other languages",
+            5,
+            2,
+            "thank you for taking the time to review our app jonathan and to reward it 5 stars too eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "reham elrefaay",
+            "good",
+            4,
+            0,
+            "glad you are enjoying learning with us reham! eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "lucas stamper",
+            "you are amazing the only problem at least for me is that musuu english course is only british it could be neutral where we could learn things useful in both",
+            4,
+            0,
+            "hi lucas thanks a lot for your feedback we appreciate your suggestion and we will take it on board have a great evening eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "jeniffer lines",
+            "use you too",
+            4,
+            8,
+            "hello jenifer lines thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "vishvanathan thineshkumar",
+            "really i like it",
+            5,
+            5,
+            "hello vishvanathan thineshkumar, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "\u029c\u1d00\u0280\u1d0d\u1d00\u0274 \u0455\u026a\u0274\u0262\u029c",
+            "very good",
+            5,
+            0,
+            "glad that you are enjoying learning with us harman! all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "wajid mengal",
+            "it improved my english speaking",
+            5,
+            0,
+            "thanks a lot for the 5 star ratings abdul we really appreciate it eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "very good",
+            5,
+            0,
+            "thanks a lot for your great feedback all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "abd allah",
+            "\u0627\u0641\u0636\u0644 \u0628\u0631\u0646\u0627\u0645\u062c \u0644\u062a\u062a\u0639\u0644\u0645 \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+            5,
+            0,
+            "\u0634\u0643\u0631\u0627 \u0644\u062a\u0642\u064a\u064a\u0645\u0643."
+        ],
+        [
+            "busuu: learn english",
+            "achal gajbhiye",
+            "yahoo",
+            3,
+            0,
+            "hello a google user thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "joseline djuiko",
+            "ho pagato musuu premium con il mio account wind ma non mi hanno sbloccato le lezioni nell app come main",
+            3,
+            2,
+            "ciao laurel grazie per il tuo messaggio! si prea di inviare un'e-mail a team@busuu.com con una prove d'acquisto e siamo in grade di aggiungere manualmente premium al tuo account grazie eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "daniel ferreira",
+            "espero que continue melhorando o app e distribuindo o conhecimento!",
+            5,
+            0,
+            "old daniel agradecemos o envie de seu coment\u00e1rio elogiando nossa metodologia. a equip musuu reza pela efici\u00eancia e estamos sempre aperfei\u00e7oando nossa ferramenta de estudo. caso precise nos cantate pelo team@busuu.com renato"
+        ],
+        [
+            "busuu: learn english",
+            "gita pertiwi",
+            "so helpfully for me i can learn english so easy",
+            4,
+            1,
+            "hello gita thanks for your feedback this motivates us to continue improving our platform if you need contact us by team@busuu.com musuu team"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "good",
+            5,
+            0,
+            "thanks a lot for the 5 stars eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "mohamed almogtaba",
+            "\u0644\u0642\u062f \u0633\u0627 \u0639\u062f\u0646\u064a \u0643\u062b\u064a\u0631\u0627 \u0641\u064a \u062a\u0637\u0648\u064a\u0631 \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+            5,
+            2,
+            "\u0634\u0643\u0631\u0627 \u0644\u062a\u0642\u064a\u064a\u0645\u0643"
+        ],
+        [
+            "busuu: learn english",
+            "melissa tv_crazy family",
+            "very good application thank's a lot uber!)",
+            5,
+            0,
+            "thanks a lot for your lovely feedback have a great day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "abraham owusu",
+            "i think is one of users best ideas",
+            5,
+            4,
+            "hello abraham thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "abdelwahed khaled",
+            "i hope you unlock some tests and courses for free users too it's going to be unuseful when very important courses are missed !",
+            5,
+            0,
+            "thanks a lot for your comment abdelwahed! wishing you all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "musuu is the best way to improve your language",
+            5,
+            0,
+            "thanks a lot for your lovely comment we really appreciate it eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "ngomylinh",
+            "good",
+            5,
+            1,
+            "thanks a lot for the 5 star feedback have a great evening eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "camila jacinto p\u00e9rez",
+            "i would like to learn more much but it's still good although i don't get premium\ud83d\ude25.",
+            5,
+            3,
+            "hello camilla thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "compare la premium pero solo me cobraron y no se me active",
+            2,
+            1,
+            "muchas gracias por las cinco estrellas lo agradecemos mucho eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "im",
+            1,
+            0,
+            "thanks for the feedback eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "a google user",
+            "tenho aprendido bem o ingles com este app",
+            5,
+            0,
+            "old victor braga muito obrigado peas sua sugest\u00f5es! estamos grates por todas as sugest\u00f5es que recebemos e isso nos motive a continuar trabalhando muito para melhorar nosso produtos. tudo de bomb renato"
+        ],
+        [
+            "busuu: learn english",
+            "arvind rawat",
+            "i love basuu",
+            5,
+            0,
+            "and we love that you are learning with us arvind all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "carlos silva",
+            "that's an amazing app to practice languages anywhere anytime",
+            4,
+            0,
+            "thanks a lot for the lovely feedback carlos have a great evening eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "ricardo giaviti",
+            "ok the app is free however you have to pay the premium plan to do more advanced lessons please busuu, at least be honest and say this in the app description for now i will be going with duolingo.",
+            2,
+            0,
+            "we appreciate your feedback ricardo thanks a lot eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "le dung ngoc",
+            "i pay 9 euro ago 4 day in google play money is lost but application is still limit i very sad",
+            1,
+            1,
+            "hi le dung thanks a lot for your message please send us a message to team@busuu.com with a proof of purchase and we can manually add premium to your account many thanks eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "jacque gonzales",
+            "i subscribe here but still cant unlock the premium please help.thanks",
+            4,
+            0,
+            "hi jacques thanks a lot for your message i have just responded to your other email :-) all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "bago's club",
+            "nice app",
+            5,
+            0,
+            "hello ahmed thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "vignesh madhavel",
+            "international level teaching",
+            5,
+            0,
+            "thanks a lot for the fantastic feedback vignesh! wishing you all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "\u0622\u063a\u0627\u0631\u062b\u0627 agartha",
+            "i",
+            5,
+            0,
+            "hello azzam, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "manchale friends",
+            "it is the best app for english speak",
+            5,
+            0,
+            "thanks a lot for the fantastic 5 star feedback rajeev have a great day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "tareq ahmad",
+            "it's very amazing app i can study the language on the short period thank's for every body who is creating this app",
+            5,
+            0,
+            "thanks a lot for the fantastic feedback tareq! have a great weekend eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "arturo ismael hern\u00e1ndez",
+            "i can't buy the premium version from the app",
+            3,
+            1,
+            "hi arturo thanks a lot for your message if you could send us a message to team@busuu.com and i can help you with the payment process all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "roman samolazov",
+            "\u0435\u0441\u043b\u0438 \u044f\u0437\u044b\u043a \u0443\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430 \u0430\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439, \u0442\u043e \u043e\u0442 \u0437\u0430\u0434\u0430\u043d\u0438\u0439 \u043d\u0438\u043a\u0430\u043a\u043e\u0433\u043e \u0442\u043e\u043b\u043a\u0430, \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430\u043c\u0438 \u043f\u043e \u043d\u0435 \u0438\u0441\u043f\u0440\u0430\u0432\u0438\u0442\u044c. \u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0430\u043a\u0446\u0435\u043d\u0442 \u043d\u0430 \u043c\u043e\u043d\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u044e, \u0435\u0441\u0442\u044c \u043f\u043e\u043b\u0443\u0447\u0448\u0435 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b \u0437\u0430 \u0434\u0435\u043d\u044c\u0433\u0438 i \u043c\u0435\u043d\u044c\u0448\u0438\u0435.",
+            1,
+            2,
+            "\u0440\u043e\u043c\u0430\u043d, \u0434\u043e\u0431\u0440\u044b\u0439 \u0434\u0435\u043d\u044c! \u043d\u0430\u043c \u0436\u0430\u043b\u044c, \u0447\u0442\u043e \u043d\u0430\u0448\u0435 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0432\u0430\u043c \u043d\u0435 \u043f\u043e\u0434\u043e\u0448\u043b\u043e. is \u0432\u044b \u043c\u043e\u0436\u0435\u0442\u0435 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u044f\u0437\u044b\u043a\u043e\u043c \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u043b\u044e\u0431\u043e\u0439 \u044f\u0437\u044b\u043a \u0438\u0437 \u043f\u0440\u0435\u0434\u043b\u0430\u0433\u0430\u0435\u043c\u044b\u0445 \u043d\u0430\u043c\u0438. i \u0443\u0432\u0430\u0436\u0435\u043d\u0438\u0435\u043c, \u044e\u043b\u0438\u044f"
+        ],
+        [
+            "busuu: learn english",
+            "deepali likhar",
+            "i dont like it app",
+            1,
+            3,
+            "hello deepali, ok thanks all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "raman prakash",
+            "good",
+            5,
+            0,
+            "thanks a lot for the five star ratings raman all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "surinder singh sandhu",
+            "very gud app",
+            5,
+            0,
+            "thanks a lot for the 5 star feedback surinder all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "lakshay mathur",
+            "\" unfortunately musuu has stopped working \"",
+            1,
+            13,
+            "hi lakshay, thanks a lot for your message if you could send us a message to team@busuu.com, we can help you with this issue all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "ravi bhatt",
+            "excellent",
+            5,
+            0,
+            "hello ravi thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "bell - agario",
+            "no mony not well",
+            1,
+            1,
+            "hope you can still enjoy learning with our free account bell all the best eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "tito javier ardila",
+            "i",
+            4,
+            1,
+            "thanks a lot for your feedback tito have a great day eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "azhar khan",
+            "good",
+            2,
+            0,
+            "thanks a lot for the review azhar! have a good evening eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "nguy\u1ec5n th\u1ecb thanh ng\u00e2n",
+            "can i improve my listening and speaking as well",
+            5,
+            0,
+            "hi nguy\u1ec5n, thanks a lot for the 5 star feedback we have both listening and speaking exercises with our course we are also currently revamping our voice recording function!) all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "cristopher henrique",
+            "awesome!!!",
+            5,
+            0,
+            "hello christopher henriques thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best musuu"
+        ],
+        [
+            "busuu: learn english",
+            "ed lu",
+            "no paguen por una suscripcion premium pagu\u00e9 por una y no la puedo usar",
+            4,
+            1,
+            "hola edgar gracias por tu mensaje por favor nos manda un corre a team@busuu.com y te podemos ayudar con este problema buen dial eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "amin ahmed",
+            "every time i want to use it...started and closed as blink flash...please fix it.. thank you",
+            1,
+            11,
+            "hi amino thanks a lot for your message please send us a message to team@busuu.com and we can help you with this issue all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "alik aliyev",
+            "bir alik premium satin aldim 11$ odedim ama kilitler acilmiyor !!!",
+            1,
+            11,
+            "merhaba alike mesaj\u0131n\u0131z iin te\u015fekk\u00fcr ederiz. l\u00fctfen team@busuu.com'a mesaj ating te\u015fekk\u00fcrler, asli"
+        ],
+        [
+            "busuu: learn english",
+            "binoy harold",
+            "awesome guyss.. after hitting a minor hiccup that u guys rectified i am fully enjoying this app a big shout out for the team for helping me so fast.. :)",
+            5,
+            29,
+            "hi binoy, thanks a lot for your message please send us a proof of purchase to team@busuu.com and we can manually add premium to your account all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "diosshu",
+            "the app does not work i have a let is with lollipop and i have installed the app two times but i can not use it yet",
+            1,
+            1,
+            "hello thank you for your feedback - we'll pass this on internally if you would like to provide any additional feedback you can reach out via team@busuu.com. thank you musuu"
+        ],
+        [
+            "busuu: learn english",
+            "chirag babaria",
+            "after installation this app is crashes it crashes while i try to open this app i am using lenovo ke note in indian",
+            1,
+            4,
+            "hello thank you for your feedback - we'll pass this on internally if you would like to provide any additional feedback you can reach out via team@busuu.com. thank you musuu"
+        ],
+        [
+            "busuu: learn english",
+            "leonardo gasparini",
+            "program excelent de aprendizagem!",
+            5,
+            1,
+            "old leonardo tudo bem muito obrigado pela sua mensagem! estamos grates e isso nos motive a continuar trabalhando muito para melhorar nosso produtos. tudo de bom e se poss\u00edvel me avalie positivamente. renato"
+        ],
+        [
+            "busuu: learn english",
+            "vijay dasari",
+            "good",
+            5,
+            0,
+            "hello vijay thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "abhishek sikarwar",
+            "please provide some more offline features for fluent english speaking for free",
+            5,
+            0,
+            "thanks for your suggestion abhishek wishing you a good evening eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "aymen alzubaidi",
+            "the audio recognition is very bad... when the app fail to recognize the word i speak twice there is a penalty and i have to redo the entire test from the beginning because of two mistake... otherwise choose i can't speak at the moment * is recommended",
+            3,
+            12,
+            "hi aymn, thanks a lot for your message if you could send us a message to team@busuu.com indicating exactly where you have this issue this would really help us to help you have a great day eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "bibin basil",
+            "doesn't open... not working",
+            1,
+            5,
+            "hi bibin, thanks a lot for your message please send us a message to team@busuu.com and we can assist you with this issue further all the best eleanor"
+        ],
+        [
+            "busuu: learn english",
+            "silvia escudero lamas",
+            "great",
+            4,
+            1,
+            "glad you are enjoying the app silvia eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "jhony c",
+            "muy buena app para reforzar vocabulario y muy bien explicado",
+            5,
+            0,
+            "gracias por las cinco estrellas jhony! eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "techno skills",
+            "good app for eng learning",
+            5,
+            0,
+            "thanks a lot for your great feedback saravagay! we are glad you are loving the app eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "chanakan maenyat",
+            "good",
+            4,
+            2,
+            "glad you are enjoying our app eleanor :)"
+        ],
+        [
+            "busuu: learn english",
+            "nada salah",
+            "it's an amazing application to learn how to deal with people in english",
+            5,
+            12,
+            "hello nada thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ],
+        [
+            "busuu: learn english",
+            "sahil khan",
+            "nice",
+            5,
+            0,
+            "thanks for your comment sahil"
+        ],
+        [
+            "busuu: learn english",
+            "h\u00e2n cao l\u00ea thu\u1ef3",
+            "good",
+            4,
+            18,
+            "hello cao la they h\u00e2n, thanks a lot for your feedback we're grateful for all the feedback that we received and this motivates us to continue working hard to improve our products all the best asli"
+        ]
+    ]
+}
