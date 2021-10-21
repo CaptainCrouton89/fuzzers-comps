@@ -2,17 +2,58 @@ import json
 import argparse
 import torch
 from torch import nn
-from network_deployable import EncoderRNN, LuongAttnDecoderRNN, GreedySearchDecoder, loadPrepareData
+from network_deployable import EncoderRNN, LuongAttnDecoderRNN, GreedySearchDecoder, loadPrepareData, indexesFromSentence, normalizeString
+
+def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
+    ### Format input sentence as a batch
+    # words -> indexes
+    indexes_batch = [indexesFromSentence(voc, sentence)]
+    # Create lengths tensor
+    lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
+    # Transpose dimensions of batch to match models' expectations
+    input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
+    # Use appropriate device
+    input_batch = input_batch.to(device)
+    lengths = lengths.to("cpu")
+    # Decode sentence with searcher
+    tokens, scores = searcher(input_batch, lengths, max_length)
+    # indexes -> words
+    decoded_words = [voc.index2word[token.item()] for token in tokens]
+    return decoded_words
+
+
+def evaluateInput(encoder, decoder, searcher, voc, max_length):
+    input_sentence = ''
+    while(1):
+        try:
+            # Get input sentence
+            input_sentence = input('> ')
+            # Check if it is quit case
+            if input_sentence == 'q' or input_sentence == 'quit': break
+            # Normalize sentence
+            input_sentence = normalizeString(input_sentence)
+            # Evaluate sentence
+            output_words = evaluate(encoder, decoder, searcher, voc, input_sentence, max_length)
+            # Format and print response sentence
+            output_words[:] = [x for x in output_words if not (x == 'EOS' or x == 'PAD')]
+            print('Bot:', ' '.join(output_words))
+
+        except KeyError:
+            print("Error: Encountered unknown word.")
+
 
 # Get args
 parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-parser.add_argument("-m", "--model_checkpoint", help="uses model for testing responses")
+parser.add_argument("-m", "--model_checkpoint", help="uses model for testing responses", 
+                        default="../data/network_saves/cb_model/AppReviewsResponses/2-2_500_local/4000_checkpoint.tar")
+parser.add_argument("-c", "--config", help="config file for running model. Should correspond to model.", 
+                        default="configs/config_basic.json")
 args = parser.parse_args()
 
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-with open('config_basic.json') as f:
+with open('configs/config_basic.json') as f:
     config = json.load(f)
 
 if not args.model_checkpoint:
@@ -57,3 +98,5 @@ decoder.eval()
 
 # Initialize search module
 searcher = GreedySearchDecoder(encoder, decoder)
+
+evaluateInput(encoder, decoder, searcher, voc, config['MAX_LENGTH'])
