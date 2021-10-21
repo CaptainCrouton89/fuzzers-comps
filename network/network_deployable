@@ -644,7 +644,7 @@ print('Models built and ready to go!')
 # %%
 # Configure training/optimization
 clip = 50.0
-teacher_forcing_ratio = 1.0
+teacher_forcing_ratio = .5
 learning_rate = 0.0001
 decoder_learning_ratio = 5.0
 n_iteration = 4000
@@ -680,52 +680,3 @@ print("Starting Training!")
 trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
            embedding, encoder_n_layers, decoder_n_layers, network_save_path, n_iteration, batch_size,
            teacher_forcing_ratio, print_every, save_every, clip, corpus_name)
-
-# %% [markdown]
-# # IGNORE STUFF BELOW
-
-# %%
-glove = pd.read_csv('../embedding/glove.6B.100d.txt', sep=" ",
-                    quoting=3, header=None, index_col=0)
-glove_embedding = {key: val.values for key, val in glove.T.items()}
-
-
-# %%
-def create_embedding_matrix(word_index, embedding_dict, dimension):
-  embedding_matrix = np.zeros((len(word_index)+1, dimension))
-
-  for word, index in word_index.items():
-    if word in embedding_dict:
-      embedding_matrix[index] = embedding_dict[word]
-  return embedding_matrix
-
-
-# %%
-# text = ["The cat sat on mat", "we can play with model"]
-
-review_data_path = "../data/app_review_data/data_with_responses.json"
-test_path = "../data/refined_data.json"
-
-df = pd.read_json(test_path, orient="split")
-all_text = [review for review in df["content"]]
-all_text.extend([reply for reply in df["replyContent"]])
-
-
-# %%
-tokenizer = tf.keras.preprocessing.text.Tokenizer(split=" ")
-tokenizer.fit_on_texts(all_text)
-
-text_token = tokenizer.texts_to_sequences(all_text)
-
-embedding_matrix = create_embedding_matrix(
-    tokenizer.word_index, embedding_dict=glove_embedding, dimension=100)
-
-
-# %%
-vocab_size = embedding_matrix.shape[0]
-vector_size = embedding_matrix.shape[1]
-
-embedding = nn.Embedding(num_embeddings=vocab_size, embedding_dim=vector_size)
-print("embedding matrix shape (num words, embedding width):\n", embedding_matrix.shape)
-
-
