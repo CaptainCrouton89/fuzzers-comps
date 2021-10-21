@@ -2,7 +2,7 @@
 # To add a new markdown cell, type '# %% [markdown]'
 # %% [markdown]
 # Following this guide: https://pytorch.org/tutorials/beginner/chatbot_tutorial.html
-# 
+#
 
 # %%
 from __future__ import absolute_import, unicode_literals, print_function, division
@@ -24,6 +24,7 @@ import torch.nn.functional as F
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
+
 torch.manual_seed(1)
 
 review_data_path = "../data/app_review_data/data_with_responses_test.json"
@@ -41,13 +42,15 @@ PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
 EOS_token = 2  # End-of-sentence token
 
+
 class Voc:
     def __init__(self, name):
         self.name = name
         self.trimmed = False
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS"}
+        self.index2word = {PAD_token: "PAD",
+                           SOS_token: "SOS", EOS_token: "EOS"}
         self.num_words = 3  # Count SOS, EOS, PAD
 
     def addSentence(self, sentence):
@@ -76,14 +79,16 @@ class Voc:
                 keep_words.append(k)
 
         print('keep_words {} / {} = {:.4f}'.format(
-            len(keep_words), len(self.word2index), len(keep_words) / len(self.word2index)
+            len(keep_words), len(self.word2index), len(
+                keep_words) / len(self.word2index)
         ))
 
         # Reinitialize dictionaries
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS"}
-        self.num_words = 3 # Count default tokens
+        self.index2word = {PAD_token: "PAD",
+                           SOS_token: "SOS", EOS_token: "EOS"}
+        self.num_words = 3  # Count default tokens
 
         for word in keep_words:
             self.addWord(word)
@@ -91,11 +96,14 @@ class Voc:
 # %% [markdown]
 # ## Assembling Vocabulary and Formatting Pairs
 
+
 # %%
 MAX_LENGTH = 50  # Maximum sentence length to consider
 
 # Turn a Unicode string to plain ASCII, thanks to
 # https://stackoverflow.com/a/518232/2809427
+
+
 def unicodeToAscii(s):
     return ''.join(
         c for c in unicodedata.normalize('NFD', s)
@@ -103,6 +111,8 @@ def unicodeToAscii(s):
     )
 
 # Lowercase, trim, and remove non-letter characters
+
+
 def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
     s = re.sub(r"([.!?])", r" \1", s)
@@ -111,6 +121,8 @@ def normalizeString(s):
     return s
 
 # Read query/response pairs and return a voc object
+
+
 def readVocs(df, corpus_name):
     print("Reading lines...")
     pairs = list(zip(df["content"], df["replyContent"]))
@@ -118,11 +130,15 @@ def readVocs(df, corpus_name):
     return voc, pairs
 
 # Returns True iff both sentences in a pair 'p' are under the MAX_LENGTH threshold
+
+
 def filterPair(p):
     # Input sequences need to preserve the last word for EOS token
     return len(p[0].split(' ')) < MAX_LENGTH and len(p[1].split(' ')) < MAX_LENGTH
 
 # Filter pairs using filterPair condition
+
+
 def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
@@ -154,12 +170,15 @@ for pair in pairs[:10]:
 # In order to take advantage of the GPU, we need to send data in batches. These batches need to be of same length, however, and our sentences are not of all the same length, so they need to get padded with extra space so they all take up the same size.
 
 # %%
+
+
 def indexesFromSentence(voc, sentence):
     return [voc.word2index[word] for word in sentence.split(' ')] + [EOS_token]
 
 
 def zeroPadding(l, fillvalue=PAD_token):
     return list(itertools.zip_longest(*l, fillvalue=fillvalue))
+
 
 def binaryMatrix(l, value=PAD_token):
     m = []
@@ -173,6 +192,8 @@ def binaryMatrix(l, value=PAD_token):
     return m
 
 # Returns padded input sequence tensor and lengths
+
+
 def inputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
@@ -181,6 +202,8 @@ def inputVar(l, voc):
     return padVar, lengths
 
 # Returns padded target sequence tensor, padding mask, and max target length
+
+
 def outputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     max_target_len = max([len(indexes) for indexes in indexes_batch])
@@ -191,6 +214,8 @@ def outputVar(l, voc):
     return padVar, mask, max_target_len
 
 # Returns all items for a given batch of pairs
+
+
 def batch2TrainData(voc, pair_batch):
     pair_batch.sort(key=lambda x: len(x[0].split(" ")), reverse=True)
     input_batch, output_batch = [], []
@@ -204,7 +229,8 @@ def batch2TrainData(voc, pair_batch):
 
 # Example for validation
 small_batch_size = 5
-batches = batch2TrainData(voc, [random.choice(pairs) for _ in range(small_batch_size)])
+batches = batch2TrainData(voc, [random.choice(pairs)
+                          for _ in range(small_batch_size)])
 input_variable, lengths, target_variable, mask, max_target_len = batches
 
 print("input_variable:", input_variable)
@@ -219,6 +245,8 @@ print("max_target_len:", max_target_len)
 # ### Architecture
 
 # %%
+
+
 class EncoderRNN(nn.Module):
     def __init__(self, hidden_size, embedding, n_layers=1, dropout=0):
         super(EncoderRNN, self).__init__()
@@ -241,7 +269,8 @@ class EncoderRNN(nn.Module):
         # Unpack padding
         outputs, _ = nn.utils.rnn.pad_packed_sequence(outputs)
         # Sum bidirectional GRU outputs
-        outputs = outputs[:, :, :self.hidden_size] +             outputs[:, :, self.hidden_size:]
+        outputs = outputs[:, :, :self.hidden_size] + \
+            outputs[:, :, self.hidden_size:]
         # Return output and final hidden state
         return outputs, hidden
 
@@ -302,7 +331,8 @@ class LuongAttnDecoderRNN(nn.Module):
         # Define layers
         self.embedding = embedding
         self.embedding_dropout = nn.Dropout(dropout)
-        self.gru = nn.GRU(hidden_size, hidden_size, n_layers, dropout=(0 if n_layers == 1 else dropout))
+        self.gru = nn.GRU(hidden_size, hidden_size, n_layers,
+                          dropout=(0 if n_layers == 1 else dropout))
         self.concat = nn.Linear(hidden_size * 2, hidden_size)
         self.out = nn.Linear(hidden_size, output_size)
 
@@ -378,7 +408,8 @@ class LuongAttnDecoderRNN(nn.Module):
 # %%
 def maskNLLLoss(inp, target, mask):
     nTotal = mask.sum()
-    crossEntropy = -         torch.log(torch.gather(inp, 1, target.view(-1, 1)).squeeze(1))
+    crossEntropy = - \
+        torch.log(torch.gather(inp, 1, target.view(-1, 1)).squeeze(1))
     loss = crossEntropy.masked_select(mask).mean()
     loss = loss.to(device)
     return loss, nTotal.item()
@@ -387,6 +418,8 @@ def maskNLLLoss(inp, target, mask):
 # ### Training Code
 
 # %%
+
+
 def train(input_variable, lengths, target_variable, mask, max_target_len, encoder, decoder, embedding,
           encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio, max_length=MAX_LENGTH):
 
@@ -428,7 +461,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
             # Teacher forcing: next input is current target
             decoder_input = target_variable[t].view(1, -1)
             # Calculate and accumulate loss
-            mask_loss, nTotal = maskNLLLoss(decoder_output, target_variable[t], mask[t])
+            mask_loss, nTotal = maskNLLLoss(
+                decoder_output, target_variable[t], mask[t])
             loss += mask_loss
             print_losses.append(mask_loss.item() * nTotal)
             n_totals += nTotal
@@ -439,10 +473,12 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
             )
             # No teacher forcing: next input is decoder's own current output
             _, topi = decoder_output.topk(1)
-            decoder_input = torch.LongTensor([[topi[i][0] for i in range(batch_size)]])
+            decoder_input = torch.LongTensor(
+                [[topi[i][0] for i in range(batch_size)]])
             decoder_input = decoder_input.to(device)
             # Calculate and accumulate loss
-            mask_loss, nTotal = maskNLLLoss(decoder_output, target_variable[t], mask[t])
+            mask_loss, nTotal = maskNLLLoss(
+                decoder_output, target_variable[t], mask[t])
             loss += mask_loss
             print_losses.append(mask_loss.item() * nTotal)
             n_totals += nTotal
@@ -462,13 +498,13 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
 
 # %%
-def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer, 
-                embedding, encoder_n_layers, decoder_n_layers, save_dir, n_iteration, batch_size, 
+def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
+               embedding, encoder_n_layers, decoder_n_layers, save_dir, n_iteration, batch_size,
                teacher_forcing_ratio, print_every, save_every, clip, corpus_name="corpus", loadFilename=None, checkpoint=None):
 
     # Load batches for each iteration
     training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)])
-                      for _ in range(n_iteration)]
+                        for _ in range(n_iteration)]
 
     # Initializations
     print('Initializing ...')
@@ -492,12 +528,14 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
         # Print progress
         if iteration % print_every == 0:
             print_loss_avg = print_loss / print_every
-            print("Iteration: {}; Percent complete: {:.1f}%; Average loss: {:.4f}".format(iteration, iteration / n_iteration * 100, print_loss_avg))
+            print("Iteration: {}; Percent complete: {:.1f}%; Average loss: {:.4f}".format(
+                iteration, iteration / n_iteration * 100, print_loss_avg))
             print_loss = 0
 
         # Save checkpoint
         if (iteration % save_every == 0):
-            directory = os.path.join(save_dir, model_name, corpus_name, '{}-{}_{}'.format(encoder_n_layers, decoder_n_layers, hidden_size))
+            directory = os.path.join(save_dir, model_name, corpus_name, '{}-{}_{}'.format(
+                encoder_n_layers, decoder_n_layers, hidden_size))
             if not os.path.exists(directory):
                 os.makedirs(directory)
             torch.save({
@@ -548,7 +586,7 @@ class GreedySearchDecoder(nn.Module):
 
 # %%
 def evaluate(encoder, decoder, searcher, voc, sentence, max_length=MAX_LENGTH):
-    ### Format input sentence as a batch
+    # Format input sentence as a batch
     # words -> indexes
     indexes_batch = [indexesFromSentence(voc, sentence)]
     # Create lengths tensor
@@ -603,7 +641,7 @@ batch_size = 64
 # Set checkpoint to load from; set to None if starting from scratch
 loadFilename = None
 checkpoint_iter = 4000
-#loadFilename = os.path.join(save_dir, model_name, corpus_name,
+# loadFilename = os.path.join(save_dir, model_name, corpus_name,
 #                            '{}-{}_{}'.format(encoder_n_layers, decoder_n_layers, hidden_size),
 #                            '{}_checkpoint.tar'.format(checkpoint_iter))
 
