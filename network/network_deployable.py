@@ -24,8 +24,8 @@ import torch.nn.functional as F
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
+
 torch.manual_seed(1)
-MAX_LENGTH = 100
 
 review_data_path = "../data/app_review_data/data_with_responses_test.json"
 network_save_path = "../data/network_saves/"
@@ -143,9 +143,8 @@ def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
 # Using the functions defined above, return a populated voc object and pairs list
-
-
-def loadPrepareData(corpus_name, df):
+def loadPrepareData(corpus_name, data_path):
+    df = pd.read_json(data_path, orient="split")
     print("Start preparing training data ...")
     voc, pairs = readVocs(df, corpus_name)
     print("Read {!s} sentence pairs".format(len(pairs)))
@@ -160,8 +159,7 @@ def loadPrepareData(corpus_name, df):
 
 
 # Load/Assemble voc and pairs
-app_review_df = pd.read_json(review_data_path, orient="split")
-voc, pairs = loadPrepareData(corpus_name, app_review_df)
+voc, pairs = loadPrepareData(corpus_name, review_data_path)
 # Print some pairs to validate
 print("\npairs:")
 for pair in pairs[:10]:
