@@ -93,12 +93,13 @@ if not args.model_checkpoint:
     print("No model given. Use `-m <model name>` to give model")
     exit()
 
-pairs, voc = loadPrepareData(config['corpus_name'], config["data_path"])
+voc, pairs = loadPrepareData(config['corpus_name'], config["data_path"])
 
 # If loading on same machine the model was trained on
-checkpoint = torch.load(args.model_checkpoint)
-# If loading a model trained on GPU to CPU
-#checkpoint = torch.load(loadFilename, map_location=torch.device('cpu'))
+if torch.cuda.is_available():
+    checkpoint = torch.load(args.model_checkpoint)
+else:
+    checkpoint = torch.load(args.model_checkpoint, map_location=torch.device('cpu'))
 encoder_sd = checkpoint['en']
 decoder_sd = checkpoint['de']
 encoder_optimizer_sd = checkpoint['en_opt']
