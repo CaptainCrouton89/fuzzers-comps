@@ -594,7 +594,7 @@ def evaluateInput(encoder, decoder, searcher, voc):
 #%%
 def main():
     # Configure models
-    model_name = 'cb_model'
+    model_name = 'simple_attention_rnn'
     attn_model = 'dot'
     #attn_model = 'general'
     #attn_model = 'concat'

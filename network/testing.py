@@ -1,4 +1,5 @@
 import json
+import os
 import argparse
 import torch
 from torch import nn
@@ -75,11 +76,20 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length):
             print("Error: Encountered unknown word.")
 
 
+network_saves_path = "../data/network_saves"
 # Get args
 parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-parser.add_argument("-m", "--model_checkpoint", help="uses model for testing responses", 
-                        default="../data/network_saves/cb_model/AppReviewsResponses/2-2_500_local/4000_checkpoint.tar")
-parser.add_argument("-c", "--config", help="config file for running model. Should correspond to model.", 
+parser.add_argument("-m", "--model", 
+                        help="model for testing", 
+                        default="cb_model")
+parser.add_argument("-u", "--corpus", 
+                        help="corpus name", 
+                        default="AppReviewsResponses")
+parser.add_argument("-k", "--checkpoint", 
+                        help="model checkpoint name for training. Should have format <model/number_checkpoint.tar>",
+                        default="2-2_500_local/4000_checkpoint.tar")
+parser.add_argument("-c", "--config", 
+                        help="config file for running model. Should correspond to model.", 
                         default="configs/config_basic.json")
 args = parser.parse_args()
 
@@ -89,17 +99,15 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 with open('configs/config_basic.json') as f:
     config = json.load(f)
 
-if not args.model_checkpoint:
-    print("No model given. Use `-m <model name>` to give model")
-    exit()
+model_path = os.path.join(network_saves_path, args.model, args.corpus, args.checkpoint)
 
 voc, pairs = loadPrepareData(config['corpus_name'], config["data_path"])
 
 # If loading on same machine the model was trained on
 if torch.cuda.is_available():
-    checkpoint = torch.load(args.model_checkpoint)
+    checkpoint = torch.load(model_path)
 else:
-    checkpoint = torch.load(args.model_checkpoint, map_location=torch.device('cpu'))
+    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 encoder_sd = checkpoint['en']
 decoder_sd = checkpoint['de']
 encoder_optimizer_sd = checkpoint['en_opt']
