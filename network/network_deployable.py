@@ -455,7 +455,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
 # %%
 def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
-               embedding, encoder_n_layers, decoder_n_layers, save_dir, n_iteration, batch_size,
+               embedding, encoder_n_layers, decoder_n_layers, hidden_size, save_dir, n_iteration, batch_size,
                teacher_forcing_ratio, print_every, save_every, clip, corpus_name="corpus", loadFilename=None, checkpoint=None):
 
     # Load batches for each iteration
@@ -636,7 +636,7 @@ def main():
     # Run training iterations
     print("Starting Training!")
     trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
-            embedding, encoder_n_layers, decoder_n_layers, network_save_path, n_iteration, batch_size,
+            embedding, encoder_n_layers, decoder_n_layers, hidden_size, network_save_path, n_iteration, batch_size,
             teacher_forcing_ratio, print_every, save_every, clip, corpus_name)
 
 if "__name__" == "__main__":
