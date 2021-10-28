@@ -36,6 +36,11 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
 EOS_token = 2  # End-of-sentence token
+APP_NAME_token = 3
+DIGITS_token = 4
+USERNAME_token = 5
+URL_TOKEN = 6
+EMAIL_token = 7
 
 
 class Voc:
@@ -44,9 +49,11 @@ class Voc:
         self.trimmed = False
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD",
-                           SOS_token: "SOS", EOS_token: "EOS"}
-        self.num_words = 3  # Count SOS, EOS, PAD
+        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS",
+                           APP_NAME_token: "ANT", DIGITS_token: "DGT", USERNAME_token: "UNT",
+                           URL_TOKEN: "URT", EMAIL_token: "EMT"}
+        # <appname>, <digits>, <username>, <url>, <email>
+        self.num_words = 8  # Count SOS, EOS, PAD
 
     def addSentence(self, sentence):
         for word in sentence.split(' '):
@@ -81,9 +88,11 @@ class Voc:
         # Reinitialize dictionaries
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD",
-                           SOS_token: "SOS", EOS_token: "EOS"}
-        self.num_words = 3  # Count default tokens
+        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS",
+                           APP_NAME_token: "ANT", DIGITS_token: "DGT", USERNAME_token: "UNT",
+                           URL_TOKEN: "URT", EMAIL_token: "EMT"}
+        # <appname>, <digits>, <username>, <url>, <email>
+        self.num_words = 8  # Count default tokens
 
         for word in keep_words:
             self.addWord(word)
