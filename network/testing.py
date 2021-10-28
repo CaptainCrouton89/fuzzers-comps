@@ -96,7 +96,7 @@ args = parser.parse_args()
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-with open('configs/config_basic.json') as f:
+with open(str(args.config)) as f:
     config = json.load(f)
 
 model_path = os.path.join(network_saves_path, args.model, args.corpus, args.checkpoint)
@@ -119,11 +119,13 @@ hidden_size = config['hidden_size']
 encoder_n_layers = config['encoder_n_layers']
 dropout = config['dropout']
 hidden_size = config['hidden_size']
+attn_model = config['attn_model']
+decoder_n_layers = config['decoder_n_layers']
 
 embedding = nn.Embedding(voc.num_words, hidden_size)
 encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
 decoder = LuongAttnDecoderRNN(
-    config['attn_model'], embedding, hidden_size, voc.num_words, config['decoder_n_layers'], dropout)
+    attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
 
 embedding.load_state_dict(embedding_sd)
 encoder.load_state_dict(encoder_sd)
