@@ -79,12 +79,12 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length):
 network_saves_path = "../data/network_saves"
 # Get args
 parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-parser.add_argument("-m", "--model", 
-                        help="model for testing", 
-                        default="cb_model")
 parser.add_argument("-u", "--corpus", 
                         help="corpus name", 
                         default="AppReviewsResponses")
+parser.add_argument("-m", "--model", 
+                        help="model for testing", 
+                        default="cb_model")
 parser.add_argument("-k", "--checkpoint", 
                         help="model checkpoint name for training. Should have format <model/number_checkpoint.tar>",
                         default="2-2_500_local/4000_checkpoint.tar")
