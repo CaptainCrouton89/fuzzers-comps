@@ -546,15 +546,6 @@ def main():
     parser.add_argument("-r", "--resume",
                             help="resume from save",
                             action='store_true') 
-    parser.add_argument("-m", "--model", 
-                            help="model for testing", 
-                            default="cb_model")
-    parser.add_argument("-u", "--corpus", 
-                            help="corpus name", 
-                            default="AppReviewsResponses")
-    parser.add_argument("-k", "--checkpoint", 
-                            help="model checkpoint name for training. Should have format <model/number_checkpoint.tar>",
-                            default="2-2_500_local/4000_checkpoint.tar")
     parser.add_argument("-c", "--config", 
                             help="config file for running model. Should correspond to model.", 
                             default="configs/config_basic.json")
