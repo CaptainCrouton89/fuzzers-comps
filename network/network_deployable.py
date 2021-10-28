@@ -27,7 +27,7 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 
 torch.manual_seed(1)
 
-review_data_path = "../data/app_review_data/data_with_responses_test.json"
+review_data_path = "../data/app_review_data/parsed_data_with_responses.json"
 network_save_path = "../data/network_saves/"
 corpus_name = "AppReviewsResponses"
 
@@ -143,6 +143,8 @@ def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
 # Using the functions defined above, return a populated voc object and pairs list
+
+
 def loadPrepareData(corpus_name, data_path):
     df = pd.read_json(data_path, orient="split")
     print("Start preparing training data ...")
@@ -547,7 +549,9 @@ def evaluateInput(encoder, decoder, searcher, voc):
         except KeyError:
             print("Error: Encountered unknown word.")
 
-#%%
+# %%
+
+
 def main():
     # Configure models
     model_name = 'simple_attention_rnn'
@@ -567,7 +571,6 @@ def main():
     #                            '{}-{}_{}'.format(encoder_n_layers, decoder_n_layers, hidden_size),
     #                            '{}_checkpoint.tar'.format(checkpoint_iter))
 
-
     # Load model if a loadFilename is provided
     if loadFilename:
         # If loading on same machine the model was trained on
@@ -580,7 +583,6 @@ def main():
         decoder_optimizer_sd = checkpoint['de_opt']
         embedding_sd = checkpoint['embedding']
         voc.__dict__ = checkpoint['voc_dict']
-
 
     print('Building encoder and decoder ...')
     # Initialize word embeddings
@@ -598,7 +600,6 @@ def main():
     encoder = encoder.to(device)
     decoder = decoder.to(device)
     print('Models built and ready to go!')
-
 
     # Configure training/optimization
     clip = 50.0
@@ -636,8 +637,9 @@ def main():
     # Run training iterations
     print("Starting Training!")
     trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
-            embedding, encoder_n_layers, decoder_n_layers, hidden_size, network_save_path, n_iteration, batch_size,
-            teacher_forcing_ratio, print_every, save_every, clip, corpus_name)
+               embedding, encoder_n_layers, decoder_n_layers, hidden_size, network_save_path, n_iteration, batch_size,
+               teacher_forcing_ratio, print_every, save_every, clip, corpus_name)
 
-if "__name__" == "__main__":
+
+if __name__ == "__main__":
     main()
