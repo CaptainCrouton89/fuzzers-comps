@@ -3,7 +3,7 @@
     "data_path": "../data/app_review_data/data_with_responses_test.json",
     "network_save_path": "../data/network_saves/",
     "corpus_name": "AppReviewsResponses",
-    "model_name": "cb_model",
+    "model_name": "simple_attention_rnn",
     "attn_model": "dot",
     "hidden_size": 500,
     "encoder_n_layers": 2,
@@ -17,5 +17,6 @@
     "decoder_learning_ratio": 5.0,
     "n_iteration": 4000,
     "print_every": 1,
-    "save_every": 500
+    "save_every": 500,
+    "learning_stop_count": 100
 }
