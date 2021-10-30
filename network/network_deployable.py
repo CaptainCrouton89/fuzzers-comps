@@ -367,8 +367,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
     decoder_input = decoder_input.to(device)
 
     # Concatonating other embeddings to hidden layer
-    star_embedding = 0
-    new_layer = torch.cat((encoder_hidden, star_embedding), 2)
+    # star_embedding = 0
+    # new_layer = torch.cat((encoder_hidden, star_embedding), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = encoder_hidden[:decoder.n_layers]
