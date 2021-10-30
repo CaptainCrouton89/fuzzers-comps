@@ -121,7 +121,7 @@ def normalizeString(s):
 # Read query/response pairs and return a voc object
 def readVocs(df, corpus_name):
     print("Reading lines...")
-    pairs = list(zip(df["content"], df["replyContent"]))
+    pairs = list(zip(df["content"], df["replyContent"], df["score"], df["thumbsUpCount"]))
     voc = Voc(corpus_name)
     return voc, pairs
 
@@ -366,8 +366,13 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
 
+    # Concatonating other embeddings to hidden layer
+    star_embedding = 0
+    new_layer = torch.cat((encoder_hidden, star_embedding), 2)
+
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = encoder_hidden[:decoder.n_layers]
+    print(encoder_hidden)
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
@@ -441,6 +446,9 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     # Load batches for each iteration
     training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)])
                         for _ in range(n_iteration)]
+    print("batch sample:\n", training_batches[:3])
+    # with open("batch_sample.json", "w+") as f:
+    #     json.dump(training_batches, f)
 
     # Initializations
     print('Initializing ...')
