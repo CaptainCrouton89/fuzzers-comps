@@ -569,7 +569,7 @@ def main():
     voc, pairs = loadPrepareData(corpus_name, data_path)
     # Print some pairs to validate
     print("\npairs:")
-    for pair in pairs[:10]:
+    for pair in pairs[:5]:
         print(pair)
 
     # Example for validation
