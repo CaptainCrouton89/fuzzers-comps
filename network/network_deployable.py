@@ -336,7 +336,7 @@ def maskNLLLoss(inp, target, mask):
 # %%
 
 
-def train(input_variable, lengths, target_variable, mask, max_target_len, encoder, decoder, embedding,
+def train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder, decoder, embedding,
           encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio, max_length=MAX_LENGTH):
 
     # Zero gradients
@@ -363,8 +363,9 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
     decoder_input = decoder_input.to(device)
 
     # Concatonating other embeddings to hidden layer
-    star_embedding = 0
-    new_layer = torch.cat((encoder_hidden, star_embedding), 2)
+    score = meta_data[0]
+    thumbsup = meta_data[1]
+    first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = encoder_hidden[:decoder.n_layers]
@@ -461,7 +462,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
         input_variable, lengths, target_variable, mask, max_target_len, meta_data = training_batch        
 
         # Run a training iteration with batch
-        loss = train(input_variable, lengths, target_variable, mask, max_target_len, encoder,
+        loss = train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder,
                      decoder, embedding, encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio)
         print_loss += loss
 
