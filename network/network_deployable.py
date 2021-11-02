@@ -135,8 +135,11 @@ def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
 # Using the functions defined above, return a populated voc object and pairs list
-def loadPrepareData(corpus_name, data_path):
+def loadPrepareData(corpus_name, data_path, function_mapping={}):
     df = pd.read_json(data_path, orient="split")
+    for column, function_list in function_mapping.items():
+        for function in function_list:
+            df[column] = function(df, column)
     print("Start preparing training data ...")
     voc, pairs = readVocs(df, corpus_name)
     print("Read {!s} sentence pairs".format(len(pairs)))
