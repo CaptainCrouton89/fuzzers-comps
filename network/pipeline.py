@@ -1,5 +1,5 @@
 import data_pipeline
-import network_deployable
+import gru_attention_network
 import argparse
 import json
 import random
