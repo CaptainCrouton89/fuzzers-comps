@@ -31,7 +31,7 @@ def call_network_deployable(config, vocab, pairs):
     """
     # Example for validation
     small_batch_size = 5
-    batches = network_deployable.batch2TrainData(vocab, [random.choice(pairs)
+    batches = gru_attention_network.batch2TrainData(vocab, [random.choice(pairs)
                                     for _ in range(small_batch_size)])
     input_variable, lengths, target_variable, mask, max_target_len, meta_data = batches
 
@@ -61,8 +61,8 @@ def call_network_deployable(config, vocab, pairs):
     embedding = nn.Embedding(vocab.num_words, hidden_size)
 
     # Initialize encoder & decoder models
-    encoder = network_deployable.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
-    decoder = network_deployable.LuongAttnDecoderRNN(
+    encoder = gru_attention_network.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
+    decoder = gru_attention_network.LuongAttnDecoderRNN(
         attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, dropout)
 
     # Use appropriate device
@@ -93,7 +93,7 @@ def call_network_deployable(config, vocab, pairs):
 
     # Run training iterations
     print("Starting Training!")
-    network_deployable.trainIters(model_name, vocab, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
+    gru_attention_network.trainIters(model_name, vocab, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
                embedding, config)
     return
 
