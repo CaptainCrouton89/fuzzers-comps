@@ -110,8 +110,7 @@ def normalizeString(s):
 # Read query/response pairs and return a voc object
 def readVocs(df, corpus_name):
     print("Reading lines...")
-    col_names = list(df)
-    pairs = list(zip(*col_names))
+    pairs = df.to_numpy().tolist()
     voc = Voc(corpus_name)
     return voc, pairs
 
