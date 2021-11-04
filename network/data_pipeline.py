@@ -1,6 +1,7 @@
 import pandas as pd
 import unicodedata
 import re
+import pandas.api.types as ptypes
 
 config = {
     "input_column": "content",
@@ -92,6 +93,9 @@ class Voc:
 MAX_LENGTH = 50  # Maximum sentence length to consider
 # TODO: read from config
 
+def validate(df):
+    assert ptypes.is_string_dtype(list(df)[0])
+    assert ptypes.is_string_dtype(list(df)[1])
 
 def unicodeToAscii(s):
     return ''.join(
@@ -132,6 +136,7 @@ def filterPairs(pairs):
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 def loadPrepareData(corpus_name, data_path, function_mapping=[]):
     df = pd.read_json(data_path, orient="split")
+    validate(df)
     for func, inp_col, out_col in function_mapping:
         df[out_col] = func(inp_col)
     print("Start preparing training data ...")
