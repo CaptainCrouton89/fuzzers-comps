@@ -110,18 +110,15 @@ def normalizeString(s):
     return s
 
 # Read query/response pairs and return a voc object
-
-
 def readVocs(df, corpus_name):
     print("Reading lines...")
-    pairs = list(zip(df["content"], df["replyContent"],
-                 df["score"], df["thumbsUpCount"]))
+    col_names = list(df)
+    print(*col_names)
+    pairs = list(zip(*col_names))
     voc = Voc(corpus_name)
     return voc, pairs
 
 # Returns True if both sentences in a pair 'p' are under the MAX_LENGTH threshold
-
-
 def filterPair(p):
     # Input sequences need to preserve the last word for EOS token
     for i in range(len(p)):
@@ -130,8 +127,6 @@ def filterPair(p):
     return True
 
 # Filter pairs using filterPair condition
-
-
 def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
