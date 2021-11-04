@@ -22,7 +22,7 @@ def call_data_pipeline(config):
 
     return vocab, pairs
 
-def create_network(config, vocab, pairs):
+def create_network(config, vocab, pairs, verbosity):
 
     """
     1. Create new columns using inp, out, func_list
@@ -35,12 +35,13 @@ def create_network(config, vocab, pairs):
                                     for _ in range(small_batch_size)])
     input_variable, lengths, target_variable, mask, max_target_len, meta_data = batches
 
-    print("input_variable:", input_variable)
-    print("lengths:", lengths)
-    print("target_variable:", target_variable)
-    print("mask:", mask)
-    print("max_target_len:", max_target_len)
-    print("meta_data:", meta_data)
+    if verbosity > 0:
+        print("input_variable:", input_variable)
+        print("lengths:", lengths)
+        print("target_variable:", target_variable)
+        print("mask:", mask)
+        print("max_target_len:", max_target_len)
+        print("meta_data:", meta_data)
 
     # Configure models
     hidden_size = config['hidden_size']
@@ -104,12 +105,16 @@ def main():
     parser.add_argument("-c", "--config", 
                             help="config file for network_deployable. Should correspond to model.", 
                             default="configs/config_basic.json")
+    parser.add_argument("-v", "--verbose", 
+                            help="how much verbosity to include :)", 
+                            action="count",
+                            default=0)
     args = parser.parse_args()
     with open(args.config) as f:
         config = json.load(f)
 
     vocab, pairs = call_data_pipeline(config)
-    create_network(config, vocab, pairs)
+    create_network(config, vocab, pairs, args.verbose)
 
 if __name__ == "__main__":
     main()
