@@ -1,3 +1,7 @@
+import pandas as pd
+import unicodedata
+import re
+
 config = {
     "input_column": "content",
     "input_associated_columns": [
