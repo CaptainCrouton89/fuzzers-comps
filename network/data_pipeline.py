@@ -1,17 +1,7 @@
 import pandas as pd
 import unicodedata
 import re
-import pandas.api.types as ptypes
-
-config = {
-    "input_column": "content",
-    "input_associated_columns": [
-        "score",
-        "thumbsUpCount"
-    ],
-    "response_column": "replyContent",
-    "response_associated_columns": []
-}
+import warnings
 
 # %% [markdown]
 # # Assembling Vocabulary, Formatting Input
@@ -90,12 +80,18 @@ class Voc:
 
 
 # %%
-MAX_LENGTH = 50  # Maximum sentence length to consider
-# TODO: read from config
-
 def validate(df):
-    assert ptypes.is_string_dtype(list(df)[0]), "Column 1 must be of type string, and should be input content"
-    assert ptypes.is_string_dtype(list(df)[1]), "Column 2 must be of type string, and should be output content"
+    assert df.dtypes[0] == "object", "Column 1 must be of type string, and should be input content"
+    assert df.dtypes[1] == "object", "Column 2 must be of type string, and should be output content"
+    content = list(df)[0]
+    replyContent = list(df)[1]
+    if content != "content":
+        warnings.warn("First column in dataframe should be input_text. \
+The current column is named {}".format(content))
+    if replyContent != "replyContent":
+        warnings.warn("Second column in dataframe should be target text. \
+It should be named `replyContent`. The current column is named {}".format(replyContent))
+
 
 def unicodeToAscii(s):
     return ''.join(
@@ -118,23 +114,23 @@ def readVocs(df, corpus_name):
     voc = Voc(corpus_name)
     return voc, pairs
 
-# Returns True if both sentences in a pair 'p' are under the MAX_LENGTH threshold
-def filterPair(p):
+# Returns True if both sentences in a pair 'p' are under the max_len threshold
+def filterPair(p, max_len):
     # Input sequences need to preserve the last word for EOS token
     for i in range(len(p)):
-        if len(p[i].split(' ')) >= MAX_LENGTH:
+        if len(p[i].split(' ')) >= max_len:
             return False
     return True
 
 # Filter pairs using filterPair condition
-def filterPairs(pairs):
-    return [pair for pair in pairs if filterPair(pair)]
+def filterPairs(pairs, max_len):
+    return [pair for pair in pairs if filterPair(pair, max_len)]
 
 # [[func, inp_col, out_col], [func2, inp_col, out_col]]
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-def loadPrepareData(corpus_name, data_path, function_mapping=[]):
+def loadPrepareData(corpus_name, data_path, max_len, function_mapping=[]):
     df = pd.read_json(data_path, orient="split")
     validate(df)
     for func, inp_col, out_col in function_mapping:
@@ -142,7 +138,7 @@ def loadPrepareData(corpus_name, data_path, function_mapping=[]):
     print("Start preparing training data ...")
     voc, pairs = readVocs(df, corpus_name)
     print("Read {!s} sentence pairs".format(len(pairs)))
-    pairs = filterPairs(pairs)
+    pairs = filterPairs(pairs, max_len)
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
     print("Counting words...")
     for pair in pairs:

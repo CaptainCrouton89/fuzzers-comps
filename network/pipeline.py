@@ -14,7 +14,8 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 def call_data_pipeline(config):
     corpus_name = config["corpus_name"]
     data_path = config["data_path"]
-    vocab, pairs = data_pipeline.loadPrepareData(corpus_name, data_path)
+    max_len = config["max_len"]
+    vocab, pairs = data_pipeline.loadPrepareData(corpus_name, data_path, max_len)
 
     print("\nsample pairs:")
     for pair in pairs[:5]:
@@ -113,7 +114,17 @@ def main():
     with open(args.config) as f:
         config = json.load(f)
 
-    vocab, pairs = call_data_pipeline(config)
+    # Build data
+    corpus_name = config["corpus_name"]
+    data_path = config["data_path"]
+    max_len = config["max_len"]
+    vocab, pairs = data_pipeline.loadPrepareData(corpus_name, data_path, max_len)
+
+    print("\nsample pairs:")
+    for pair in pairs[:5]:
+        print(pair)
+
+    # Build network
     create_network(config, vocab, pairs, args.verbose)
 
 if __name__ == "__main__":
