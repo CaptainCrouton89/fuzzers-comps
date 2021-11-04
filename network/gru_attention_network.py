@@ -264,9 +264,13 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     decoder_input = decoder_input.to(device)
 
     # Concatonating other embeddings to hidden layer
-    score = meta_data[0]
-    thumbsup = meta_data[1]
-    first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
+    meta_data_tensors = [torch.FloatTensor(meta_data_list) for meta_data_list in meta_data]
+    first_hidden = torch.cat((encoder_hidden, *meta_data_tensors), 2)
+
+    # If the above doesn't work, use this instead
+    # score = torch.FloatTensor(meta_data[0])
+    # thumbsup = torch.FloatTensor(meta_data[1])
+    # first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
     # decoder_hidden = encoder_hidden[:decoder.n_layers]
