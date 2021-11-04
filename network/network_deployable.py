@@ -136,6 +136,9 @@ def filterPairs(pairs):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
+
+
+
 def loadPrepareData(corpus_name, data_path, function_mapping={}):
     df = pd.read_json(data_path, orient="split")
     for column, function_list in function_mapping.items():
@@ -572,6 +575,19 @@ def main():
     print("\npairs:")
     for pair in pairs[:5]:
         print(pair)
+
+    """
+    1. Create new columns using inp, out, func_list
+    2. During batching, apply other normalization
+    3. Onehot encode everything necessary
+    """
+
+    # Which meta columns to take into account
+    # New columns to be created
+    # What to transform to those columns/normalize everything
+    # One-hot encode all (should happen right before appending to the hidden layer)
+    # input column, function, outputcolumn
+    # normalize existing column
 
     # Example for validation
     small_batch_size = 5
