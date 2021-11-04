@@ -47,6 +47,7 @@ def create_network(config, vocab, pairs):
     encoder_n_layers = config['encoder_n_layers']
     dropout = config['dropout']
     hidden_size = config['hidden_size']
+    decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
     model_name = config['model_name']
     attn_model = config['attn_model']
     encoder_n_layers = config["encoder_n_layers"]
@@ -63,7 +64,7 @@ def create_network(config, vocab, pairs):
     # Initialize encoder & decoder models
     encoder = gru_attention_network.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = gru_attention_network.LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, dropout)
+        attn_model, embedding, decoder_hidden_size, vocab.num_words, decoder_n_layers, dropout)
 
     # Use appropriate device
     encoder = encoder.to(device)
