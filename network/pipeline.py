@@ -4,6 +4,12 @@ import argparse
 import json
 import random
 import torch
+import torch.nn as nn
+from torch import optim
+
+torch.manual_seed(1)
+USE_CUDA = torch.cuda.is_available()
+device = torch.device("cuda" if USE_CUDA else "cpu")
 
 def call_data_pipeline(config):
     corpus_name = config["corpus_name"]
@@ -41,7 +47,6 @@ def call_network_deployable(config, vocab, pairs):
     encoder_n_layers = config['encoder_n_layers']
     dropout = config['dropout']
     hidden_size = config['hidden_size']
-    network_save_path = config["network_save_path"]
     model_name = config['model_name']
     attn_model = config['attn_model']
     encoder_n_layers = config["encoder_n_layers"]
@@ -51,36 +56,15 @@ def call_network_deployable(config, vocab, pairs):
     learning_rate = config["learning_rate"]
     decoder_learning_ratio = config["decoder_learning_ratio"]
 
-    # Set checkpoint to load from; set to None if starting from scratch
-    if args.resume:
-        checkpoint_iter = config["checkpoint_iter"]
-        loadFilename = os.path.join(network_save_path, args.model_name, args.corpus_name,
-                                    '{}-{}_{}'.format(encoder_n_layers,
-                                                      decoder_n_layers, hidden_size),
-                                    '{}_checkpoint.tar'.format(checkpoint_iter))
-        # If loading on same machine the model was trained on
-        checkpoint = torch.load(loadFilename)
-        # If loading a model trained on GPU to CPU
-        #checkpoint = torch.load(loadFilename, map_location=torch.device('cpu'))
-        encoder_sd = checkpoint['en']
-        decoder_sd = checkpoint['de']
-        encoder_optimizer_sd = checkpoint['en_opt']
-        decoder_optimizer_sd = checkpoint['de_opt']
-        embedding_sd = checkpoint['embedding']
-        vocab.__dict__ = checkpoint['voc_dict']
-
     print('Building encoder and decoder ...')
     # Initialize word embeddings
-    embedding = nn.Embedding(voc.num_words, hidden_size)
-    if args.resume:
-        embedding.load_state_dict(embedding_sd)
+    embedding = nn.Embedding(vocab.num_words, hidden_size)
+
     # Initialize encoder & decoder models
-    encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
-    decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
-    if args.resume:
-        encoder.load_state_dict(encoder_sd)
-        decoder.load_state_dict(decoder_sd)
+    encoder = network_deployable.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
+    decoder = network_deployable.LuongAttnDecoderRNN(
+        attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, dropout)
+
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)
@@ -95,9 +79,6 @@ def call_network_deployable(config, vocab, pairs):
     encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
     decoder_optimizer = optim.Adam(
         decoder.parameters(), lr=learning_rate * decoder_learning_ratio)
-    if args.resume:
-        encoder_optimizer.load_state_dict(encoder_optimizer_sd)
-        decoder_optimizer.load_state_dict(decoder_optimizer_sd)
 
     # If you have cuda, configure cuda to call
     for state in encoder_optimizer.state.values():
@@ -112,7 +93,7 @@ def call_network_deployable(config, vocab, pairs):
 
     # Run training iterations
     print("Starting Training!")
-    trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
+    network_deployable.trainIters(model_name, vocab, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
                embedding, config)
     return
 
