@@ -111,7 +111,6 @@ def normalizeString(s):
 def readVocs(df, corpus_name):
     print("Reading lines...")
     col_names = list(df)
-    print(*col_names)
     pairs = list(zip(*col_names))
     voc = Voc(corpus_name)
     return voc, pairs
