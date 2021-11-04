@@ -1,6 +1,3 @@
-import unicodedata
-import re
-import pandas as pd
 config = {
     "input_column": "content",
     "input_associated_columns": [
@@ -10,7 +7,6 @@ config = {
     "response_column": "replyContent",
     "response_associated_columns": []
 }
-
 
 # %% [markdown]
 # # Assembling Vocabulary, Formatting Input
@@ -91,6 +87,8 @@ class Voc:
 # %%
 MAX_LENGTH = 50  # Maximum sentence length to consider
 # TODO: read from config
+
+
 def unicodeToAscii(s):
     return ''.join(
         c for c in unicodedata.normalize('NFD', s)
@@ -98,6 +96,8 @@ def unicodeToAscii(s):
     )
 
 # Lowercase, trim, and remove non-letter characters
+
+
 def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
     s = re.sub(r"([.!?])", r" \1", s)
@@ -106,6 +106,8 @@ def normalizeString(s):
     return s
 
 # Read query/response pairs and return a voc object
+
+
 def readVocs(df, corpus_name):
     print("Reading lines...")
     pairs = list(zip(df["content"], df["replyContent"],
@@ -114,6 +116,8 @@ def readVocs(df, corpus_name):
     return voc, pairs
 
 # Returns True if both sentences in a pair 'p' are under the MAX_LENGTH threshold
+
+
 def filterPair(p):
     # Input sequences need to preserve the last word for EOS token
     for i in range(len(p)):
@@ -122,16 +126,21 @@ def filterPair(p):
     return True
 
 # Filter pairs using filterPair condition
+
+
 def filterPairs(pairs):
     return [pair for pair in pairs if filterPair(pair)]
 
+# [[func, inp_col, out_col], [func2, inp_col, out_col]]
+
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-def loadPrepareData(corpus_name, data_path, function_mapping={}):
+
+
+def loadPrepareData(corpus_name, data_path, function_mapping=[]):
     df = pd.read_json(data_path, orient="split")
-    for column, function_list in function_mapping.items():
-        for function in function_list:
-            df[column] = function(df, column)
+    for func, inp_col, out_col in function_mapping:
+        df[out_col] = func(inp_col)
     print("Start preparing training data ...")
     voc, pairs = readVocs(df, corpus_name)
     print("Read {!s} sentence pairs".format(len(pairs)))
