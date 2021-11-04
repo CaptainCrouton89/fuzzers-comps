@@ -102,8 +102,7 @@ def batch2TrainData(voc, pair_batch):
     for pair in pair_batch:
         input_batch.append(pair[0])
         output_batch.append(pair[1])
-        meta_data_list = [i for i in pair[2:]]
-        meta_data.append(meta_data_list)
+        meta_data.append(meta_data_list[2:])
     inp, lengths = inputVar(input_batch, voc)
     output, mask, max_target_len = outputVar(output_batch, voc)
     return inp, lengths, output, mask, max_target_len, meta_data

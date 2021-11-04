@@ -94,8 +94,8 @@ MAX_LENGTH = 50  # Maximum sentence length to consider
 # TODO: read from config
 
 def validate(df):
-    assert ptypes.is_string_dtype(list(df)[0])
-    assert ptypes.is_string_dtype(list(df)[1])
+    assert ptypes.is_string_dtype(list(df)[0]), "Column 1 must be of type string, and should be input content"
+    assert ptypes.is_string_dtype(list(df)[1]), "Column 2 must be of type string, and should be output content"
 
 def unicodeToAscii(s):
     return ''.join(

@@ -3,7 +3,7 @@ import os
 import argparse
 import torch
 from torch import nn
-from network_deployable import EncoderRNN, LuongAttnDecoderRNN, loadPrepareData, indexesFromSentence, normalizeString, SOS_token
+from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, loadPrepareData, indexesFromSentence, normalizeString, SOS_token
 
 # %%
 class GreedySearchDecoder(nn.Module):
