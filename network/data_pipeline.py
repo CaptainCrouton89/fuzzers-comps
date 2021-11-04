@@ -134,8 +134,6 @@ def filterPairs(pairs):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-
-
 def loadPrepareData(corpus_name, data_path, function_mapping=[]):
     df = pd.read_json(data_path, orient="split")
     for func, inp_col, out_col in function_mapping:
