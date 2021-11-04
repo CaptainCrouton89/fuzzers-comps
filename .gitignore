@@ -136,3 +136,6 @@ embedding/
 
 # network_saves
 *.tar
+
+# python testing script
+test.py
