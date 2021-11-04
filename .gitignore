@@ -138,4 +138,4 @@ embedding/
 *.tar
 
 # python testing script
-test.py
+t*st.py
