@@ -107,8 +107,8 @@ def main():
     with open(args.config) as f:
         config = json.load(f)
 
-    vocab, pairs = create_network(config)
-    call_data_pipeline(config, vocab, pairs)
+    vocab, pairs = call_data_pipeline(config)
+    create_network(config, vocab, pairs)
 
 if __name__ == "__main__":
     main()
