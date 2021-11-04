@@ -1,0 +1,7 @@
+Stuff returned by batch2TrainData:
+
+    - inp: a 2D tensor containing the indices of each word in each sentence in the input batch from our vocabluary dictionary padded with zeros. Oriented vertically for some goddamn reason 
+    - lengths: a 1D tensor containing the lengths fo each sentence in the input batch 
+    - output: a 2D tensor contianing the indices of each word in each sentence in the output batch. Also oriented vertically for presumably the same goddamn reason as before.
+    - mask: 2D tensor the same size as output, contains True if there's a word in the corresponding position in the output tensor, and False otherwise.
+    - max_target_len: the maximum length of the output sentences from the batch. Just an int.

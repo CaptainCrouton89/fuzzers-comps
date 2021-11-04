@@ -1,6 +1,6 @@
 {
     "MAX_LENGTH": 50,
-    "data_path": "../data/app_review_data/data_with_responses_test.json",
+    "data_path": "../data/app_review_data/parsed_data_with_responses.json",
     "network_save_path": "../data/network_saves/",
     "corpus_name": "AppReviewsResponses",
     "model_name": "simple_attention_rnn",
