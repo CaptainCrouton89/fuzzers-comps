@@ -344,7 +344,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     # Load batches for each iteration
     training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)])
                         for _ in range(n_iteration)]
-                        
+
     # Initializations
     print('Initializing ...')
     start_iteration = 1
