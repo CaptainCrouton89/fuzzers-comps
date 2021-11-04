@@ -22,7 +22,7 @@ def call_data_pipeline(config):
 
     return vocab, pairs
 
-def call_network_deployable(config, vocab, pairs):
+def create_network(config, vocab, pairs):
 
     """
     1. Create new columns using inp, out, func_list
@@ -107,8 +107,8 @@ def main():
     with open(args.config) as f:
         config = json.load(f)
 
-    vocab, pairs = call_network_deployable(config)
-    call_data_pipeline(config, vocab, pairs)
+    vocab, pairs = call_data_pipeline(config)
+    create_network(config, vocab, pairs)
 
 if __name__ == "__main__":
     main()
