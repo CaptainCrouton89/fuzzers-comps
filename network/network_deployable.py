@@ -128,7 +128,10 @@ def readVocs(df, corpus_name):
 # Returns True if both sentences in a pair 'p' are under the MAX_LENGTH threshold
 def filterPair(p):
     # Input sequences need to preserve the last word for EOS token
-    return len(p[0].split(' ')) < MAX_LENGTH and len(p[1].split(' ')) < MAX_LENGTH
+    for i in range(len(p)):
+        if len(p[i].split(' ')) >= MAX_LENGTH:
+            return False
+    return True
 
 # Filter pairs using filterPair condition
 def filterPairs(pairs):
@@ -151,6 +154,9 @@ def loadPrepareData(corpus_name, data_path, function_mapping={}):
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
     print("Counting words...")
     for pair in pairs:
+        # This definitely doesn't work, I think. 
+        # How should new data be added to vocab/ should it?
+        # i.e. how to add star rating corresponding with sentence?
         voc.addSentence(pair[0])
         voc.addSentence(pair[1])
     print("Counted words:", voc.num_words)
