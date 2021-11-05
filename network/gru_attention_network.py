@@ -37,20 +37,6 @@ USERNAME_token = 5
 URL_TOKEN = 6
 EMAIL_token = 7
 
-parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-parser.add_argument("-r", "--resume",
-                        help="resume from save",
-                        action='store_true') 
-parser.add_argument("-c", "--config", 
-                        help="config file for running model. Should correspond to model.", 
-                        default="configs/config_basic.json")
-args = parser.parse_args()
-
-with open(args.config) as f:
-    config = json.load(f)
-
-MAX_LENGTH = config["MAX_LENGTH"]
-
 # %% [markdown]
 # ## Batching Data
 # In order to take advantage of the GPU, we need to send data in batches. These batches need to be of same length, however, and our sentences are not of all the same length, so they need to get padded with extra space so they all take up the same size.
@@ -238,7 +224,7 @@ def maskNLLLoss(inp, target, mask):
 
 
 def train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder, decoder, embedding,
-          encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio, max_length=MAX_LENGTH):
+          encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio):
 
     # Zero gradients
     encoder_optimizer.zero_grad()
@@ -404,7 +390,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
 
 
 # %%
-def evaluate(encoder, decoder, searcher, voc, sentence, max_length=MAX_LENGTH):
+def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # Format input sentence as a batch
     # words -> indexes
     indexes_batch = [indexesFromSentence(voc, sentence)]

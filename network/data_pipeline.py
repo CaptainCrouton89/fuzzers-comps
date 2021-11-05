@@ -81,6 +81,8 @@ class Voc:
 
 # %%
 def validate(df):
+    return
+    # This shit needs to get significantly changed.
     assert df.dtypes[0] == "object", "Column 1 must be of type string, and should be input content"
     assert df.dtypes[1] == "object", "Column 2 must be of type string, and should be output content"
     content = list(df)[0]
@@ -92,6 +94,9 @@ The current column is named {}".format(content))
         warnings.warn("Second column in dataframe should be target text. \
 It should be named `replyContent`. The current column is named {}".format(replyContent))
 
+def preprocess(df):
+    # any sort of normal preprocessing stuff
+    return df
 
 def unicodeToAscii(s):
     return ''.join(
@@ -106,13 +111,6 @@ def normalizeString(s):
     s = re.sub(r"[^a-zA-Z.!?<>]+", r" ", s)
     s = re.sub(r"\s+", r" ", s).strip()
     return s
-
-# Read query/response pairs and return a voc object
-def readVocs(df, corpus_name):
-    print("Reading lines...")
-    pairs = df.to_numpy().tolist()
-    voc = Voc(corpus_name)
-    return voc, pairs
 
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
 def filterPair(p, max_len):
@@ -130,22 +128,36 @@ def filterPairs(pairs, max_len):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-def loadPrepareData(corpus_name, data_path, max_len, function_mapping=[]):
-    df = pd.read_json(data_path, orient="split")
+def loadPrepareData(data_config, function_mapping=[]):
+    df = pd.read_json(data_config["data_path"], orient="split")
     validate(df)
+    df = preprocess(df)
+    
+    # Add additional columns, if necessary
     for func, inp_col, out_col in function_mapping:
         df[out_col] = func(inp_col)
+    
+    # Makeing pairs and filtering
+    input_cols = [df.columns.get_loc(input_col) for input_col in data_config["encoder_inputs"]]
+    target_cols = [df.columns.get_loc(input_col) for input_col in data_config["decoder_inputs"]]
+    static_cols = [df.columns.get_loc(input_col) for input_col in data_config["static_inputs"]]
+    
+    # TODO Need to make sure that pairs are organized correctly
+    # TODO We get input of which input columns, which output column names, and which static input names to use, and need to put them into pairs
     print("Start preparing training data ...")
-    voc, pairs = readVocs(df, corpus_name)
+    pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
-    pairs = filterPairs(pairs, max_len)
+    pairs = filterPairs(pairs, data_config["max_len"])
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
+
+    # Building vocabulary
     print("Counting words...")
+    voc = Voc(data_config["corpus_name"])
+    # Add all text from input and output collumns
     for pair in pairs:
-        # This definitely doesn't work, I think.
-        # How should new data be added to vocab/ should it?
-        # i.e. how to add star rating corresponding with sentence?
-        voc.addSentence(pair[0])
-        voc.addSentence(pair[1])
+        for col in input_cols: # Likely only a single input column: `content`
+            voc.addSentence(pair[col])
+        for col in target_cols: # Likely only a single output column: `replyContent`
+            voc.addSentence(pair[col])
     print("Counted words:", voc.num_words)
     return voc, pairs

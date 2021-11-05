@@ -11,18 +11,6 @@ torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-def call_data_pipeline(config):
-    corpus_name = config["corpus_name"]
-    data_path = config["data_path"]
-    max_len = config["max_len"]
-    vocab, pairs = data_pipeline.loadPrepareData(corpus_name, data_path, max_len)
-
-    print("\nsample pairs:")
-    for pair in pairs[:5]:
-        print(pair)
-
-    return vocab, pairs
-
 def create_network(config, vocab, pairs, verbosity):
 
     """
@@ -45,19 +33,21 @@ def create_network(config, vocab, pairs, verbosity):
         print("meta_data:", meta_data)
 
     # Configure models
-    hidden_size = config['hidden_size']
-    encoder_n_layers = config['encoder_n_layers']
-    dropout = config['dropout']
-    hidden_size = config['hidden_size']
-    decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
     model_name = config['model_name']
-    attn_model = config['attn_model']
-    encoder_n_layers = config["encoder_n_layers"]
-    decoder_n_layers = config["encoder_n_layers"]
+    model_config = config["model"]
+
+    hidden_size = model_config['hidden_size']
+    encoder_n_layers = model_config['encoder_n_layers']
+    dropout = model_config['dropout']
+    hidden_size = model_config['hidden_size']
+    decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
+    attn_model = model_config['attn_model']
+    encoder_n_layers = model_config["encoder_n_layers"]
+    decoder_n_layers = model_config["encoder_n_layers"]
 
     # Configuring optimizer
-    learning_rate = config["learning_rate"]
-    decoder_learning_ratio = config["decoder_learning_ratio"]
+    learning_rate = model_config["learning_rate"]
+    decoder_learning_ratio = model_config["decoder_learning_ratio"]
 
     print('Building encoder and decoder ...')
     # Initialize word embeddings
@@ -113,16 +103,19 @@ def main():
     args = parser.parse_args()
     with open(args.config) as f:
         config = json.load(f)
+    # Load sub-configuration dicts (narrower scope)
+    data_config = config["data"]
+    model_config = config["model"]
+    training_config = config["training"]
 
-    # Build data
-    corpus_name = config["corpus_name"]
-    data_path = config["data_path"]
-    max_len = config["max_len"]
-    vocab, pairs = data_pipeline.loadPrepareData(corpus_name, data_path, max_len)
+    # Build data pairs
+    vocab, pairs = data_pipeline.loadPrepareData(data_config)
 
-    print("\nsample pairs:")
-    for pair in pairs[:5]:
-        print(pair)
+    # Print sample pairs
+    if args.verbose > 0:
+        print("\nsample pairs:")
+        for pair in pairs[:5]:
+            print(pair)
 
     # Build network
     create_network(config, vocab, pairs, args.verbose)
