@@ -147,6 +147,8 @@ def loadPrepareData(data_config, function_mapping=[]):
     pairs = filterPairs(pairs, data_config["max_len"], string_col_indices)
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
+    print(df.head())
+
     # Building vocabulary
     print("Counting words...")
     voc = Voc(data_config["corpus_name"])
