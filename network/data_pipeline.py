@@ -95,7 +95,7 @@ The current column is named {}".format(content))
 It should be named `replyContent`. The current column is named {}".format(replyContent))
 
 def preprocess(df, data_config):
-    df = df[df.columns[data_config["encoder_inputs"] + data_config["target"] + data_config["static_inputs"]]]
+    df = df[data_config["encoder_inputs"] + data_config["target"] + data_config["static_inputs"]]
     return df
 
 def unicodeToAscii(s):
@@ -152,9 +152,9 @@ def loadPrepareData(data_config, function_mapping=[]):
     voc = Voc(data_config["corpus_name"])
     # Add all text from input and output collumns
     for pair in pairs:
-        for col in df[[*data_config["encoder_inputs"]]]: # Likely only a single input column: `content`
+        for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]: # Likely only a single input column: `content`
             voc.addSentence(pair[col])
-        for col in df[[*data_config["target"]]]: # Likely only a single output column: `replyContent`
+        for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]: # Likely only a single output column: `replyContent`
             voc.addSentence(pair[col])
     print("Counted words:", voc.num_words)
     return voc, pairs

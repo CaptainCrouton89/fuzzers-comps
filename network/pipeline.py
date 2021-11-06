@@ -33,8 +33,10 @@ def create_network(config, vocab, pairs, verbosity):
         print("meta_data:", meta_data)
 
     # Configure models
-    model_name = config['model_name']
+    data_config = config["data"]
     model_config = config["model"]
+
+    model_name = data_config['model_name']
 
     hidden_size = model_config['hidden_size']
     encoder_n_layers = model_config['encoder_n_layers']

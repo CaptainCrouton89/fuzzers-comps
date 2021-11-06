@@ -251,6 +251,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Concatonating other embeddings to hidden layer
     meta_data_tensors = [torch.FloatTensor(meta_data_list) for meta_data_list in meta_data]
+    print(meta_data_tensors)
     first_hidden = torch.cat((encoder_hidden, *meta_data_tensors), 2)
 
     # If the above doesn't work, use this instead
@@ -317,18 +318,27 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     min_loss = np.inf
     iter_since_min_loss = 0
 
+    # Set up sub-configs
+    data_config = config["data"]
+    model_config = config["model"]
+    training_config = config["training"]
+
     # Initialize from config
-    encoder_n_layers = config["encoder_n_layers"]
-    decoder_n_layers = config["decoder_n_layers"]
-    hidden_size = config["hidden_size"]
-    network_save_path = config["network_save_path"]
-    n_iteration = config["n_iteration"]
-    batch_size = config["batch_size"]
-    teacher_forcing_ratio = config["teacher_forcing_ratio"]
-    print_every = config["print_every"]
-    save_every = config["save_every"]
-    clip = config["clip"]
-    corpus_name = config["corpus_name"]
+    encoder_n_layers = model_config["encoder_n_layers"]
+    decoder_n_layers = model_config["decoder_n_layers"]
+    hidden_size = model_config["hidden_size"]
+    clip = model_config["clip"]
+    teacher_forcing_ratio = model_config["teacher_forcing_ratio"]
+
+    network_save_path = data_config["network_save_path"]
+    corpus_name = data_config["corpus_name"]
+
+    n_iteration = training_config["n_iteration"]
+    batch_size = training_config["batch_size"]
+    print_every = training_config["print_every"]
+    save_every = training_config["save_every"]
+    
+    
 
 
     # Load batches for each iteration
