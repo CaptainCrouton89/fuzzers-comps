@@ -94,8 +94,8 @@ The current column is named {}".format(content))
         warnings.warn("Second column in dataframe should be target text. \
 It should be named `replyContent`. The current column is named {}".format(replyContent))
 
-def preprocess(df):
-    # any sort of normal preprocessing stuff
+def preprocess(df, data_config):
+    df = df[df.columns[data_config["encoder_inputs"] + data_config["target"] + data_config["static_inputs"]]]
     return df
 
 def unicodeToAscii(s):
@@ -113,41 +113,38 @@ def normalizeString(s):
     return s
 
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
-def filterPair(p, max_len):
+def filterPair(p, max_len, indices):
     # Input sequences need to preserve the last word for EOS token
-    for i in range(len(p)):
-        if len(p[i].split(' ')) >= max_len:
+    
+    for index in indices:
+        if len(p[index].split(' ')) >= max_len:
             return False
     return True
 
 # Filter pairs using filterPair condition
-def filterPairs(pairs, max_len):
-    return [pair for pair in pairs if filterPair(pair, max_len)]
+def filterPairs(pairs, max_len, indices):
+    return [pair for pair in pairs if filterPair(pair, max_len, indices)]
 
 # [[func, inp_col, out_col], [func2, inp_col, out_col]]
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 def loadPrepareData(data_config, function_mapping=[]):
+    print("Start preparing training data ...")
     df = pd.read_json(data_config["data_path"], orient="split")
+
+    df = preprocess(df, data_config)
     validate(df)
-    df = preprocess(df)
-    
+
     # Add additional columns, if necessary
     for func, inp_col, out_col in function_mapping:
-        df[out_col] = func(inp_col)
-    
-    # Makeing pairs and filtering
-    input_cols = [df.columns.get_loc(input_col) for input_col in data_config["encoder_inputs"]]
-    target_cols = [df.columns.get_loc(input_col) for input_col in data_config["decoder_inputs"]]
-    static_cols = [df.columns.get_loc(input_col) for input_col in data_config["static_inputs"]]
-    
-    # TODO Need to make sure that pairs are organized correctly
-    # TODO We get input of which input columns, which output column names, and which static input names to use, and need to put them into pairs
-    print("Start preparing training data ...")
+        df[out_col] = func(inp_col)  
+
     pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
-    pairs = filterPairs(pairs, data_config["max_len"])
+    string_col_indices = [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]] \
+                        + [df.columns.get_loc(col_name) for col_name in data_config["target"]] 
+    pairs = filterPairs(pairs, data_config["max_len"], string_col_indices)
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
     # Building vocabulary
@@ -155,9 +152,9 @@ def loadPrepareData(data_config, function_mapping=[]):
     voc = Voc(data_config["corpus_name"])
     # Add all text from input and output collumns
     for pair in pairs:
-        for col in input_cols: # Likely only a single input column: `content`
+        for col in df[[*data_config["encoder_inputs"]]]: # Likely only a single input column: `content`
             voc.addSentence(pair[col])
-        for col in target_cols: # Likely only a single output column: `replyContent`
+        for col in df[[*data_config["target"]]]: # Likely only a single output column: `replyContent`
             voc.addSentence(pair[col])
     print("Counted words:", voc.num_words)
     return voc, pairs
