@@ -55,19 +55,24 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     return decoded_words
 
-
-def evaluateInput(encoder, decoder, searcher, voc, max_length):
-    input_sentence = ''
+def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
     while(1):
         try:
             # Get input sentence
-            input_sentence = input('> ')
+            content = input('content> ')
             # Check if it is quit case
-            if input_sentence == 'q' or input_sentence == 'quit': break
-            # Normalize sentence
-            input_sentence = normalizeString(input_sentence)
+            if content == 'q' or content == 'quit': 
+                break
+            content = [normalizeString(content)]
+
+            for field in static_inputs:
+                content.append(input(field + "> "))
+
+            # Parse the sentence into a tuple representing the content and 
+            # input metadata ~somehow~
+
             # Evaluate sentence
-            output_words = evaluate(encoder, decoder, searcher, voc, input_sentence, max_length)
+            output_words = evaluate(encoder, decoder, searcher, voc, content, max_length)
             # Format and print response sentence
             output_words[:] = [x for x in output_words if not (x == 'EOS' or x == 'PAD')]
             print('Bot:', ' '.join(output_words))
@@ -75,72 +80,78 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length):
         except KeyError:
             print("Error: Encountered unknown word.")
 
-
-network_saves_path = "../data/network_saves"
-# Get args
-parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-parser.add_argument("-u", "--corpus", 
-                        help="corpus name", 
-                        default="AppReviewsResponses")
-parser.add_argument("-m", "--model", 
-                        help="model for testing", 
-                        default="cb_model")
-parser.add_argument("-k", "--checkpoint", 
-                        help="model checkpoint name for training. Should have format <model/number_checkpoint.tar>",
-                        default="2-2_500_local/4000_checkpoint.tar")
-parser.add_argument("-c", "--config", 
-                        help="config file for running model. Should correspond to model.", 
-                        default="configs/config_basic.json")
-args = parser.parse_args()
-
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-with open(str(args.config)) as f:
-    config = json.load(f)
+def main():
+    parser = argparse.ArgumentParser(description='Enables testing of neural network.')
+    parser.add_argument("-c", "--config", 
+                            help="config file for running model. Should correspond to model.", 
+                            default="configs/config_basic.json")
+    args = parser.parse_args()
 
-model_path = os.path.join(network_saves_path, args.model, args.corpus, args.checkpoint)
 
-voc, pairs = loadPrepareData(config['corpus_name'], config["data_path"])
 
-# If loading on same machine the model was trained on
-if torch.cuda.is_available():
-    checkpoint = torch.load(model_path)
-else:
-    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
-encoder_sd = checkpoint['en']
-decoder_sd = checkpoint['de']
-encoder_optimizer_sd = checkpoint['en_opt']
-decoder_optimizer_sd = checkpoint['de_opt']
-embedding_sd = checkpoint['embedding']
-voc.__dict__ = checkpoint['voc_dict']
+    with open(str(args.config)) as f:
+        config = json.load(f)
 
-hidden_size = config['hidden_size']
-encoder_n_layers = config['encoder_n_layers']
-dropout = config['dropout']
-hidden_size = config['hidden_size']
-attn_model = config['attn_model']
-decoder_n_layers = config['decoder_n_layers']
+    test_config = config['testing']
+    model_config = config['model']
 
-embedding = nn.Embedding(voc.num_words, hidden_size)
-encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
-decoder = LuongAttnDecoderRNN(
-    attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
+    network_saves_path = test_config['network_saves_path']
+    corpus_name = test_config['corpus_name']
+    model_name = test_config['model_name']
+    checkpoint = test_config['checkpoint']
+    data_path = test_config['data_path']
+    static_inputs = test_config['static_inputs']
+    max_length = test_config['max_len']
 
-embedding.load_state_dict(embedding_sd)
-encoder.load_state_dict(encoder_sd)
-decoder.load_state_dict(decoder_sd)
+    model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
-encoder.load_state_dict(encoder_sd)
-decoder.load_state_dict(decoder_sd)
-# Use appropriate device
-encoder = encoder.to(device)
-decoder = decoder.to(device)
+    voc, pairs = loadPrepareData(corpus_name, data_path)
 
-encoder.eval()
-decoder.eval()
+    # If loading on same machine the model was trained on
+    if torch.cuda.is_available():
+        checkpoint = torch.load(model_path)
+    else:
+        checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 
-# Initialize search module
-searcher = GreedySearchDecoder(encoder, decoder)
+    encoder_sd = checkpoint['encoder']
+    decoder_sd = checkpoint['decoder']
+    encoder_optimizer_sd = checkpoint['encoder_opt']
+    decoder_optimizer_sd = checkpoint['decoder_opt']
+    embedding_sd = checkpoint['embedding']
+    voc.__dict__ = checkpoint['voc_dict']
 
-evaluateInput(encoder, decoder, searcher, voc, config['MAX_LENGTH'])
+    hidden_size = model_config['hidden_size']
+    encoder_n_layers = model_config['encoder_n_layers']
+    dropout = model_config['dropout']
+    hidden_size = model_config['hidden_size']
+    attn_model = model_config['attn_model']
+    decoder_n_layers = model_config['decoder_n_layers']
+
+    embedding = nn.Embedding(voc.num_words, hidden_size)
+    encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
+    decoder = LuongAttnDecoderRNN(
+        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
+
+    embedding.load_state_dict(embedding_sd)
+    encoder.load_state_dict(encoder_sd)
+    decoder.load_state_dict(decoder_sd)
+
+    encoder.load_state_dict(encoder_sd)
+    decoder.load_state_dict(decoder_sd)
+    # Use appropriate device
+    encoder = encoder.to(device)
+    decoder = decoder.to(device)
+
+    encoder.eval()
+    decoder.eval()
+
+    # Initialize search module
+    searcher = GreedySearchDecoder(encoder, decoder)
+
+    evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs)
+
+if __name__ == "__main__":
+    main()
