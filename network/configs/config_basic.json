@@ -41,7 +41,10 @@
         "model_name": "simple_attention_rnn",
         "checkpoint": "2-2_500_local/4000_checkpoint.tar",
         "data_path": "../data/app_review_data/parsed_data_with_responses.json",
-        "static_inputs": ["thumbsUpCount", "score"],
+        "static_inputs": [
+            "thumbsUpCount",
+            "score"
+        ],
         "max_len": 50
     }
 }

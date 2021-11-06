@@ -249,10 +249,14 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
 
+    print("hidden layer size [seq_len, batch_size, features]:", encoder_hidden.size())
     # Concatonating other embeddings to hidden layer
-    meta_data_tensors = [torch.FloatTensor(meta_data_list) for meta_data_list in meta_data]
-    print(meta_data_tensors)
-    first_hidden = torch.cat((encoder_hidden, *meta_data_tensors), 2)
+    print("meta_data:", meta_data)
+
+    meta_data_tensor = torch.FloatTensor([[meta_data_list] for meta_data_list in meta_data])
+    print("meta_data_tensor:", meta_data_tensor)
+    print("encoder_hidden:", encoder_hidden)
+    first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
 
     # If the above doesn't work, use this instead
     # score = torch.FloatTensor(meta_data[0])
