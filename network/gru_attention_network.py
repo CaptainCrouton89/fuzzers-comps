@@ -389,10 +389,10 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
                 os.makedirs(directory)
             torch.save({
                 'iteration': iteration,
-                'en': encoder.state_dict(),
-                'de': decoder.state_dict(),
-                'en_opt': encoder_optimizer.state_dict(),
-                'de_opt': decoder_optimizer.state_dict(),
+                'encoder': encoder.state_dict(),
+                'decoder': decoder.state_dict(),
+                'encoder_opt': encoder_optimizer.state_dict(),
+                'decoder_opt': decoder_optimizer.state_dict(),
                 'loss': loss,
                 'voc_dict': voc.__dict__,
                 'embedding': embedding.state_dict()

@@ -34,5 +34,14 @@
         "print_every": 1,
         "save_every": 500,
         "learning_stop_count": 100
+    },
+    "testing": {
+        "network_saves_path": "../data/network_saves",
+        "corpus_name": "AppReviewsResponses",
+        "model_name": "simple_attention_rnn",
+        "checkpoint": "2-2_500_local/4000_checkpoint.tar",
+        "data_path": "../data/app_review_data/parsed_data_with_responses.json",
+        "static_inputs": ["thumbsUpCount", "score"],
+        "max_len": 50
     }
 }
