@@ -2,4 +2,5 @@
 - Free
 - Role assignment for selective announcements
 - Advanced permissions assignment
+- When you copy things, it keeps more formatting than Slack
 - 
