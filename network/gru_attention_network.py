@@ -6,17 +6,14 @@
 
 # %%
 from __future__ import absolute_import, unicode_literals, print_function, division
-import argparse
 import random
 import itertools
 import os
 import pandas as pd
 import numpy as np
 import json
-import tensorflow as tf
 import torch
 import torch.nn as nn
-from torch import optim
 import torch.nn.functional as F
 import data_pipeline
 

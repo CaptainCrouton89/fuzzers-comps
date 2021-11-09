@@ -13,6 +13,7 @@
             "gilded",
             "score",
             "parent_score",
+            "delay",
             "edited"
         ],
         "target": [
