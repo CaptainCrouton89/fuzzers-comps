@@ -164,7 +164,6 @@ class Attn(nn.Module):
 class LuongAttnDecoderRNN(nn.Module):
     def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, dropout=0.1):
         super(LuongAttnDecoderRNN, self).__init__()
-
         # Keep for reference
         self.attn_model = attn_model
         self.hidden_size = hidden_size
@@ -183,11 +182,16 @@ class LuongAttnDecoderRNN(nn.Module):
         self.attn = Attn(attn_model, hidden_size)
 
     def forward(self, input_step, last_hidden, encoder_outputs):
+        print("Hidden layer size:", last_hidden.size())
         # Note: we run this one step (word) at a time
         # Get embedding of current input word
         embedded = self.embedding(input_step)
         embedded = self.embedding_dropout(embedded)
         # Forward through unidirectional GRU
+        print("Embedded layer size:", embedded.size())
+
+        # Mabye we add some zeros to the end of embedded
+
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
         attn_weights = self.attn(rnn_output, encoder_outputs)
@@ -250,10 +254,14 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # Concatonating other embeddings to hidden layer
     print("meta_data:", meta_data)
 
-    meta_data_tensor = torch.FloatTensor([[meta_data_list] for meta_data_list in meta_data])
+    meta_data_tensor = torch.FloatTensor([[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
+
+    print("hidden layer size [seq_len, batch_size, features]:", meta_data_tensor.size())
     print("meta_data_tensor:", meta_data_tensor)
     print("encoder_hidden:", encoder_hidden)
+
     first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
+    print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
 
     # If the above doesn't work, use this instead
     # score = torch.FloatTensor(meta_data[0])
