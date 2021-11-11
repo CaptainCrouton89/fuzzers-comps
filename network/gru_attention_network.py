@@ -385,7 +385,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
         else:
             iter_since_min_loss += 1
 
-        if iter_since_min_loss > config["learning_stop_count"]:
+        if iter_since_min_loss > training_config["learning_stop_count"]:
             # save and break
             pass
 
