@@ -118,7 +118,7 @@ def main():
 
     # Set function mapping
     function_mapping = [
-        (get_sentiment, "content", "sentiment_content", "static_inputs"),
+        (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
     ]
 
     # Build data pairs

@@ -143,7 +143,7 @@ def loadPrepareData(data_config, function_mapping=[]):
 
     # Add additional columns, if necessary
     for func, inp_col, out_col, category in function_mapping:
-        df[out_col] = func(inp_col)
+        df[out_col] = func(df, inp_col)
         data_config[category].append(category)
 
     pairs = df.to_numpy().tolist()

@@ -2,7 +2,7 @@ import stanza
 import nltk.sentiment
 import pandas
 
-nltk.download(["vader_lexicon"])
+nltk.downloader.download(["vader_lexicon"])
 stanza.download('en', processors='tokenize,sentiment')
 
 
