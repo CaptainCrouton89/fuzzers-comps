@@ -279,7 +279,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
 
-    print("decoder input:", decoder_input.size(), "\ndecoder_hidden", decoder_hidden.size(), "\nencoder outputs", encoder_outputs.size())
+    # print("decoder input:", decoder_input.size(), "\ndecoder_hidden", decoder_hidden.size(), "\nencoder outputs", encoder_outputs.size())
 
     # Forward batch of sequences through decoder one time step at a time
     if use_teacher_forcing:
