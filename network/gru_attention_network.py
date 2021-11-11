@@ -182,13 +182,13 @@ class LuongAttnDecoderRNN(nn.Module):
         self.attn = Attn(attn_model, hidden_size)
 
     def forward(self, input_step, last_hidden, encoder_outputs):
-        print("Hidden layer size:", last_hidden.size())
+        # print("Hidden layer size:", last_hidden.size())
         # Note: we run this one step (word) at a time
         # Get embedding of current input word
         embedded = self.embedding(input_step)
         embedded = self.embedding_dropout(embedded)
         # Forward through unidirectional GRU
-        print("Embedded layer size:", embedded.size())
+        # print("Embedded layer size:", embedded.size())
 
         # Mabye we add some zeros to the end of embedded
         # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
@@ -252,15 +252,15 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
 
-    print("hidden layer size [seq_len, batch_size, features]:", encoder_hidden.size())
+    # print("hidden layer size [seq_len, batch_size, features]:", encoder_hidden.size())
     # Concatonating other embeddings to hidden layer
-    print("meta_data:", meta_data)
+    # print("meta_data:", meta_data)
 
     meta_data_tensor = torch.FloatTensor([[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
 
-    print("hidden layer size [seq_len, batch_size, features]:", meta_data_tensor.size())
-    print("meta_data_tensor:", meta_data_tensor)
-    print("encoder_hidden:", encoder_hidden)
+    # print("hidden layer size [seq_len, batch_size, features]:", meta_data_tensor.size())
+    # print("meta_data_tensor:", meta_data_tensor)
+    # print("encoder_hidden:", encoder_hidden)
 
     # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
 

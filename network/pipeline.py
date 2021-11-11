@@ -43,7 +43,8 @@ def create_network(config, vocab, pairs, verbosity):
     encoder_n_layers = model_config['encoder_n_layers']
     dropout = model_config['dropout']
     hidden_size = model_config['hidden_size']
-    decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
+    decoder_hidden_size = hidden_size 
+    # decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
     attn_model = model_config['attn_model']
     encoder_n_layers = model_config["encoder_n_layers"]
     decoder_n_layers = model_config["encoder_n_layers"]
