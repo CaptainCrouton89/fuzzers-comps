@@ -5,7 +5,7 @@ import os
 import json
 import random
 import torch
-from ..pipeline_functions.pipeline_sentiment_analysis import get_sentiment
+from pipeline_functions.sentiment_analysis import get_sentiment
 import torch.nn as nn
 from torch import optim
 
