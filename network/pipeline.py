@@ -5,6 +5,7 @@ import os
 import json
 import random
 import torch
+from ..pipeline_functions.pipeline_sentiment_analysis import get_sentiment
 import torch.nn as nn
 from torch import optim
 
@@ -115,8 +116,13 @@ def main():
     if not os.path.exists(data_config["network_save_path"]):
         os.mkdir(data_config["network_save_path"])
 
+    # Set function mapping
+    function_mapping = [
+        (get_sentiment, "content", "sentiment_content", "static_inputs"),
+    ]
+
     # Build data pairs
-    vocab, pairs = data_pipeline.loadPrepareData(data_config)
+    vocab, pairs = data_pipeline.loadPrepareData(data_config, function_mapping)
 
     # Print sample pairs
     if args.verbose > 0:

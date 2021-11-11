@@ -142,8 +142,9 @@ def loadPrepareData(data_config, function_mapping=[]):
     validate(df)
 
     # Add additional columns, if necessary
-    for func, inp_col, out_col in function_mapping:
-        df[out_col] = func(inp_col)  
+    for func, inp_col, out_col, category in function_mapping:
+        df[out_col] = func(inp_col)
+        data_config[category].append(category)
 
     pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
