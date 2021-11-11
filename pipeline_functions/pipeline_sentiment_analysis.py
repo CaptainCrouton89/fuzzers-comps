@@ -6,7 +6,7 @@ nltk.download(["vader_lexicon"])
 stanza.download('en', processors='tokenize,sentiment')
 
 
-def getSentiment(dataFrame, inputColumn: str):
+def get_sentiment(dataFrame, inputColumn: str):
     sentiment_analyzer_stanza = stanza.Pipeline(
         'en', processors='tokenize,sentiment')
     sentiment_analyzer_nltk = nltk.sentiment.SentimentIntensityAnalyzer()
