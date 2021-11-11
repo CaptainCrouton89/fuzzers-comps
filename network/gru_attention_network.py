@@ -191,7 +191,7 @@ class LuongAttnDecoderRNN(nn.Module):
         print("Embedded layer size:", embedded.size())
 
         # Mabye we add some zeros to the end of embedded
-        embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
+        # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
 
 
         rnn_output, hidden = self.gru(embedded, last_hidden)
