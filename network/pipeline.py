@@ -1,6 +1,7 @@
 import data_pipeline
 import gru_attention_network
 import argparse
+import os
 import json
 import random
 import torch
@@ -109,6 +110,10 @@ def main():
     data_config = config["data"]
     model_config = config["model"]
     training_config = config["training"]
+
+    # Build file save path
+    if not os.path.exists(data_config["network_save_path"]):
+        os.mkdir(data_config["network_save_path"])
 
     # Build data pairs
     vocab, pairs = data_pipeline.loadPrepareData(data_config)

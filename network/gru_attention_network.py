@@ -262,8 +262,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     print("meta_data_tensor:", meta_data_tensor)
     print("encoder_hidden:", encoder_hidden)
 
-    first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
-    print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
+    # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
 
     # If the above doesn't work, use this instead
     # score = torch.FloatTensor(meta_data[0])
@@ -271,8 +270,11 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
-    # decoder_hidden = encoder_hidden[:decoder.n_layers]
-    decoder_hidden = first_hidden
+    decoder_hidden = encoder_hidden[:decoder.n_layers]
+
+    # Adjusted input for static variables
+    # first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
+    # decoder_hidden = first_hidden
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False

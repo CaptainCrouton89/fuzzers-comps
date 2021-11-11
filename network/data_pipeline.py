@@ -131,7 +131,12 @@ def filterPairs(pairs, max_len, indices):
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 def loadPrepareData(data_config, function_mapping=[]):
     print("Start preparing training data ...")
-    df = pd.read_json(data_config["data_path"], orient="split")
+
+    data_format = data_config["data_format"]
+    if data_format == "json":
+        df = pd.read_json(data_config["data_path"], orient="split")
+    if data_format == "feather":
+        df = pd.read_feather(data_config["data_path"])
 
     df = preprocess(df, data_config)
     validate(df)
