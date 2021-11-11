@@ -191,6 +191,8 @@ class LuongAttnDecoderRNN(nn.Module):
         print("Embedded layer size:", embedded.size())
 
         # Mabye we add some zeros to the end of embedded
+        embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
+
 
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
@@ -274,6 +276,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
+
+    print("decoder input:", decoder_input.size(), "\ndecoder_hidden", decoder_hidden.size(), "\nencoder outputs", encoder_outputs.size())
 
     # Forward batch of sequences through decoder one time step at a time
     if use_teacher_forcing:
