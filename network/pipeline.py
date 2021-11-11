@@ -98,8 +98,7 @@ def main():
     parser = argparse.ArgumentParser(
             description='Enables testing of neural network.') 
     parser.add_argument("-c", "--config", 
-                            help="config file for network_deployable. Should correspond to model.", 
-                            default="configs/config_basic.json")
+                            help="config file for network_deployable. Should correspond to model.")
     parser.add_argument("-v", "--verbose", 
                             help="how much verbosity to include :)", 
                             action="count",

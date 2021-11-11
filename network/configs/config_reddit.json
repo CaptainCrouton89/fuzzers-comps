@@ -2,6 +2,7 @@
     "data": {
         "max_len": 50,
         "data_path": "../data/app_review_data/parsed_data_reddit.json",
+        "data_format": "feather",
         "network_save_path": "../data/network_saves_reddit/",
         "corpus_name": "RedditComments",
         "model_name": "simple_attention_rnn",

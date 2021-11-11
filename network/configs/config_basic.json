@@ -2,6 +2,7 @@
     "data": {
         "max_len": 50,
         "data_path": "../data/app_review_data/parsed_data_with_responses.json",
+        "data_format": "json",
         "network_save_path": "../data/network_saves/",
         "corpus_name": "AppReviewsResponses",
         "model_name": "simple_attention_rnn",
