@@ -3,7 +3,8 @@ import os
 import argparse
 import torch
 from torch import nn
-from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, loadPrepareData, indexesFromSentence, normalizeString, SOS_token
+from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token
+from data_pipeline import loadPrepareData, normalizeString
 
 # %%
 class GreedySearchDecoder(nn.Module):
@@ -41,7 +42,8 @@ class GreedySearchDecoder(nn.Module):
 def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     ### Format input sentence as a batch
     # words -> indexes
-    indexes_batch = [indexesFromSentence(voc, sentence)]
+    # indexes_batch = [indexesFromSentence(voc, sentence)]
+    indexes_batch = [indexesFromSentence(voc, sentence[0])]
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
@@ -108,7 +110,8 @@ def main():
 
     model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
-    voc, pairs = loadPrepareData(corpus_name, data_path)
+    # voc, pairs = loadPrepareData(corpus_name, data_path)
+    voc, pairs = loadPrepareData(config["data"], )
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
