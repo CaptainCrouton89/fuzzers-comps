@@ -122,7 +122,7 @@ def main():
     ]
 
     # Build data pairs
-    vocab, pairs = data_pipeline.loadPrepareData(data_config, function_mapping)
+    vocab, pairs = data_pipeline.loadPrepareData(data_config, function_mapping, use_proccessed=False)
 
     # Print sample pairs
     if args.verbose > 0:

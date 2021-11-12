@@ -11,7 +11,7 @@ def get_sentiment(dataFrame, inputColumn: str):
         'en', processors='tokenize,sentiment')
     sentiment_analyzer_nltk = nltk.sentiment.SentimentIntensityAnalyzer()
     sentiment_list = []
-    for sentence in dataFrame[inputColumn]:
+    for i, sentence in enumerate(dataFrame[inputColumn]):
         nltk_result = sentiment_analyzer_nltk.polarity_scores(sentence)[
             'compound']
         stanza_result = sentiment_analyzer_stanza(
@@ -19,4 +19,6 @@ def get_sentiment(dataFrame, inputColumn: str):
         if nltk_result*stanza_result < 0:
             nltk_result = nltk_result/2
         sentiment_list.append(nltk_result)
+        if i % 500 == 0:
+            print("line:", i)
     return pandas.Series(sentiment_list)
