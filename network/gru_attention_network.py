@@ -17,6 +17,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import data_pipeline
 
+META_DATA_SIZE = 2
+
 torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
@@ -61,6 +63,8 @@ def binaryMatrix(l, value=PAD_token):
     return m
 
 # Returns padded input sequence tensor and lengths
+
+
 def inputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
@@ -69,6 +73,8 @@ def inputVar(l, voc):
     return padVar, lengths
 
 # Returns padded target sequence tensor, padding mask, and max target length
+
+
 def outputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     max_target_len = max([len(indexes) for indexes in indexes_batch])
@@ -79,6 +85,8 @@ def outputVar(l, voc):
     return padVar, mask, max_target_len
 
 # Returns all items for a given batch of pairs
+
+
 def batch2TrainData(voc, pair_batch):
     pair_batch.sort(key=lambda x: len(x[0].split(" ")), reverse=True)
     input_batch, output_batch, meta_data = [], [], []
@@ -86,6 +94,7 @@ def batch2TrainData(voc, pair_batch):
         input_batch.append(pair[0])
         output_batch.append(pair[1])
         meta_data.append(pair[2:])
+        # print((pair[2:]).size())
     inp, lengths = inputVar(input_batch, voc)
     output, mask, max_target_len = outputVar(output_batch, voc)
     return inp, lengths, output, mask, max_target_len, meta_data
@@ -192,7 +201,7 @@ class LuongAttnDecoderRNN(nn.Module):
 
         # Mabye we add some zeros to the end of embedded
         # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
-
+        embedded = torch.cat((embedded, torch.zeros(1, 64, META_DATA_SIZE)), 2)
 
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
@@ -248,6 +257,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # Forward pass through encoder
     encoder_outputs, encoder_hidden = encoder(input_variable, lengths)
 
+    encoder_outputs = torch.cat(
+        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, META_DATA_SIZE)), 2)
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
@@ -256,13 +267,15 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # Concatonating other embeddings to hidden layer
     # print("meta_data:", meta_data)
 
-    meta_data_tensor = torch.FloatTensor([[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
+    meta_data_tensor = torch.FloatTensor(
+        [[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
 
     # print("hidden layer size [seq_len, batch_size, features]:", meta_data_tensor.size())
     # print("meta_data_tensor:", meta_data_tensor)
     # print("encoder_hidden:", encoder_hidden)
 
     # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
+    first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
 
     # If the above doesn't work, use this instead
     # score = torch.FloatTensor(meta_data[0])
@@ -270,7 +283,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
-    decoder_hidden = encoder_hidden[:decoder.n_layers]
+    decoder_hidden = first_hidden[:decoder.n_layers]
 
     # Adjusted input for static variables
     # first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
@@ -352,9 +365,6 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     batch_size = training_config["batch_size"]
     print_every = training_config["print_every"]
     save_every = training_config["save_every"]
-    
-    
-
 
     # Load batches for each iteration
     training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)])
@@ -372,7 +382,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     for iteration in range(start_iteration, n_iteration + 1):
         training_batch = training_batches[iteration - 1]
         # Extract fields from batch
-        input_variable, lengths, target_variable, mask, max_target_len, meta_data = training_batch        
+        input_variable, lengths, target_variable, mask, max_target_len, meta_data = training_batch
 
         # Run a training iteration with batch
         loss = train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder,
