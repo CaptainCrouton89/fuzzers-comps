@@ -140,7 +140,7 @@ def loadPrepareData(data_config, function_mapping=[], use_proccessed=True):
     if format == "feather":
         df = pd.read_feather(path)
     elif format == "json":
-        df = pd.read_json(path)
+        df = pd.read_json(path, orient="split")
 
     df = preprocess(df, data_config)
     validate(df)
