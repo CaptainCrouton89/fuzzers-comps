@@ -129,7 +129,7 @@ def filterPairs(pairs, max_len, indices):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-def loadPrepareData(data_config, function_mapping=[], use_processed=True):
+def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     print("Start preparing training data ...")
 
     format = data_config["data_format"]

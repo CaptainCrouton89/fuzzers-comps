@@ -124,7 +124,7 @@ def main():
     function_mapping = []
 
     # Build data pairs
-    vocab, pairs = data_pipeline.loadPrepareData(data_config, function_mapping, use_proccessed=False)
+    vocab, pairs = data_pipeline.load_prepare_data(data_config, function_mapping, use_processed=False)
 
     # Print sample pairs
     if args.verbose > 0:
