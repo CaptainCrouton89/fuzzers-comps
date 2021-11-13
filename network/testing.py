@@ -44,6 +44,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
+    indexes_batch.extend(sentence[1:])
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
@@ -111,7 +112,7 @@ def main():
     model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
     # voc, pairs = loadPrepareData(corpus_name, data_path)
-    voc, pairs = loadPrepareData(config["data"], )
+    voc, pairs = loadPrepareData(config["data"] )
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
@@ -126,12 +127,11 @@ def main():
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
 
-    hidden_size = model_config['hidden_size']
     encoder_n_layers = model_config['encoder_n_layers']
     dropout = model_config['dropout']
-    hidden_size = model_config['hidden_size']
     attn_model = model_config['attn_model']
     decoder_n_layers = model_config['decoder_n_layers']
+    hidden_size = model_config['hidden_size'] + len(static_inputs)
 
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)

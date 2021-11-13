@@ -129,12 +129,12 @@ def filterPairs(pairs, max_len, indices):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-def loadPrepareData(data_config, function_mapping=[], use_proccessed=True):
+def loadPrepareData(data_config, function_mapping=[], use_processed=True):
     print("Start preparing training data ...")
 
     format = data_config["data_format"]
     path = data_config["data_path"]
-    if use_proccessed:
+    if use_processed:
         path.replace(f".{format}", f"_processed.{format}")
 
     if format == "feather":
@@ -146,7 +146,7 @@ def loadPrepareData(data_config, function_mapping=[], use_proccessed=True):
     validate(df)
 
     # Add additional columns, if necessary
-    if not use_proccessed:
+    if not use_processed:
         for func, inp_col, out_col, category in function_mapping:
             df[out_col] = func(df, inp_col)
             data_config[category].append(out_col)
