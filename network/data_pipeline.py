@@ -134,7 +134,7 @@ def loadPrepareData(data_config, function_mapping=[], use_processed=True):
 
     format = data_config["data_format"]
     path = data_config["data_path"]
-    if use_proccessed:
+    if use_processed:
         path.replace(f".{format}", f"_processed.{format}")
 
     if format == "feather":
@@ -146,7 +146,7 @@ def loadPrepareData(data_config, function_mapping=[], use_processed=True):
     validate(df)
 
     # Add additional columns, if necessary
-    if not use_proccessed:
+    if not use_processed:
         for func, inp_col, out_col, category in function_mapping:
             df[out_col] = func(df, inp_col)
             data_config[category].append(out_col)
