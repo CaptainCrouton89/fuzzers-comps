@@ -17,8 +17,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import data_pipeline
 
-META_DATA_SIZE = 2
-
 torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
@@ -87,14 +85,15 @@ def outputVar(l, voc):
 # Returns all items for a given batch of pairs
 
 
-def batch2TrainData(voc, pair_batch):
+def batch2TrainData(voc, pair_batch, category_indices):
     pair_batch.sort(key=lambda x: len(x[0].split(" ")), reverse=True)
     input_batch, output_batch, meta_data = [], [], []
     for pair in pair_batch:
-        input_batch.append(pair[0])
-        output_batch.append(pair[1])
-        meta_data.append(pair[2:])
+        input_batch.extend([pair[i] for i in category_indices["encoder_inputs"]])
+        output_batch.extend([pair[i] for i in category_indices["target"]])
+        meta_data.append([pair[i] for i in category_indices["static_inputs"]])
         # print((pair[2:]).size())
+    
     inp, lengths = inputVar(input_batch, voc)
     output, mask, max_target_len = outputVar(output_batch, voc)
     return inp, lengths, output, mask, max_target_len, meta_data
@@ -171,7 +170,7 @@ class Attn(nn.Module):
 
 
 class LuongAttnDecoderRNN(nn.Module):
-    def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, dropout=0.1):
+    def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, dropout=0.1, meta_data_size=0):
         super(LuongAttnDecoderRNN, self).__init__()
         # Keep for reference
         self.attn_model = attn_model
@@ -179,6 +178,8 @@ class LuongAttnDecoderRNN(nn.Module):
         self.output_size = output_size
         self.n_layers = n_layers
         self.dropout = dropout
+        self.meta_data_size = meta_data_size
+        print("meta data size!:", self.meta_data_size)
 
         # Define layers
         self.embedding = embedding
@@ -201,7 +202,7 @@ class LuongAttnDecoderRNN(nn.Module):
 
         # Mabye we add some zeros to the end of embedded
         # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
-        embedded = torch.cat((embedded, torch.zeros(1, 64, META_DATA_SIZE)), 2)
+        embedded = torch.cat((embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
 
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
@@ -256,9 +257,12 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Forward pass through encoder
     encoder_outputs, encoder_hidden = encoder(input_variable, lengths)
+    
+    # We get the total amount of metadata that will be concatenated
+    meta_data_size = len(meta_data[0]) 
 
     encoder_outputs = torch.cat(
-        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, META_DATA_SIZE)), 2)
+        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, meta_data_size)), 2)
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
@@ -340,7 +344,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
 
 # %%
-def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
+def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encoder_optimizer, decoder_optimizer,
                embedding, config, loadFilename=None, checkpoint=None):
 
     min_loss = np.inf
@@ -367,7 +371,7 @@ def trainIters(model_name, voc, pairs, encoder, decoder, encoder_optimizer, deco
     save_every = training_config["save_every"]
 
     # Load batches for each iteration
-    training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)])
+    training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)], category_indices)
                         for _ in range(n_iteration)]
 
     # Initializations
