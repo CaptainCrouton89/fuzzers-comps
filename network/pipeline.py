@@ -121,6 +121,8 @@ def main():
         (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
     ]
 
+    function_mapping = []
+
     # Build data pairs
     vocab, pairs = data_pipeline.loadPrepareData(data_config, function_mapping, use_proccessed=False)
 
