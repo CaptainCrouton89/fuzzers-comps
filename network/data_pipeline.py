@@ -132,19 +132,27 @@ def filterPairs(pairs, max_len, indices):
 def loadPrepareData(data_config, function_mapping=[], use_proccessed=True):
     print("Start preparing training data ...")
 
+    format = data_config["data_format"]
     path = data_config["data_path"]
     if use_proccessed:
-        path.replace(".ft", "_processed.ft")
-        path.replace(".json", "_processed.json")
+        path.replace(f".{format}", f"_processed.{format}")
 
-    data_format = data_config["data_format"]
-    if data_format == "json":
-        df = pd.read_json(path, orient="split")
-    if data_format == "feather":
+    if format == "feather":
         df = pd.read_feather(path)
+    elif format == "json":
+        df = pd.read_json(path)
 
     df = preprocess(df, data_config)
     validate(df)
+
+    # Add additional columns, if necessary
+    if not use_proccessed:
+        for func, inp_col, out_col, category in function_mapping:
+            df[out_col] = func(df, inp_col)
+            data_config[category].append(out_col)
+
+        # Save file to <path>_processed for future use
+        df.to_feather(path.replace(f".{format}", f"_processed.{format}"))
 
     pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
@@ -154,14 +162,6 @@ def loadPrepareData(data_config, function_mapping=[], use_proccessed=True):
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
     print(df.head())
-
-    # Add additional columns, if necessary
-    for func, inp_col, out_col, category in function_mapping:
-        df[out_col] = func(df, inp_col)
-        data_config[category].append(category)
-
-    df.to_feather(path.replace(".ft", "_processed.ft"))
-    df.to_json(path.replace(".json", "_processed.json"))
 
     # Building vocabulary
     print("Counting words...")
