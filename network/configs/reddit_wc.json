@@ -1,10 +1,10 @@
 {
     "data": {
         "max_len": 50,
-        "data_path": "../data/app_review_data/parsed_data_reddit.json",
+        "data_path": "../data/reddit_data/reddit_df.ft",
         "data_format": "feather",
-        "network_save_path": "../data/network_saves_reddit/",
-        "corpus_name": "RedditComments",
+        "network_save_path": "../data/network_saves/reddit/",
+        "corpus_name": "RedditComments/2-2_500",
         "model_name": "simple_attention_rnn",
         "encoder_inputs": [
             "subreddit",
@@ -39,5 +39,20 @@
         "print_every": 1,
         "save_every": 500,
         "learning_stop_count": 100
+    },
+    "testing": {
+        "network_saves_path": "../data/network_saves/reddit/",
+        "corpus_name": "RedditComments/2-2_500",
+        "model_name": "simple_attention_rnn",
+        "checkpoint": "3500_checkpoint.tar",
+        "data_path": "../data/app_review_data/parsed_data_reddit.json",
+        "static_inputs": [
+            "gilded",
+            "score",
+            "parent_score",
+            "delay",
+            "edited"
+        ],
+        "max_len": 50
     }
 }

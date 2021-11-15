@@ -4,7 +4,7 @@ import argparse
 import torch
 from torch import nn
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token
-from data_pipeline import loadPrepareData, normalizeString
+from data_pipeline import load_prepare_data, normalizeString
 
 # %%
 class GreedySearchDecoder(nn.Module):
@@ -90,7 +90,7 @@ def main():
     parser = argparse.ArgumentParser(description='Enables testing of neural network.')
     parser.add_argument("-c", "--config", 
                             help="config file for running model. Should correspond to model.", 
-                            default="configs/config_basic.json")
+                            default="configs/reddit.json")
     args = parser.parse_args()
 
 
@@ -111,8 +111,7 @@ def main():
 
     model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
-    # voc, pairs = loadPrepareData(corpus_name, data_path)
-    voc, pairs = loadPrepareData(config["data"] )
+    voc, pairs, category_indices = load_prepare_data(config["data"], use_processed=("_processed" in data_path))
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():

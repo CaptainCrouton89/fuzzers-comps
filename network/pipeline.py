@@ -13,7 +13,7 @@ torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-def create_network(config, vocab, pairs, verbosity):
+def create_network(config, vocab, pairs, category_indices, verbosity):
 
     """
     1. Create new columns using inp, out, func_list
@@ -23,7 +23,7 @@ def create_network(config, vocab, pairs, verbosity):
     # Example for validation
     small_batch_size = 5
     batches = gru_attention_network.batch2TrainData(vocab, [random.choice(pairs)
-                                    for _ in range(small_batch_size)])
+                                    for _ in range(small_batch_size)], category_indices)
     input_variable, lengths, target_variable, mask, max_target_len, meta_data = batches
 
     if verbosity > 0:
@@ -50,6 +50,8 @@ def create_network(config, vocab, pairs, verbosity):
     encoder_n_layers = model_config["encoder_n_layers"]
     decoder_n_layers = model_config["encoder_n_layers"]
 
+    meta_data_size = len(category_indices["static_inputs"])
+
     # Configuring optimizer
     learning_rate = model_config["learning_rate"]
     decoder_learning_ratio = model_config["decoder_learning_ratio"]
@@ -61,7 +63,7 @@ def create_network(config, vocab, pairs, verbosity):
     # Initialize encoder & decoder models
     encoder = gru_attention_network.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = gru_attention_network.LuongAttnDecoderRNN(
-        attn_model, embedding, decoder_hidden_size, vocab.num_words, decoder_n_layers, dropout)
+        attn_model, embedding, decoder_hidden_size, vocab.num_words, decoder_n_layers, dropout, meta_data_size)
 
     # Use appropriate device
     encoder = encoder.to(device)
@@ -91,7 +93,7 @@ def create_network(config, vocab, pairs, verbosity):
 
     # Run training iterations
     print("Starting Training!")
-    gru_attention_network.trainIters(model_name, vocab, pairs, encoder, decoder, encoder_optimizer, decoder_optimizer,
+    gru_attention_network.trainIters(model_name, vocab, pairs, category_indices, encoder, decoder, encoder_optimizer, decoder_optimizer,
                embedding, config)
     return
 
@@ -124,7 +126,7 @@ def main():
     function_mapping = []
 
     # Build data pairs
-    vocab, pairs = data_pipeline.load_prepare_data(data_config, function_mapping, use_processed=False)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(data_config, function_mapping, use_processed=False)
 
     # Print sample pairs
     if args.verbose > 0:
@@ -133,7 +135,7 @@ def main():
             print(pair)
 
     # Build network
-    create_network(config, vocab, pairs, args.verbose)
+    create_network(config, vocab, pairs, category_indices, args.verbose)
 
 if __name__ == "__main__":
     main()

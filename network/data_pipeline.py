@@ -152,16 +152,27 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
             data_config[category].append(out_col)
 
         # Save file to <path>_processed for future use
-        df.to_feather(path.replace(f".{format}", f"_processed.{format}"))
+        save_path = path.replace(f".{format}", f"_processed.{format}")
+        if format == "feather":
+            df.to_feather(save_path)
+        elif format == "json":
+            df.to_json(save_path, orient="split")
 
     pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
-    string_col_indices = [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]] \
-                        + [df.columns.get_loc(col_name) for col_name in data_config["target"]] 
-    pairs = filterPairs(pairs, data_config["max_len"], string_col_indices)
+
+    category_indices = {"encoder_inputs": [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]],
+                        "target": [df.columns.get_loc(col_name) for col_name in data_config["target"]],
+                        "static_inputs": [df.columns.get_loc(col_name) for col_name in data_config["static_inputs"]]
+    }
+
+    pairs = filterPairs(pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
     print(df.head())
+    for i in range(5):
+        print(str(pairs[i]) + "\n")
+    print("category_indices:" + str(category_indices))
 
     # Building vocabulary
     print("Counting words...")
@@ -173,4 +184,4 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
         for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]: # Likely only a single output column: `replyContent`
             voc.addSentence(pair[col])
     print("Counted words:", voc.num_words)
-    return voc, pairs
+    return voc, pairs, category_indices
