@@ -38,7 +38,7 @@
         "network_saves_path": "../data/network_saves/reddit/",
         "corpus_name": "RedditComments/2-2_500",
         "model_name": "simple_attention_rnn",
-        "checkpoint": "1000_checkpoint.tar",
+        "checkpoint": "3500_checkpoint.tar",
         "data_path": "../data/app_review_data/parsed_data_reddit.json",
         "static_inputs": [
         ],

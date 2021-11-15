@@ -111,8 +111,7 @@ def main():
 
     model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
-    # voc, pairs = loadPrepareData(corpus_name, data_path)
-    voc, pairs, category_indices = load_prepare_data(config["data"] )
+    voc, pairs, category_indices = load_prepare_data(config["data"], use_processed=("_processed" in data_path))
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():

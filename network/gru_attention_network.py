@@ -179,7 +179,7 @@ class LuongAttnDecoderRNN(nn.Module):
         self.n_layers = n_layers
         self.dropout = dropout
         self.meta_data_size = meta_data_size
-        print("meta data size!:", self.meta_data_size)
+        print("meta data size:", self.meta_data_size)
 
         # Define layers
         self.embedding = embedding
@@ -202,7 +202,8 @@ class LuongAttnDecoderRNN(nn.Module):
 
         # Mabye we add some zeros to the end of embedded
         # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
-        embedded = torch.cat((embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
+        if (self.meta_data_size > 0):
+            embedded = torch.cat((embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
 
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output

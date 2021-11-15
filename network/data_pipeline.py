@@ -170,8 +170,9 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
     print(df.head())
-    print(pairs[:3])
-    print(category_indices)
+    for i in range(5):
+        print(str(pairs[i]) + "\n")
+    print("category_indices:" + str(category_indices))
 
     # Building vocabulary
     print("Counting words...")
