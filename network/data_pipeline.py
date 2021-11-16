@@ -112,6 +112,9 @@ def normalizeString(s):
     s = re.sub(r"\s+", r" ", s).strip()
     return s
 
+def normalizeStrings(pair):
+    return (normalizeString(pair[0]), normalizeString(pair[1]))
+
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
 def filterPair(p, max_len, indices):
     # Input sequences need to preserve the last word for EOS token

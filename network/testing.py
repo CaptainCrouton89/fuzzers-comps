@@ -3,7 +3,7 @@ import os
 import argparse
 import torch
 from torch import nn
-from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token
+from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token, EOS_token
 from data_pipeline import load_prepare_data, normalizeString, Voc
 import random
 
@@ -34,19 +34,36 @@ class GreedySearchDecoder(nn.Module):
             # Obtain most likely word token and its softmax score
             # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
 
-            r = random.randrange(0, self.top_n)
-            score, index = torch.topk(decoder_output, self.top_n, dim=1)
+            scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
+            r = self.pickOption(scores, indexs, decoder_input)
 
-            decoder_scores = torch.transpose(score, 0, 1)[r]
-            decoder_input = torch.transpose(index, 0, 1)[r]
+            decoder_scores = torch.transpose(scores, 0, 1)[r]
+            decoder_input = torch.transpose(indexs, 0, 1)[r]
+
             # print("score: %f, index: %d" %(decoder_scores, decoder_input))
             # Record token and score
             all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
             all_scores = torch.cat((all_scores, decoder_scores), dim=0)
             # Prepare current token to be next decoder input (add a dimension)
             decoder_input = torch.unsqueeze(decoder_input, 0)
+            if decoder_input[0].item() == EOS_token:
+                break
         # Return collections of word tokens and scores
         return all_tokens, all_scores
+
+    def pickOption(self, scores, indexs, previous):
+        print(list(zip(scores[0].tolist(), indexs[0].tolist())))
+        probs = scores[0].tolist()
+        opts = list(range(len(indexs[0])))
+        r = random.choices(opts, probs)
+        r = r[0]
+        print(indexs[0][r].item())
+        if (indexs[0][r] == previous[0].item()):
+            print('fuck ' + str(r))
+            return self.pickOption(scores, indexs, previous)
+        print('yay ' + str(r))
+
+        return r
 
 def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     ### Format input sentence as a batch
@@ -65,6 +82,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     tokens, scores = searcher(input_batch, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
+    print(list(zip(tokens, decoded_words)))
     return decoded_words
 
 def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
