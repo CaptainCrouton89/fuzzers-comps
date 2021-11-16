@@ -133,11 +133,12 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     print("Start preparing training data ...")
 
     format = data_config["data_format"]
+    print(format)
     path = data_config["data_path"]
     if use_processed:
         path.replace(f".{format}", f"_processed.{format}")
 
-    if format == "feather":
+    if format == "ft":
         df = pd.read_feather(path)
     elif format == "json":
         df = pd.read_json(path, orient="split")
@@ -152,11 +153,11 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
             data_config[category].append(out_col)
 
         # Save file to <path>_processed for future use
-        save_path = path.replace(f".{format}", f"_processed.{format}")
-        if format == "feather":
-            df.to_feather(save_path)
+        path = path.replace(f".{format}", f"_processed.{format}")
+        if format == "ft":
+            df.to_feather(path)
         elif format == "json":
-            df.to_json(save_path, orient="split")
+            df.to_json(path, orient="split")
 
     pairs = df.to_numpy().tolist()
     print("Read {!s} sentence pairs".format(len(pairs)))
