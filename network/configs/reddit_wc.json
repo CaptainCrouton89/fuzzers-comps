@@ -7,7 +7,6 @@
         "corpus_name": "RedditComments/2-2_500",
         "model_name": "simple_attention_rnn",
         "encoder_inputs": [
-            "subreddit",
             "parent_body"
         ],
         "static_inputs": [
