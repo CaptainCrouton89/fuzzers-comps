@@ -3,7 +3,7 @@
         "max_len": 50,
         "data_path": "../data/reddit_data/small_reddit_df.ft",
         "data_format": "ft",
-        "network_save_path": "../data/network_saves/reddit/",
+        "network_save_path": "../data/network_saves/reddit_wc/",
         "corpus_name": "RedditComments",
         "model_name": "simple_attention_rnn",
         "encoder_inputs": [
