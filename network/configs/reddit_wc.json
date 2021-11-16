@@ -40,18 +40,7 @@
         "learning_stop_count": 100
     },
     "testing": {
-        "network_saves_path": "../data/network_saves/reddit/",
-        "corpus_name": "RedditComments",
-        "model_name": "simple_attention_rnn",
         "checkpoint": "3500_checkpoint.tar",
-        "data_path": "../data/app_review_data/parsed_data_reddit.json",
-        "static_inputs": [
-            "gilded",
-            "score",
-            "parent_score",
-            "delay",
-            "edited"
-        ],
-        "max_len": 50
+        "top_n": 1
     }
 }

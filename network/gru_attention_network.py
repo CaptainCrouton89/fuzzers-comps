@@ -400,10 +400,6 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
         else:
             iter_since_min_loss += 1
 
-        if iter_since_min_loss > training_config["learning_stop_count"]:
-            # save and break
-            pass
-
         # Print progress
         if iteration % print_every == 0:
             print_loss_avg = print_loss / print_every
@@ -412,7 +408,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
             print_loss = 0
 
         # Save checkpoint
-        if (iteration % save_every == 0):
+        if (iteration % save_every == 0 or iter_since_min_loss > training_config["learning_stop_count"]):
             directory = os.path.join(network_save_path, model_name, corpus_name, '{}-{}_{}'.format(
                 encoder_n_layers, decoder_n_layers, hidden_size))
             if not os.path.exists(directory):
@@ -427,6 +423,8 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
                 'voc_dict': voc.__dict__,
                 'embedding': embedding.state_dict()
             }, os.path.join(directory, '{}_{}.tar'.format(iteration, 'checkpoint')))
+            if iter_since_min_loss > training_config["learning_stop_count"]:
+                return
 
 
 # %%

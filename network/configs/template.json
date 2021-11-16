@@ -1,20 +1,21 @@
 {
     "data": {
-        "max_len": 50,
-        "data_path": "../data/app_review_data/parsed_data_with_responses.json",
-        "data_format": "json",
-        "network_save_path": "../data/network_saves/",
-        "corpus_name": "AppReviewsResponses",
-        "model_name": "simple_attention_rnn",
+        "max_len": "max length to trim to",
+        "data_path": "data path",
+        "data_format": "data format",
+        "network_save_path": "save path",
+        "corpus_name": "network name",
+        "model_name": "type of network",
         "encoder_inputs": [
-            "content"
+            "input1",
+            "input2"
         ],
         "static_inputs": [
-            "thumbsUpCount",
-            "score"
+            "metadata input1",
+            "metadata input2"
         ],
         "target": [
-            "replyContent"
+            "output goal"
         ]
     },
     "model": {
@@ -37,7 +38,7 @@
         "learning_stop_count": 100
     },
     "testing": {
-        "corpus_name": "AppReviewsResponses",
-        "top_n": 1
+        "checkpoint": "checkpoint",
+        "top_n": "how many to pick from when decoding"
     }
 }

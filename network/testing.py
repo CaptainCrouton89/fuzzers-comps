@@ -5,13 +5,15 @@ import torch
 from torch import nn
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token
 from data_pipeline import load_prepare_data, normalizeString, Voc
+import random
 
 # %%
 class GreedySearchDecoder(nn.Module):
-    def __init__(self, encoder, decoder):
+    def __init__(self, encoder, decoder, top_n):
         super(GreedySearchDecoder, self).__init__()
         self.encoder = encoder
         self.decoder = decoder
+        self.top_n = top_n
 
     def forward(self, input_seq, input_length, max_length):
         # Forward input through encoder model
@@ -30,7 +32,14 @@ class GreedySearchDecoder(nn.Module):
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
-            decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
+            # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
+
+            r = random.randrange(0, self.top_n)
+            score, index = torch.topk(decoder_output, self.top_n, dim=1)
+
+            decoder_scores = torch.transpose(score, 0, 1)[r]
+            decoder_input = torch.transpose(index, 0, 1)[r]
+            # print("score: %f, index: %d" %(decoder_scores, decoder_input))
             # Record token and score
             all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
             all_scores = torch.cat((all_scores, decoder_scores), dim=0)
@@ -97,19 +106,26 @@ def main():
         config = json.load(f)
 
     test_config = config['testing']
+    data_config = config['data']
     model_config = config['model']
 
-    network_saves_path = test_config['network_saves_path']
-    corpus_name = test_config['corpus_name']
-    model_name = test_config['model_name']
+    network_save_path = data_config['network_save_path']
+    corpus_name = data_config['corpus_name']
+    model_name = data_config['model_name']
+    static_inputs = data_config['static_inputs']
+    max_length = data_config['max_len']
+
     checkpoint = test_config['checkpoint']
-    data_path = test_config['data_path']
-    static_inputs = test_config['static_inputs']
-    max_length = test_config['max_len']
+    top_n = test_config['top_n']
 
-    model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
+    encoder_n_layers = model_config['encoder_n_layers']
+    dropout = model_config['dropout']
+    attn_model = model_config['attn_model']
+    decoder_n_layers = model_config['decoder_n_layers']
+    hidden_size = model_config['hidden_size'] + len(static_inputs)
 
-    voc = Voc(test_config["corpus_name"])
+    model_features = str(encoder_n_layers) + "-" + str(decoder_n_layers) + "_" + str(hidden_size)
+    model_path = os.path.join(network_save_path, model_name, corpus_name, model_features, checkpoint)
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
@@ -117,18 +133,13 @@ def main():
     else:
         checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 
+    voc = Voc(corpus_name)
     encoder_sd = checkpoint['encoder']
     decoder_sd = checkpoint['decoder']
     encoder_optimizer_sd = checkpoint['encoder_opt']
     decoder_optimizer_sd = checkpoint['decoder_opt']
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
-
-    encoder_n_layers = model_config['encoder_n_layers']
-    dropout = model_config['dropout']
-    attn_model = model_config['attn_model']
-    decoder_n_layers = model_config['decoder_n_layers']
-    hidden_size = model_config['hidden_size'] + len(static_inputs)
 
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
@@ -149,7 +160,7 @@ def main():
     decoder.eval()
 
     # Initialize search module
-    searcher = GreedySearchDecoder(encoder, decoder)
+    searcher = GreedySearchDecoder(encoder, decoder, top_n)
 
     evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs)
 
