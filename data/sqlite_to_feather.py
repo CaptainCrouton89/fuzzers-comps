@@ -14,7 +14,7 @@ linked_query = """SELECT post.subreddit, parent.body AS parent_body, post.gilded
                     INNER JOIN May2015 parent ON substring(post.parent_id,4) = parent.id
                     WHERE post.body NOT LIKE '[deleted]'
                     AND parent.body NOT LIKE '[deleted]'
-                    LIMIT 300000"""
+                    LIMIT 25000"""
 
 # vertical_query = """SELECT subreddit, body, id, substring(parent_id,4) AS parent_id, score
 #                     FROM May2015
