@@ -4,7 +4,7 @@ import argparse
 import torch
 from torch import nn
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token
-from data_pipeline import load_prepare_data, normalizeString
+from data_pipeline import load_prepare_data, normalizeString, Voc
 
 # %%
 class GreedySearchDecoder(nn.Module):
@@ -93,8 +93,6 @@ def main():
                             default="configs/reddit.json")
     args = parser.parse_args()
 
-
-
     with open(str(args.config)) as f:
         config = json.load(f)
 
@@ -111,7 +109,7 @@ def main():
 
     model_path = os.path.join(network_saves_path, model_name, corpus_name, checkpoint)
 
-    voc, pairs, category_indices = load_prepare_data(config["data"], use_processed=("_processed" in data_path))
+    voc = Voc(test_config["corpus_name"])
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
