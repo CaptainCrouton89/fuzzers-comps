@@ -2,7 +2,7 @@
     "data": {
         "max_len": 50,
         "data_path": "../data/reddit_data/reddit_df.ft",
-        "data_format": "feather",
+        "data_format": "ft",
         "network_save_path": "../data/network_saves/reddit/",
         "corpus_name": "RedditComments",
         "model_name": "simple_attention_rnn",
