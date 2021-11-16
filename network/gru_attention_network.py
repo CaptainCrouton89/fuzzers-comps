@@ -282,11 +282,6 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
     first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
 
-    # If the above doesn't work, use this instead
-    # score = torch.FloatTensor(meta_data[0])
-    # thumbsup = torch.FloatTensor(meta_data[1])
-    # first_hidden = torch.cat((encoder_hidden, score, thumbsup), 2)
-
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = first_hidden[:decoder.n_layers]
 
