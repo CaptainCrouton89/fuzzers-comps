@@ -6,6 +6,7 @@
 
 # %%
 from __future__ import absolute_import, unicode_literals, print_function, division
+import logging
 import random
 import itertools
 import os
@@ -20,7 +21,6 @@ import data_pipeline
 torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
-
 
 # %%
 # Vocabulary Class
@@ -61,8 +61,6 @@ def binaryMatrix(l, value=PAD_token):
     return m
 
 # Returns padded input sequence tensor and lengths
-
-
 def inputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
@@ -71,8 +69,6 @@ def inputVar(l, voc):
     return padVar, lengths
 
 # Returns padded target sequence tensor, padding mask, and max target length
-
-
 def outputVar(l, voc):
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     max_target_len = max([len(indexes) for indexes in indexes_batch])
@@ -83,8 +79,6 @@ def outputVar(l, voc):
     return padVar, mask, max_target_len
 
 # Returns all items for a given batch of pairs
-
-
 def batch2TrainData(voc, pair_batch, category_indices):
     pair_batch.sort(key=lambda x: len(x[0].split(" ")), reverse=True)
     input_batch, output_batch, meta_data = [], [], []
@@ -93,7 +87,6 @@ def batch2TrainData(voc, pair_batch, category_indices):
                            for i in category_indices["encoder_inputs"]])
         output_batch.extend([pair[i] for i in category_indices["target"]])
         meta_data.append([pair[i] for i in category_indices["static_inputs"]])
-        # print((pair[2:]).size())
 
     inp, lengths = inputVar(input_batch, voc)
     output, mask, max_target_len = outputVar(output_batch, voc)
@@ -163,10 +156,8 @@ class Attn(nn.Module):
             attn_energies = self.concat_score(hidden, encoder_outputs)
         elif self.method == 'dot':
             attn_energies = self.dot_score(hidden, encoder_outputs)
-
         # Transpose max_length and batch_size dimensions
         attn_energies = attn_energies.t()
-
         # Return the softmax normalized probability scores (with added dimension)
         return F.softmax(attn_energies, dim=1).unsqueeze(1)
 
@@ -181,12 +172,12 @@ class LuongAttnDecoderRNN(nn.Module):
         self.n_layers = n_layers
         self.dropout = dropout
         self.meta_data_size = meta_data_size
-        print("meta data size:", self.meta_data_size)
+        logging.debug(f"Meta data size: {self.meta_data_size}")
 
         # Define layers
         self.embedding = embedding
         self.embedding_dropout = nn.Dropout(dropout)
-        print("HIDDEN SIZE =", self.hidden_size)
+        logging.debug(f"Decoder hidden size ={self.hidden_size}")
         self.gru = nn.GRU(self.hidden_size, self.hidden_size, n_layers,
                           dropout=(0 if n_layers == 1 else dropout))
         self.concat = nn.Linear(self.hidden_size * 2, self.hidden_size)
@@ -195,24 +186,18 @@ class LuongAttnDecoderRNN(nn.Module):
         self.attn = Attn(attn_model, hidden_size)
 
     def forward(self, input_step, last_hidden, encoder_outputs):
-        # print("Hidden layer size:", last_hidden.size())
+        logging.debug(f"Hidden layer size: {last_hidden.size()}")
         # Note: we run this one step (word) at a time
         # Get embedding of current input word
         embedded = self.embedding(input_step)
         embedded = self.embedding_dropout(embedded)
         # Forward through unidirectional GRU
-        # print("Embedded layer size:", embedded.size())
-
+        logging.debug(f"Embedded layer size{embedded.size()}")
         # Mabye we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
                 (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
-
-        # print("embedded = ", embedded.size())
-        # print("last_hidden = ", last_hidden.size())
-
-        # print("gru = ", self.gru.input_size,
-        #       self.gru.proj_size, self.gru.hidden_size)
+        logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
         attn_weights = self.attn(rnn_output, encoder_outputs)
@@ -275,19 +260,18 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
 
-    # print("hidden layer size [seq_len, batch_size, features]:", encoder_hidden.size())
+    logging.debug(f"hidden layer size before meta_data [seq_len, batch_size, features]: {encoder_hidden.size()}")
+    
     # Concatonating other embeddings to hidden layer
-    # print("meta_data:", meta_data)
-
     meta_data_tensor = torch.FloatTensor(
         [[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
 
-    # print("hidden layer size [seq_len, batch_size, features]:", meta_data_tensor.size())
-    # print("meta_data_tensor:", meta_data_tensor)
-    # print("encoder_hidden:", encoder_hidden)
+    logging.debug(f"hidden layer size [seq_len, batch_size, features]: {meta_data_tensor.size()}")
+    logging.debug(f"meta_data_tensor size: {meta_data_tensor.size()}")
+    logging.debug(f"encoder_hidden size: {encoder_hidden.size()}")
 
-    # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
     first_hidden = torch.cat((encoder_hidden, meta_data_tensor.to(device)), 2)
+    logging.debug(f"first_hidden size [seq_len, batch_size, features]: {first_hidden.size()}")
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = first_hidden[:decoder.n_layers]
@@ -298,8 +282,6 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Determine if we are using teacher forcing this iteration
     use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
-
-    # print("decoder input:", decoder_input.size(), "\ndecoder_hidden", decoder_hidden.size(), "\nencoder outputs", encoder_outputs.size())
 
     # Forward batch of sequences through decoder one time step at a time
     if use_teacher_forcing:
@@ -378,14 +360,14 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
                         for _ in range(n_iteration)]
 
     # Initializations
-    print('Initializing ...')
+    logging.info('Initializing ...')
     start_iteration = 1
     print_loss = 0
     if loadFilename:
         start_iteration = checkpoint['iteration'] + 1
 
     # Training loop
-    print("Training...")
+    logging.info("Training...")
     for iteration in range(start_iteration, n_iteration + 1):
         training_batch = training_batches[iteration - 1]
         # Extract fields from batch
@@ -406,7 +388,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
         # Print progress
         if iteration % print_every == 0:
             print_loss_avg = print_loss / print_every
-            print("Iteration: {}; Percent complete: {:.1f}%; Average loss: {:.4f}".format(
+            logging.info("Iteration: {}; Percent complete: {:.1f}%; Average loss: {:.4f}".format(
                 iteration, iteration / n_iteration * 100, print_loss_avg))
             print_loss = 0
 
@@ -469,4 +451,4 @@ def evaluateInput(encoder, decoder, searcher, voc):
             print('Bot:', ' '.join(output_words))
 
         except KeyError:
-            print("Error: Encountered unknown word.")
+            logging.warning("Error: Encountered unknown word.")
