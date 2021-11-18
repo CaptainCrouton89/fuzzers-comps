@@ -9,7 +9,9 @@ import random
 import logging
 import torch
 from pipeline_functions.sentiment_analysis import get_sentiment
-from pipeline_functions.normalize import getNormal
+from pipeline_functions.reddit_replace import replace_user_and_subreddit
+from pipeline_functions.normalize import get_normal
+from pipeline_functions.string_normalize import get_normal_string
 import torch.nn as nn
 from torch import optim
 
@@ -147,8 +149,12 @@ def main():
 
     # Set function mapping
     function_mapping = [
+        (replace_user_and_subreddit, "parent_body", "parent_body", "encoder_inputs"),
+        (replace_user_and_subreddit, "body", "body", "target"),
         (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
-        (getNormal, "delay", "delay", "static_inputs"),
+        (get_normal, "delay", "delay", "static_inputs"),
+        (get_normal_string, "body", "body", "target"),
+        (get_normal_string, "parent_body", "parent_body", "encoder_inputs")
     ]
 
     # Build data pairs
