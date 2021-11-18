@@ -147,7 +147,6 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     print("Start preparing training data ...")
 
     format = data_config["data_format"]
-    print(format)
     path = data_config["data_path"]
     if use_processed:
         path.replace(f".{format}", f"_processed.{format}")
