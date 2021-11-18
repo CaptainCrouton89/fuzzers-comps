@@ -6,6 +6,7 @@ import json
 import random
 import torch
 from pipeline_functions.sentiment_analysis import get_sentiment
+from pipeline_functions.reddit_replace import replace_user_and_subreddit
 import torch.nn as nn
 from torch import optim
 
@@ -122,7 +123,9 @@ def main():
 
     # Set function mapping
     function_mapping = [
-        (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
+        (replace_user_and_subreddit, "parent_body", "parent_body_new", "encoder_inputs"),
+        # (replace_user_and_subreddit, "body", "body", "target"),
+        (get_sentiment, "parent_body", "sentiment_content", "static_inputs")
     ]
 
     # function_mapping = []
