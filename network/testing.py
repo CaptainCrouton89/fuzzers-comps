@@ -74,10 +74,22 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
-    indexes_batch.extend(sentence[1:])
+    print(indexes_batch)
+    testing = []
+    for i in range(len(indexes_batch[0])):
+        testing.append([indexes_batch[0][i]])
+    indexes_batch = testing
+    for i in range(1, len(sentence)):
+        indexes_batch.append([int(sentence[i])])
+
+    # indexes_batch.extend(sentence[1:])
+    print(indexes_batch)
+
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
+    print(lengths)
+    print(indexes_batch)
     input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
