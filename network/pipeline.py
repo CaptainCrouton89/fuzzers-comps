@@ -20,7 +20,7 @@ USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
 
-def create_network(config, vocab, pairs, category_indices, verbosity):
+def create_network(config, vocab, pairs, category_indices):
     """
     1. Create new columns using inp, out, func_list
     2. During batching, apply other normalization
@@ -130,6 +130,7 @@ def main():
     width = os.get_terminal_size().columns
 
     formatter = logging.Formatter('%(levelname)s: %(message)s \t\t@ %(filename)s: %(funcName)s: %(lineno)d', datefmt='%m/%d/%Y %I:%M:%S',)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(formatter)
@@ -162,7 +163,7 @@ def main():
         data_config, function_mapping, use_processed=False)
 
     # Build network
-    create_network(config, vocab, pairs, category_indices, args.verbose)
+    create_network(config, vocab, pairs, category_indices)
 
 
 if __name__ == "__main__":
