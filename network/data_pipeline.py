@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import unicodedata
 import re
@@ -58,7 +59,7 @@ class Voc:
             if v >= min_count:
                 keep_words.append(k)
 
-        print('keep_words {} / {} = {:.4f}'.format(
+        logging.info('keep_words {} / {} = {:.4f}'.format(
             len(keep_words), len(self.word2index), len(
                 keep_words) / len(self.word2index)
         ))
@@ -144,7 +145,7 @@ def filterPairs(pairs, max_len, indices):
 
 
 def load_prepare_data(data_config, function_mapping=[], use_processed=True):
-    print("Start preparing training data ...")
+    logging.info("Start preparing training data ...")
 
     format = data_config["data_format"]
     path = data_config["data_path"]
@@ -174,7 +175,7 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
             df.to_json(path, orient="split")
 
     pairs = df.to_numpy().tolist()
-    print("Read {!s} sentence pairs".format(len(pairs)))
+    logging.info("Read {!s} sentence pairs".format(len(pairs)))
 
     category_indices = {"encoder_inputs": [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]],
                         "target": [df.columns.get_loc(col_name) for col_name in data_config["target"]],
@@ -183,15 +184,13 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
 
     pairs = filterPairs(
         pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
-    print("Trimmed to {!s} sentence pairs".format(len(pairs)))
+    logging.info("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
-    print(df.head())
-    for i in range(5):
-        print(str(pairs[i]) + "\n")
-    print("category_indices:" + str(category_indices))
+    logging.info(f"\n{df.head()}")
+    logging.debug(f"category_indices: {str(category_indices)}")
 
     # Building vocabulary
-    print("Counting words...")
+    logging.info("Counting words...")
     voc = Voc(data_config["corpus_name"])
     # Add all text from input and output collumns
     for pair in pairs:
@@ -201,5 +200,5 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
         # Likely only a single output column: `replyContent`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
             voc.addSentence(pair[col])
-    print("Counted words:", voc.num_words)
+    logging.info("Counted words:", voc.num_words)
     return voc, pairs, category_indices
