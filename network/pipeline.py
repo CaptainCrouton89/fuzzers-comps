@@ -123,7 +123,7 @@ def main():
 
     # Set function mapping
     function_mapping = [
-        (replace_user_and_subreddit, "parent_body", "parent_body_new", "encoder_inputs"),
+        (replace_user_and_subreddit, "parent_body", "parent_body", "encoder_inputs"),
         # (replace_user_and_subreddit, "body", "body", "target"),
         (get_sentiment, "parent_body", "sentiment_content", "static_inputs")
     ]
