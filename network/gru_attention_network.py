@@ -401,6 +401,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
             iter_since_min_loss = 0
         else:
             iter_since_min_loss += 1
+            iter_since_min_loss = 0 # leave off until properly handled later
 
         # Print progress
         if iteration % print_every == 0:

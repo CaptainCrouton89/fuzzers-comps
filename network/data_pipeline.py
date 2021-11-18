@@ -118,7 +118,6 @@ def normalizeStrings(pair):
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
 def filterPair(p, max_len, indices):
     # Input sequences need to preserve the last word for EOS token
-    
     for index in indices:
         if len(p[index].split(' ')) >= max_len:
             return False

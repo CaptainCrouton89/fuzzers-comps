@@ -125,7 +125,7 @@ def main():
         (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
     ]
 
-    function_mapping = []
+    # function_mapping = []
 
     # Build data pairs
     vocab, pairs, category_indices = data_pipeline.load_prepare_data(
