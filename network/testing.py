@@ -9,6 +9,8 @@ from pipeline_functions.string_normalize import normalize_one_string
 import random
 
 # %%
+
+
 class GreedySearchDecoder(nn.Module):
     def __init__(self, encoder, decoder, top_n):
         super(GreedySearchDecoder, self).__init__()
@@ -66,8 +68,9 @@ class GreedySearchDecoder(nn.Module):
 
         return r
 
+
 def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
-    ### Format input sentence as a batch
+    # Format input sentence as a batch
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
@@ -86,39 +89,46 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     print(list(zip(tokens, decoded_words)))
     return decoded_words
 
+
 def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
     while(1):
         try:
             # Get input sentence
             content = input('content> ')
             # Check if it is quit case
-            if content == 'q' or content == 'quit': 
+            if content == 'q' or content == 'quit':
                 break
             content = [normalize_one_string(content)]
 
             for field in static_inputs:
                 content.append(input(field + "> "))
 
-            # Parse the sentence into a tuple representing the content and 
+            # Parse the sentence into a tuple representing the content and
             # input metadata ~somehow~
 
             # Evaluate sentence
-            output_words = evaluate(encoder, decoder, searcher, voc, content, max_length)
+            output_words = evaluate(
+                encoder, decoder, searcher, voc, content, max_length)
             # Format and print response sentence
-            output_words[:] = [x for x in output_words if not (x == 'EOS' or x == 'PAD')]
+            output_words[:] = [x for x in output_words if not (
+                x == 'EOS' or x == 'PAD')]
             print('Bot:', ' '.join(output_words))
 
         except KeyError:
             print("Error: Encountered unknown word.")
 
+
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Enables testing of neural network.')
-    parser.add_argument("-c", "--config", 
-                            help="config file for running model. Should correspond to model.", 
-                            default="configs/reddit.json")
+    meta_data_size = 6
+    parser = argparse.ArgumentParser(
+        description='Enables testing of neural network.')
+    parser.add_argument("-c", "--config",
+                        help="config file for running model. Should correspond to model.",
+                        default="configs/reddit.json")
     args = parser.parse_args()
 
     with open(str(args.config)) as f:
@@ -141,10 +151,12 @@ def main():
     dropout = model_config['dropout']
     attn_model = model_config['attn_model']
     decoder_n_layers = model_config['decoder_n_layers']
-    hidden_size = model_config['hidden_size'] + len(static_inputs)
+    hidden_size = model_config['hidden_size'] + meta_data_size
 
-    model_features = str(encoder_n_layers) + "-" + str(decoder_n_layers) + "_" + str(hidden_size)
-    model_path = os.path.join(network_save_path, model_name, corpus_name, model_features, checkpoint)
+    model_features = str(encoder_n_layers) + "-" + \
+        str(decoder_n_layers) + "_" + str(hidden_size)
+    model_path = os.path.join(
+        network_save_path, model_name, corpus_name, model_features, checkpoint)
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
@@ -165,6 +177,10 @@ def main():
     decoder = LuongAttnDecoderRNN(
         attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
 
+    if (meta_data_size > 0):
+        embedding = torch.cat(
+            (embedding, torch.zeros(1, 64, meta_data_size).to(device)), 2)
+
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)
     decoder.load_state_dict(decoder_sd)
@@ -182,6 +198,7 @@ def main():
     searcher = GreedySearchDecoder(encoder, decoder, top_n)
 
     evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs)
+
 
 if __name__ == "__main__":
     main()
