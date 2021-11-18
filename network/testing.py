@@ -22,6 +22,8 @@ class GreedySearchDecoder(nn.Module):
 
     def forward(self, input_seq, input_length, max_length):
         # Forward input through encoder model
+        print(f"input seq: {input_seq}")
+        print(f"input length: {input_length}")
         encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
         # Prepare encoder's final hidden layer to be first hidden input to the decoder
         decoder_hidden = encoder_hidden[:self.decoder.n_layers]
@@ -34,6 +36,9 @@ class GreedySearchDecoder(nn.Module):
         # Iteratively decode one word token at a time
         for _ in range(max_length):
             # Forward pass through decoder
+            print(f"decoder input shape:{decoder_input.shape}")
+            print(f"decoder hidden shape:{decoder_hidden.shape}")
+            print(f"encoder output shape:{encoder_outputs.shape}")
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
@@ -76,7 +81,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
-    logging.debug(indexes_batch)
+    logging.debug(f"index batch:{indexes_batch}")
     testing = []
     for i in range(len(indexes_batch[0])):
         testing.append([indexes_batch[0][i]])
@@ -85,16 +90,17 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
         indexes_batch.append([int(sentence[i])])
 
     # indexes_batch.extend(sentence[1:])
-    logging.debug(indexes_batch)
+    logging.debug(f"indexes_batch later:{indexes_batch}")
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
-    logging.debug(lengths)
-    logging.debug(indexes_batch)
+    logging.debug(f"lengths: {lengths}")
+    logging.debug(f"indexes_batch last: {indexes_batch}")
     input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
+    logging.debug(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
     # Decode sentence with searcher
     tokens, scores = searcher(input_batch, lengths, max_length)
@@ -217,3 +223,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# %%
