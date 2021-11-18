@@ -13,8 +13,8 @@ torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-def create_network(config, vocab, pairs, category_indices, verbosity):
 
+def create_network(config, vocab, pairs, category_indices, verbosity):
     """
     1. Create new columns using inp, out, func_list
     2. During batching, apply other normalization
@@ -23,7 +23,7 @@ def create_network(config, vocab, pairs, category_indices, verbosity):
     # Example for validation
     small_batch_size = 5
     batches = gru_attention_network.batch2TrainData(vocab, [random.choice(pairs)
-                                    for _ in range(small_batch_size)], category_indices)
+                                                            for _ in range(small_batch_size)], category_indices)
     input_variable, lengths, target_variable, mask, max_target_len, meta_data = batches
 
     if verbosity > 0:
@@ -44,8 +44,8 @@ def create_network(config, vocab, pairs, category_indices, verbosity):
     encoder_n_layers = model_config['encoder_n_layers']
     dropout = model_config['dropout']
     hidden_size = model_config['hidden_size']
-    decoder_hidden_size = hidden_size 
-    # decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes 
+    # decoder_hidden_size = hidden_size
+    # decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes
     attn_model = model_config['attn_model']
     encoder_n_layers = model_config["encoder_n_layers"]
     decoder_n_layers = model_config["encoder_n_layers"]
@@ -61,9 +61,10 @@ def create_network(config, vocab, pairs, category_indices, verbosity):
     embedding = nn.Embedding(vocab.num_words, hidden_size)
 
     # Initialize encoder & decoder models
-    encoder = gru_attention_network.EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
+    encoder = gru_attention_network.EncoderRNN(
+        hidden_size, embedding, encoder_n_layers, dropout)
     decoder = gru_attention_network.LuongAttnDecoderRNN(
-        attn_model, embedding, decoder_hidden_size, vocab.num_words, decoder_n_layers, dropout, meta_data_size)
+        attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, dropout, meta_data_size)
 
     # Use appropriate device
     encoder = encoder.to(device)
@@ -94,18 +95,19 @@ def create_network(config, vocab, pairs, category_indices, verbosity):
     # Run training iterations
     print("Starting Training!")
     gru_attention_network.trainIters(model_name, vocab, pairs, category_indices, encoder, decoder, encoder_optimizer, decoder_optimizer,
-               embedding, config)
+                                     embedding, config)
     return
+
 
 def main():
     parser = argparse.ArgumentParser(
-            description='Enables testing of neural network.') 
-    parser.add_argument("-c", "--config", 
-                            help="config file for network_deployable. Should correspond to model.")
-    parser.add_argument("-v", "--verbose", 
-                            help="how much verbosity to include :)", 
-                            action="count",
-                            default=0)
+        description='Enables testing of neural network.')
+    parser.add_argument("-c", "--config",
+                        help="config file for network_deployable. Should correspond to model.")
+    parser.add_argument("-v", "--verbose",
+                        help="how much verbosity to include :)",
+                        action="count",
+                        default=0)
     args = parser.parse_args()
     with open(args.config) as f:
         config = json.load(f)
@@ -126,7 +128,8 @@ def main():
     function_mapping = []
 
     # Build data pairs
-    vocab, pairs, category_indices = data_pipeline.load_prepare_data(data_config, function_mapping, use_processed=False)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(
+        data_config, function_mapping, use_processed=False)
 
     # Print sample pairs
     if args.verbose > 0:
@@ -136,6 +139,7 @@ def main():
 
     # Build network
     create_network(config, vocab, pairs, category_indices, args.verbose)
+
 
 if __name__ == "__main__":
     main()

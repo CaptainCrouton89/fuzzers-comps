@@ -89,11 +89,12 @@ def batch2TrainData(voc, pair_batch, category_indices):
     pair_batch.sort(key=lambda x: len(x[0].split(" ")), reverse=True)
     input_batch, output_batch, meta_data = [], [], []
     for pair in pair_batch:
-        input_batch.extend([pair[i] for i in category_indices["encoder_inputs"]])
+        input_batch.extend([pair[i]
+                           for i in category_indices["encoder_inputs"]])
         output_batch.extend([pair[i] for i in category_indices["target"]])
         meta_data.append([pair[i] for i in category_indices["static_inputs"]])
         # print((pair[2:]).size())
-    
+
     inp, lengths = inputVar(input_batch, voc)
     output, mask, max_target_len = outputVar(output_batch, voc)
     return inp, lengths, output, mask, max_target_len, meta_data
@@ -174,7 +175,7 @@ class LuongAttnDecoderRNN(nn.Module):
         super(LuongAttnDecoderRNN, self).__init__()
         # Keep for reference
         self.attn_model = attn_model
-        self.hidden_size = hidden_size
+        self.hidden_size = hidden_size + meta_data_size
         self.output_size = output_size
         self.n_layers = n_layers
         self.dropout = dropout
@@ -184,10 +185,11 @@ class LuongAttnDecoderRNN(nn.Module):
         # Define layers
         self.embedding = embedding
         self.embedding_dropout = nn.Dropout(dropout)
-        self.gru = nn.GRU(hidden_size, hidden_size, n_layers,
+        print("HIDDEN SIZE =", self.hidden_size)
+        self.gru = nn.GRU(self.hidden_size, self.hidden_size, n_layers,
                           dropout=(0 if n_layers == 1 else dropout))
-        self.concat = nn.Linear(hidden_size * 2, hidden_size)
-        self.out = nn.Linear(hidden_size, output_size)
+        self.concat = nn.Linear(self.hidden_size * 2, self.hidden_size)
+        self.out = nn.Linear(self.hidden_size, output_size)
 
         self.attn = Attn(attn_model, hidden_size)
 
@@ -201,10 +203,15 @@ class LuongAttnDecoderRNN(nn.Module):
         # print("Embedded layer size:", embedded.size())
 
         # Mabye we add some zeros to the end of embedded
-        # embedded = torch.cat((embedded, torch.empty(1, 64, 2)), 2)
         if (self.meta_data_size > 0):
-            embedded = torch.cat((embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
+            embedded = torch.cat(
+                (embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
 
+        # print("embedded = ", embedded.size())
+        # print("last_hidden = ", last_hidden.size())
+
+        # print("gru = ", self.gru.input_size,
+        #       self.gru.proj_size, self.gru.hidden_size)
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
         attn_weights = self.attn(rnn_output, encoder_outputs)
@@ -258,9 +265,9 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Forward pass through encoder
     encoder_outputs, encoder_hidden = encoder(input_variable, lengths)
-    
+
     # We get the total amount of metadata that will be concatenated
-    meta_data_size = len(meta_data[0]) 
+    meta_data_size = len(meta_data[0])
 
     encoder_outputs = torch.cat(
         (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, meta_data_size)), 2)
