@@ -4,7 +4,8 @@ import argparse
 import torch
 from torch import nn
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token, EOS_token
-from data_pipeline import load_prepare_data, normalizeString, Voc
+from data_pipeline import load_prepare_data, Voc
+from pipeline_functions.string_normalize import normalize_one_string
 import random
 
 # %%
@@ -93,7 +94,7 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
             # Check if it is quit case
             if content == 'q' or content == 'quit': 
                 break
-            content = [normalizeString(content)]
+            content = [normalize_one_string(content)]
 
             for field in static_inputs:
                 content.append(input(field + "> "))
