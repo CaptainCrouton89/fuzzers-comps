@@ -118,6 +118,7 @@ class EncoderRNN(nn.Module):
         # Pack padded batch of sequences for RNN module
         packed = nn.utils.rnn.pack_padded_sequence(embedded, input_lengths)
         # Forward pass through GRU
+        packed = packed.to(device)
         outputs, hidden = self.gru(packed, hidden)
         # Unpack padding
         outputs, _ = nn.utils.rnn.pad_packed_sequence(outputs)
@@ -205,7 +206,7 @@ class LuongAttnDecoderRNN(nn.Module):
         # Mabye we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
-                (embedded, torch.zeros(1, 64, self.meta_data_size)), 2)
+                (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
 
         # print("embedded = ", embedded.size())
         # print("last_hidden = ", last_hidden.size())
@@ -268,9 +269,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # We get the total amount of metadata that will be concatenated
     meta_data_size = len(meta_data[0])
-
     encoder_outputs = torch.cat(
-        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, meta_data_size)), 2)
+        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, meta_data_size).to(device)), 2)
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
@@ -287,7 +287,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # print("encoder_hidden:", encoder_hidden)
 
     # print("first_hidden size [seq_len, batch_size, features]:", first_hidden.size())
-    first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
+    first_hidden = torch.cat((encoder_hidden, meta_data_tensor.to(device)), 2)
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = first_hidden[:decoder.n_layers]
