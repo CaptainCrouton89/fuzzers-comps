@@ -94,9 +94,12 @@ The current column is named {}".format(content))
         warnings.warn("Second column in dataframe should be target text. \
 It should be named `replyContent`. The current column is named {}".format(replyContent))
 
+
 def preprocess(df, data_config):
-    df = df[data_config["encoder_inputs"] + data_config["target"] + data_config["static_inputs"]]
+    df = df[data_config["encoder_inputs"] +
+            data_config["target"] + data_config["static_inputs"]]
     return df
+
 
 def unicodeToAscii(s):
     return ''.join(
@@ -105,6 +108,8 @@ def unicodeToAscii(s):
     )
 
 # Lowercase, trim, and remove non-letter characters
+
+
 def normalizeString(s):
     s = unicodeToAscii(s.lower().strip())
     s = re.sub(r"([.!?])", r" \1", s)
@@ -112,10 +117,13 @@ def normalizeString(s):
     s = re.sub(r"\s+", r" ", s).strip()
     return s
 
+
 def normalizeStrings(pair):
     return (normalizeString(pair[0]), normalizeString(pair[1]))
 
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
+
+
 def filterPair(p, max_len, indices):
     # Input sequences need to preserve the last word for EOS token
     for index in indices:
@@ -124,6 +132,8 @@ def filterPair(p, max_len, indices):
     return True
 
 # Filter pairs using filterPair condition
+
+
 def filterPairs(pairs, max_len, indices):
     return [pair for pair in pairs if filterPair(pair, max_len, indices)]
 
@@ -131,6 +141,8 @@ def filterPairs(pairs, max_len, indices):
 
 # Using the functions defined above, return a populated voc object and pairs list
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
+
+
 def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     print("Start preparing training data ...")
 
@@ -152,7 +164,8 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     if not use_processed:
         for func, inp_col, out_col, category in function_mapping:
             df[out_col] = func(df, inp_col)
-            data_config[category].append(out_col)
+            if inp_col != out_col:
+                data_config[category].append(out_col)
 
         # Save file to <path>_processed for future use
         path = path.replace(f".{format}", f"_processed.{format}")
@@ -167,9 +180,10 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     category_indices = {"encoder_inputs": [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]],
                         "target": [df.columns.get_loc(col_name) for col_name in data_config["target"]],
                         "static_inputs": [df.columns.get_loc(col_name) for col_name in data_config["static_inputs"]]
-    }
+                        }
 
-    pairs = filterPairs(pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
+    pairs = filterPairs(
+        pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
     print("Trimmed to {!s} sentence pairs".format(len(pairs)))
 
     print(df.head())
@@ -182,9 +196,11 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     voc = Voc(data_config["corpus_name"])
     # Add all text from input and output collumns
     for pair in pairs:
-        for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]: # Likely only a single input column: `content`
+        # Likely only a single input column: `content`
+        for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]:
             voc.addSentence(pair[col])
-        for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]: # Likely only a single output column: `replyContent`
+        # Likely only a single output column: `replyContent`
+        for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
             voc.addSentence(pair[col])
     print("Counted words:", voc.num_words)
     return voc, pairs, category_indices
