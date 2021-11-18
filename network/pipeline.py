@@ -1,19 +1,19 @@
-import data_pipeline
-import gru_attention_network
-import argparse
 import os
-from datetime import datetime
 import sys
 import json
 import random
 import logging
+import argparse
 import torch
+import torch.nn as nn
+from torch import optim
+import data_pipeline
+import gru_attention_network
+from custom_logger import init_logger
 from pipeline_functions.sentiment_analysis import get_sentiment
 from pipeline_functions.reddit_replace import replace_user_and_subreddit
 from pipeline_functions.normalize import get_normal
 from pipeline_functions.string_normalize import get_normal_string
-import torch.nn as nn
-from torch import optim
 
 torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
@@ -124,26 +124,8 @@ def main():
     training_config = config["training"]
     corpus = data_config["corpus_name"]
 
-    # Configure logger
-    os.makedirs(os.path.join("logs", corpus), exist_ok=True)
-
-    width = os.get_terminal_size().columns
-
-    formatter = logging.Formatter('%(levelname)s: %(message)s \t\t@ %(filename)s: %(funcName)s: %(lineno)d', datefmt='%m/%d/%Y %I:%M:%S',)
-    logging.getLogger().setLevel(logging.DEBUG)
-
-    stdout_handler = logging.StreamHandler(sys.stdout)
-    stdout_handler.setFormatter(formatter)
-    stdout_handler.setLevel(getattr(logging, args.loglevel.upper(), None))
-
-    file_handler = logging.FileHandler(filename=f'logs/{corpus}/{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}.log', mode='w')
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.DEBUG)
-
-    logging.basicConfig(
-        handlers=[file_handler, stdout_handler])
-
-    logging.info(f"Running pipeline with {args.config}")
+    # initialize logger
+    init_logger(os.path.join("logs", corpus), args.loglevel, config_path=config)
 
     # Build file save path
     os.makedirs(data_config["network_save_path"], exist_ok=True)

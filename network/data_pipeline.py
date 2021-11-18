@@ -200,5 +200,5 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
         # Likely only a single output column: `replyContent`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
             voc.addSentence(pair[col])
-    logging.info("Counted words:", voc.num_words)
+    logging.info(f"Counted words: {voc.num_words}")
     return voc, pairs, category_indices
