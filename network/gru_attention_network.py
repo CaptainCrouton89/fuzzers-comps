@@ -401,7 +401,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
             iter_since_min_loss = 0
         else:
             iter_since_min_loss += 1
-            iter_since_min_loss = 0 # leave off until properly handled later
+            iter_since_min_loss = 0  # leave off until properly handled later
 
         # Print progress
         if iteration % print_every == 0:
@@ -413,7 +413,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
         # Save checkpoint
         if (iteration % save_every == 0 or iter_since_min_loss > training_config["learning_stop_count"]):
             directory = os.path.join(network_save_path, model_name, corpus_name, '{}-{}_{}'.format(
-                encoder_n_layers, decoder_n_layers, hidden_size))
+                encoder_n_layers, decoder_n_layers, hidden_size+len(meta_data[0])))
             if not os.path.exists(directory):
                 os.makedirs(directory)
             torch.save({
