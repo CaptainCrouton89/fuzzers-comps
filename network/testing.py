@@ -35,9 +35,9 @@ class GreedySearchDecoder(nn.Module):
         # Iteratively decode one word token at a time
         for _ in range(max_length):
             # Forward pass through decoder
-            print(decoder_input.shape)
-            print(decoder_hidden.shape)
-            print(encoder_outputs.shape)
+            print(f"decoder input shape:{decoder_input.shape}")
+            print(f"decoder hidden shape:{decoder_hidden.shape}")
+            print(f"encoder output shape:{encoder_outputs.shape}")
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
@@ -80,7 +80,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
-    print(indexes_batch)
+    print(f"index batch:{indexes_batch}")
     testing = []
     for i in range(len(indexes_batch[0])):
         testing.append([indexes_batch[0][i]])
@@ -89,16 +89,17 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
         indexes_batch.append([int(sentence[i])])
 
     # indexes_batch.extend(sentence[1:])
-    print(indexes_batch)
+    print(f"indexes_batch later:{indexes_batch}")
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
-    print(lengths)
-    print(indexes_batch)
+    print(f"lengths: {lengths}")
+    print(f"indexes_batch last: {indexes_batch}")
     input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
+    print(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
     # Decode sentence with searcher
     tokens, scores = searcher(input_batch, lengths, max_length)
