@@ -151,10 +151,10 @@ def main():
     dropout = model_config['dropout']
     attn_model = model_config['attn_model']
     decoder_n_layers = model_config['decoder_n_layers']
-    hidden_size = model_config['hidden_size'] + meta_data_size
+    hidden_size = model_config['hidden_size']
 
     model_features = str(encoder_n_layers) + "-" + \
-        str(decoder_n_layers) + "_" + str(hidden_size)
+        str(decoder_n_layers) + "_" + str(hidden_size+meta_data_size)
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
 
@@ -175,11 +175,7 @@ def main():
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout)
-
-    if (meta_data_size > 0):
-        embedding = torch.cat(
-            (embedding, torch.zeros(1, 64, meta_data_size).to(device)), 2)
+        attn_model, embedding, hidden_size + meta_data_size, voc.num_words, decoder_n_layers, dropout)
 
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)
