@@ -20,6 +20,8 @@ class GreedySearchDecoder(nn.Module):
 
     def forward(self, input_seq, input_length, max_length):
         # Forward input through encoder model
+        print(f"input seq: {input_seq}")
+        print(f"input length: {input_length}")
         encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
         # Prepare encoder's final hidden layer to be first hidden input to the decoder
         decoder_hidden = encoder_hidden[:self.decoder.n_layers]
@@ -32,6 +34,9 @@ class GreedySearchDecoder(nn.Module):
         # Iteratively decode one word token at a time
         for _ in range(max_length):
             # Forward pass through decoder
+            print(decoder_input.shape)
+            print(decoder_hidden.shape)
+            print(encoder_outputs.shape)
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
@@ -210,3 +215,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# %%
