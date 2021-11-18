@@ -4,6 +4,7 @@ import os
 import argparse
 import torch
 from torch import nn
+from custom_logger import init_logger
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token, EOS_token
 from data_pipeline import load_prepare_data, Voc
 from pipeline_functions.string_normalize import normalize_one_string
@@ -56,16 +57,16 @@ class GreedySearchDecoder(nn.Module):
         return all_tokens, all_scores
 
     def pickOption(self, scores, indexs, previous):
-        print(list(zip(scores[0].tolist(), indexs[0].tolist())))
+        logging.debug(list(zip(scores[0].tolist(), indexs[0].tolist())))
         probs = scores[0].tolist()
         opts = list(range(len(indexs[0])))
         r = random.choices(opts, probs)
         r = r[0]
-        print(indexs[0][r].item())
+        logging.debug(indexs[0][r].item())
         if (indexs[0][r] == previous[0].item()):
-            print('fuck ' + str(r))
+            logging.warning('fuck ' + str(r))
             return self.pickOption(scores, indexs, previous)
-        print('yay ' + str(r))
+        logging.debug('yay ' + str(r))
 
         return r
 
@@ -75,7 +76,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, sentence)]
     indexes_batch = [indexesFromSentence(voc, sentence[0])]
-    print(indexes_batch)
+    logging.debug(indexes_batch)
     testing = []
     for i in range(len(indexes_batch[0])):
         testing.append([indexes_batch[0][i]])
@@ -84,13 +85,13 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
         indexes_batch.append([int(sentence[i])])
 
     # indexes_batch.extend(sentence[1:])
-    print(indexes_batch)
+    logging.debug(indexes_batch)
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     # Transpose dimensions of batch to match models' expectations
-    print(lengths)
-    print(indexes_batch)
+    logging.debug(lengths)
+    logging.debug(indexes_batch)
     input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
@@ -99,7 +100,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     tokens, scores = searcher(input_batch, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
-    print(list(zip(tokens, decoded_words)))
+    logging.debug(list(zip(tokens, decoded_words)))
     return decoded_words
 
 
@@ -128,7 +129,7 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
             print('Bot:', ' '.join(output_words))
 
         except KeyError:
-            print("Error: Encountered unknown word.")
+            logging.warning("Error: Encountered unknown word.")
 
 
 USE_CUDA = torch.cuda.is_available()
@@ -142,6 +143,9 @@ def main():
     parser.add_argument("-c", "--config",
                         help="config file for running model. Should correspond to model.",
                         default="configs/reddit.json")
+    parser.add_argument("-l", "--loglevel",
+                        help="Level at which to log events.",
+                        default="INFO")
     args = parser.parse_args()
 
     with open(str(args.config)) as f:
@@ -170,6 +174,8 @@ def main():
         str(decoder_n_layers) + "_" + str(hidden_size+meta_data_size)
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
+
+    init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, config)
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
