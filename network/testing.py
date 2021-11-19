@@ -22,23 +22,30 @@ class GreedySearchDecoder(nn.Module):
 
     def forward(self, input_seq, input_length, max_length):
         # Forward input through encoder model
-        print(f"input seq: {input_seq}")
-        print(f"input length: {input_length}")
+        logging.debug(f"input seq: {input_seq}")
+        logging.debug(f"input length: {input_length}")
         encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
+        logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
+        logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
+
         # Prepare encoder's final hidden layer to be first hidden input to the decoder
         decoder_hidden = encoder_hidden[:self.decoder.n_layers]
+        logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+
         # Initialize decoder input with SOS_token
         decoder_input = torch.ones(
             1, 1, device=device, dtype=torch.long) * SOS_token
+        logging.debug(f"decoder input shape:{decoder_input.shape}")
+
         # Initialize tensors to append decoded words to
         all_tokens = torch.zeros([0], device=device, dtype=torch.long)
         all_scores = torch.zeros([0], device=device)
         # Iteratively decode one word token at a time
         for _ in range(max_length):
             # Forward pass through decoder
-            print(f"decoder input shape:{decoder_input.shape}")
-            print(f"decoder hidden shape:{decoder_hidden.shape}")
-            print(f"encoder output shape:{encoder_outputs.shape}")
+            logging.debug(f"decoder input shape:{decoder_input.shape}")
+            logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+            logging.debug(f"encoder output shape:{encoder_outputs.shape}")
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
@@ -181,7 +188,7 @@ def main():
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
 
-    init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, config)
+    init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, args.config)
 
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
