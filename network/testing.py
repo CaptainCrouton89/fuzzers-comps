@@ -150,7 +150,6 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 
 
 def main():
-    meta_data_size = 6
     parser = argparse.ArgumentParser(
         description='Enables testing of neural network.')
     parser.add_argument("-c", "--config",
@@ -173,6 +172,8 @@ def main():
     model_name = data_config['model_name']
     static_inputs = data_config['static_inputs']
     max_length = data_config['max_len']
+
+    meta_data_size = len(static_inputs)
 
     checkpoint = test_config['checkpoint']
     top_n = test_config['top_n']

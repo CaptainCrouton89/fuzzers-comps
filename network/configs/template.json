@@ -32,7 +32,6 @@
     "training": {
         "batch_size": 64,
         "n_iteration": 4000,
-        "checkpoint_iter": 4000,
         "print_every": 1,
         "save_every": 500,
         "learning_stop_count": 100

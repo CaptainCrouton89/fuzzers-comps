@@ -3,7 +3,7 @@
         "max_len": 50,
         "data_path": "../data/reddit_data/small_reddit_df.ft",
         "data_format": "ft",
-        "network_save_path": "../data/network_saves/reddit_wc/",
+        "network_save_path": "../data/network_saves/reddit_wc_tiny/",
         "corpus_name": "RedditComments",
         "model_name": "simple_attention_rnn",
         "encoder_inputs": [
@@ -33,14 +33,13 @@
     },
     "training": {
         "batch_size": 64,
-        "n_iteration": 4000,
-        "checkpoint_iter": 4000,
+        "n_iteration": 20,
         "print_every": 1,
-        "save_every": 500,
+        "save_every": 20,
         "learning_stop_count": 100
     },
     "testing": {
-        "checkpoint": "3500_checkpoint.tar",
+        "checkpoint": "20_checkpoint.tar",
         "top_n": 1
     }
 }
