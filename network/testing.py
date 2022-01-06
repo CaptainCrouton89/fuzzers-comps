@@ -147,10 +147,6 @@ class GreedySearchDecoder(nn.Module):
 
 def evaluate(encoder, decoder, searcher, voc, content, max_length):
     
-    training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)], category_indices)
-                        for _ in range(n_iteration)]
-    batch2TrainData(voc, pair_batch, category_indices)
-
     
     # Format input content as a batch
     # words -> indexes
