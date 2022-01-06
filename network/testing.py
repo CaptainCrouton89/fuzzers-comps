@@ -5,8 +5,8 @@ import argparse
 import torch
 from torch import nn
 from custom_logger import init_logger
-from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token, EOS_token
-from data_pipeline import load_prepare_data, Voc
+from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSentence, SOS_token, EOS_token, batch2TrainData
+from data_pipeline import Voc
 from pipeline_functions.string_normalize import normalize_one_string
 import random
 
@@ -52,7 +52,7 @@ class GreedySearchDecoder(nn.Module):
             # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
 
             scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
-            r = self.pickOption(scores, indexs, decoder_input)
+            r = self.pickIndex(scores, indexs, decoder_input)
 
             decoder_scores = torch.transpose(scores, 0, 1)[r]
             decoder_input = torch.transpose(indexs, 0, 1)[r]
@@ -68,49 +68,119 @@ class GreedySearchDecoder(nn.Module):
         # Return collections of word tokens and scores
         return all_tokens, all_scores
 
-    def pickOption(self, scores, indexs, previous):
-        logging.debug(list(zip(scores[0].tolist(), indexs[0].tolist())))
+    def custom_forward(self, input_seq, metadata, input_length, max_length):
+        # Forward input through encoder model
+        logging.debug(f"input seq: {input_seq}")
+        logging.debug(f"metadata: {metadata}")
+        logging.debug(f"input length: {input_length}")
+        encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
+        logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
+        logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
+
+        # Prepare encoder's final hidden layer to be first hidden input to the decoder
+        decoder_hidden = encoder_hidden[:self.decoder.n_layers]
+        logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+
+        # Initialize decoder input with SOS_token
+        decoder_input = torch.ones(
+            1, 1, device=device, dtype=torch.long) * SOS_token
+        logging.debug(f"decoder input shape:{decoder_input.shape}")
+
+        # Initialize tensors to append decoded words to
+        all_tokens = torch.zeros([0], device=device, dtype=torch.long)
+        all_scores = torch.zeros([0], device=device)
+        # Iteratively decode one word token at a time
+        for _ in range(max_length):
+            # Forward pass through decoder
+            logging.debug(f"decoder input shape:{decoder_input.shape}")
+            logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+            logging.debug(f"encoder output shape:{encoder_outputs.shape}")
+
+            # We get the total amount of metadata that will be concatenated
+            meta_data_size = len(metadata)
+            meta_data_tensor = torch.LongTensor(
+                [[[meta_data_list for meta_data_list in metadata]] for _ in range(2)])
+            meta_data_tensor.to(device)
+            logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
+            logging.debug(f"decoder input shape:{decoder_input.shape}")
+
+            decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
+            encoder_outputs = decoder_hidden
+
+            logging.debug(f"decoder_input shape:{decoder_input.shape}")
+            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
+
+            decoder_output, decoder_hidden = self.decoder(
+                decoder_input, decoder_hidden, encoder_outputs)
+            # Obtain most likely word token and its softmax score
+            # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
+            logging.debug("made it past self.decoder")
+            scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
+            r = self.pickIndex(scores, indexs, decoder_input)
+
+            decoder_scores = torch.transpose(scores, 0, 1)[r]
+            decoder_input = torch.transpose(indexs, 0, 1)[r]
+
+            # Record token and score
+            all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
+            all_scores = torch.cat((all_scores, decoder_scores), dim=0)
+            # Prepare current token to be next decoder input (add a dimension)
+            decoder_input = torch.unsqueeze(decoder_input, 0)
+            if decoder_input[0].item() == EOS_token:
+                break
+        # Return collections of word tokens and scores
+        return all_tokens, all_scores
+
+    def pickIndex(self, scores, indexs, previous):
         probs = scores[0].tolist()
         opts = list(range(len(indexs[0])))
-        r = random.choices(opts, probs)
-        r = r[0]
+
+        r = random.choices(opts, probs)[0]
         logging.debug(indexs[0][r].item())
         if (indexs[0][r] == previous[0].item()):
-            logging.warning('fuck ' + str(r))
-            return self.pickOption(scores, indexs, previous)
-        logging.debug('yay ' + str(r))
+            probs[r] = 0
+            r = random.choices(opts, probs)[0]
 
         return r
 
 
-def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
-    # Format input sentence as a batch
-    # words -> indexes
-    # indexes_batch = [indexesFromSentence(voc, sentence)]
-    indexes_batch = [indexesFromSentence(voc, sentence[0])]
-    logging.debug(f"index batch:{indexes_batch}")
-    testing = []
-    for i in range(len(indexes_batch[0])):
-        testing.append([indexes_batch[0][i]])
-    indexes_batch = testing
-    for i in range(1, len(sentence)):
-        indexes_batch.append([int(sentence[i])])
+def evaluate(encoder, decoder, searcher, voc, content, max_length):
+    
+    training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)], category_indices)
+                        for _ in range(n_iteration)]
+    batch2TrainData(voc, pair_batch, category_indices)
 
-    # indexes_batch.extend(sentence[1:])
-    logging.debug(f"indexes_batch later:{indexes_batch}")
+    
+    # Format input content as a batch
+    # words -> indexes
+    # indexes_batch = [indexesFromSentence(voc, content)]
+    sentence = [indexesFromSentence(voc, content[0])]
+    metadata = list(map(int, content[1:]))
+    logging.debug(f"sentence: {sentence}")
+    logging.debug(f"metadata: {metadata}")
+
+    # testing = []
+    # for i in range(len(sentence[0])):
+    #     testing.append([indexes_batch[0][i]])
+    # indexes_batch = testing
+    # for i in range(1, len(content)):
+    #     indexes_batch.append([int(content[i])])
+
+    # indexes_batch.extend(content[1:])
 
     # Create lengths tensor
-    lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
+    lengths = torch.tensor([len(indexes) for indexes in sentence])
     # Transpose dimensions of batch to match models' expectations
     logging.debug(f"lengths: {lengths}")
-    logging.debug(f"indexes_batch last: {indexes_batch}")
-    input_batch = torch.LongTensor(indexes_batch).transpose(0, 1)
+    logging.debug(f"sentence last: {sentence}")
+    input_batch = torch.LongTensor(sentence).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
     logging.debug(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
     # Decode sentence with searcher
-    tokens, scores = searcher(input_batch, lengths, max_length)
+    tokens, scores = searcher.custom_forward(input_batch, metadata, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     logging.debug(list(zip(tokens, decoded_words)))
@@ -118,7 +188,7 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
 
 
 def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
-    while(1):
+    while True:
         try:
             # Get input sentence
             content = input('content> ')

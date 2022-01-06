@@ -28,11 +28,11 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
 EOS_token = 2  # End-of-sentence token
-APP_NAME_token = 3
-DIGITS_token = 4
-USERNAME_token = 5
-URL_TOKEN = 6
-EMAIL_token = 7
+# APP_NAME_token = 3
+# DIGITS_token = 4
+# USERNAME_token = 5
+# URL_TOKEN = 6
+# EMAIL_token = 7
 
 # %% [markdown]
 # ## Batching Data
@@ -198,6 +198,8 @@ class LuongAttnDecoderRNN(nn.Module):
             embedded = torch.cat(
                 (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
         logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
+        logging.debug(f"embedded shape: {embedded.shape}")
+        logging.debug(f"last_hidden shape: {last_hidden.shape}")
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
         attn_weights = self.attn(rnn_output, encoder_outputs)
@@ -267,7 +269,9 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
         [[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
 
     logging.debug(f"hidden layer size [seq_len, batch_size, features]: {meta_data_tensor.size()}")
+    logging.debug(f"meta_data: {meta_data}")
     logging.debug(f"meta_data_tensor size: {meta_data_tensor.size()}")
+    logging.debug(f"meta_data_tensor: {meta_data_tensor}")
     logging.debug(f"encoder_hidden size: {encoder_hidden.size()}")
 
     first_hidden = torch.cat((encoder_hidden, meta_data_tensor.to(device)), 2)
