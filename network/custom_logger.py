@@ -16,7 +16,7 @@ def init_logger(log_path, level, config_path):
     stdout_handler.setFormatter(formatter)
     stdout_handler.setLevel(getattr(logging, level.upper(), None))
 
-    file_handler = logging.FileHandler(filename=os.path.join(log_path, datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ".log"), mode='w')
+    file_handler = logging.FileHandler(filename=os.path.join(log_path, datetime.now().strftime("%Y-%m-%d %H-%M-%S") + ".log"), mode='w')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
 
