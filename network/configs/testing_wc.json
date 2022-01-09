@@ -10,6 +10,9 @@
             "parent_body"
         ],
         "static_inputs": [
+            "gilded"
+        ],
+        "static_inputs2": [
             "gilded",
             "score",
             "parent_score",

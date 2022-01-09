@@ -9,9 +9,3 @@ def replace_user_and_subreddit(dataFrame, inputColumn: str):
     result = series.map(lambda x: re.sub(subreddit_regex, '<subreddit>', re.sub(user_regex, '<user>', re.sub(url_regex, r'\1', x))))
     print(result.head())
     return pd.Series(result)
-
-
-check = pd.DataFrame({'text': ['neither', 'has a /u/user', 'has a /r/subreddit', '/u/has /r/both', 'this has a [link](example.link)']})
-print(check)
-out = replace_user_and_subreddit(check, "text")
-print(out)

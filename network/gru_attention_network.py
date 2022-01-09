@@ -198,6 +198,7 @@ class LuongAttnDecoderRNN(nn.Module):
             embedded = torch.cat(
                 (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
         logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
+        logging.debug(f"meta_data_size: {self.meta_data_size}")
         logging.debug(f"embedded shape: {embedded.shape}")
         logging.debug(f"last_hidden shape: {last_hidden.shape}")
         rnn_output, hidden = self.gru(embedded, last_hidden)

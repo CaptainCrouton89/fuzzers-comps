@@ -133,7 +133,7 @@ def main():
         (replace_user_and_subreddit, "parent_body", "parent_body", "encoder_inputs"),
         (replace_user_and_subreddit, "body", "body", "target"),
         # (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
-        (get_normal, "delay", "delay", "static_inputs"),
+        # (get_normal, "delay", "delay", "static_inputs"),
         (get_normal_string, "body", "body", "target"),
         (get_normal_string, "parent_body", "parent_body", "encoder_inputs")
     ]
