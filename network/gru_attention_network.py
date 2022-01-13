@@ -196,7 +196,7 @@ class LuongAttnDecoderRNN(nn.Module):
         # Maybe we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
-                (embedded, torch.zeros(1, 1, self.meta_data_size).to(device)), 2)
+                (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
         logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
         logging.debug(f"meta_data_size: {self.meta_data_size}")
         logging.debug(f"embedded shape: {embedded.shape}")
