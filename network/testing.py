@@ -108,13 +108,15 @@ class GreedySearchDecoder(nn.Module):
             #     embedded = torch.cat(
             #         (embedded, torch.zeros(1, 64, meta_data_size).to(device)), 2)
 
+            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
             decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             encoder_outputs = decoder_hidden
 
             logging.debug(f"decoder_input shape:{decoder_input.shape}")
             logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
             logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
-            self.decoder.meta_data_size = meta_data_size
+            # self.decoder.meta_data_size = meta_data_size
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
             # Obtain most likely word token and its softmax score
@@ -151,7 +153,6 @@ class GreedySearchDecoder(nn.Module):
 
 def evaluate(encoder, decoder, searcher, voc, content, max_length):
     
-    
     # Format input content as a batch
     # words -> indexes
     # indexes_batch = [indexesFromSentence(voc, content)]
@@ -179,15 +180,6 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
     input_batch = input_batch.to(device)
     logging.debug(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
-
-    embedded = decoder.embedding(input_batch)
-    logging.debug(f"embedded.size: {embedded.size()}")
-    meta_data_size = len(metadata)
-    if (meta_data_size > 0):
-        embedded = torch.cat(
-            (embedded, torch.zeros(2, 1, meta_data_size).to(device)), 2)
-    logging.debug(f"embedded.size: {embedded.size()}")
-
 
 
     # Decode sentence with searcher
@@ -289,7 +281,7 @@ def main():
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size + meta_data_size, voc.num_words, decoder_n_layers, dropout)
+        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout, meta_data_size)
 
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)

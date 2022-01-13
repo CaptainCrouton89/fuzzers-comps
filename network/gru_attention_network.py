@@ -193,10 +193,10 @@ class LuongAttnDecoderRNN(nn.Module):
         embedded = self.embedding_dropout(embedded)
         # Forward through unidirectional GRU
         logging.debug(f"Embedded layer size{embedded.size()}")
-        # Mabye we add some zeros to the end of embedded
+        # Maybe we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
-                (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
+                (embedded, torch.zeros(1, 1, self.meta_data_size).to(device)), 2)
         logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
         logging.debug(f"meta_data_size: {self.meta_data_size}")
         logging.debug(f"embedded shape: {embedded.shape}")
@@ -280,6 +280,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = first_hidden[:decoder.n_layers]
+    meta_data_tensor = meta_data_tensor[:2]
 
     # Adjusted input for static variables
     # first_hidden = torch.cat((encoder_hidden, meta_data_tensor), 2)
@@ -294,6 +295,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
             decoder_output, decoder_hidden = decoder(
                 decoder_input, decoder_hidden, encoder_outputs
             )
+            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
+            decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             # Teacher forcing: next input is current target
             decoder_input = target_variable[t].view(1, -1)
             # Calculate and accumulate loss
@@ -307,6 +310,8 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
             decoder_output, decoder_hidden = decoder(
                 decoder_input, decoder_hidden, encoder_outputs
             )
+            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
+            decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             # No teacher forcing: next input is decoder's own current output
             _, topi = decoder_output.topk(1)
             decoder_input = torch.LongTensor(

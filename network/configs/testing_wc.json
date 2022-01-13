@@ -9,10 +9,10 @@
         "encoder_inputs": [
             "parent_body"
         ],
-        "static_inputs": [
-            "gilded"
-        ],
         "static_inputs2": [
+
+        ],
+        "static_inputs": [
             "gilded",
             "score",
             "parent_score",
