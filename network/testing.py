@@ -161,14 +161,6 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
     logging.debug(f"sentence: {sentence}")
     logging.debug(f"metadata: {metadata}")
 
-    # testing = []
-    # for i in range(len(sentence[0])):
-    #     testing.append([indexes_batch[0][i]])
-    # indexes_batch = testing
-    # for i in range(1, len(content)):
-    #     indexes_batch.append([int(content[i])])
-
-    # indexes_batch.extend(content[1:])
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in sentence])
@@ -263,7 +255,7 @@ def main():
         network_save_path, model_name, corpus_name, model_features, checkpoint)
 
     init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, args.config)
-
+    logging.debug(f"Using model at {model_path}")
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
         checkpoint = torch.load(model_path)

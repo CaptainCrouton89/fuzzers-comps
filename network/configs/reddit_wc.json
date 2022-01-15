@@ -39,7 +39,7 @@
         "learning_stop_count": 100
     },
     "testing": {
-        "checkpoint": "20_checkpoint.tar",
+        "checkpoint": "4000_checkpoint.tar",
         "top_n": 1
     }
 }
