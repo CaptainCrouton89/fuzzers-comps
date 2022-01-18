@@ -163,13 +163,14 @@ class Attn(nn.Module):
 
 
 class LuongAttnDecoderRNN(nn.Module):
-    def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, dropout=0.1, meta_data_size=0):
+    def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, batchsize=64, dropout=0.1, meta_data_size=0):
         super(LuongAttnDecoderRNN, self).__init__()
         # Keep for reference
         self.attn_model = attn_model
         self.hidden_size = hidden_size + meta_data_size
         self.output_size = output_size
         self.n_layers = n_layers
+        self.batchsize = batchsize
         self.dropout = dropout
         self.meta_data_size = meta_data_size
         logging.debug(f"Meta data size: {self.meta_data_size}")
@@ -196,7 +197,7 @@ class LuongAttnDecoderRNN(nn.Module):
         # Maybe we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
-                (embedded, torch.zeros(1, 64, self.meta_data_size).to(device)), 2)
+                (embedded, torch.zeros(1, self.batchsize, self.meta_data_size).to(device)), 2)
         logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
         logging.debug(f"meta_data_size: {self.meta_data_size}")
         logging.debug(f"embedded shape: {embedded.shape}")
@@ -258,7 +259,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     # We get the total amount of metadata that will be concatenated
     meta_data_size = len(meta_data[0])
     encoder_outputs = torch.cat(
-        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], 64, meta_data_size).to(device)), 2)
+        (encoder_outputs, torch.zeros(encoder_outputs.size()[0], batch_size, meta_data_size).to(device)), 2)
     # Create initial decoder input (start with SOS tokens for each sentence)
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
@@ -356,12 +357,12 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
     hidden_size = model_config["hidden_size"]
     clip = model_config["clip"]
     teacher_forcing_ratio = model_config["teacher_forcing_ratio"]
+    batch_size = model_config["batch_size"]
 
     network_save_path = data_config["network_save_path"]
     corpus_name = data_config["corpus_name"]
 
     n_iteration = training_config["n_iteration"]
-    batch_size = training_config["batch_size"]
     print_every = training_config["print_every"]
     save_every = training_config["save_every"]
 
@@ -406,6 +407,7 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
         if (iteration % save_every == 0 or iter_since_min_loss > training_config["learning_stop_count"]):
             directory = os.path.join(network_save_path, model_name, corpus_name, '{}-{}_{}'.format(
                 encoder_n_layers, decoder_n_layers, hidden_size+len(meta_data[0])))
+            save_path = os.path.join(directory, '{}_{}.tar'.format(iteration, 'checkpoint'))
             if not os.path.exists(directory):
                 os.makedirs(directory)
             torch.save({
@@ -417,7 +419,8 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
                 'loss': loss,
                 'voc_dict': voc.__dict__,
                 'embedding': embedding.state_dict()
-            }, os.path.join(directory, '{}_{}.tar'.format(iteration, 'checkpoint')))
+            }, save_path)
+            logging.info("Saving at " + save_path)
             if iter_since_min_loss > training_config["learning_stop_count"]:
                 return
 

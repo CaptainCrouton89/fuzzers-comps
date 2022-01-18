@@ -70,7 +70,7 @@ def create_network(config, vocab, pairs, category_indices):
     encoder = gru_attention_network.EncoderRNN(
         hidden_size, embedding, encoder_n_layers, dropout)
     decoder = gru_attention_network.LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, dropout, meta_data_size)
+        attn_model, embedding, hidden_size, vocab.num_words, decoder_n_layers, model_config["batch_size"], dropout, meta_data_size)
 
     # Use appropriate device
     encoder = encoder.to(device)
@@ -123,6 +123,7 @@ def main():
     corpus = data_config["corpus_name"]
 
     # initialize logger
+
     init_logger(os.path.join("logs", corpus), args.loglevel, config_path=config)
 
     # Build file save path

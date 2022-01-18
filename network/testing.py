@@ -273,7 +273,7 @@ def main():
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, dropout, meta_data_size)
+        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)
