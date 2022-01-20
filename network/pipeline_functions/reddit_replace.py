@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-def replace_user_and_subreddit(dataFrame, inputColumn: str, learn: bool):
+def replace_user_and_subreddit(dataFrame, inputColumn: str, learn=True):
     series = pd.Series(dataFrame[inputColumn])
     user_regex = '/u/[A-Za-z0-9_-]+'
     subreddit_regex = '/r/[A-Za-z0-9_-]+'
