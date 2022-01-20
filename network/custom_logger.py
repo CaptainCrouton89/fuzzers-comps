@@ -9,10 +9,8 @@ def init_logger(log_path, level, config_path):
 
     width = os.get_terminal_size().columns
 
-    # formatter = logging.Formatter('%(levelname)s: %(message)s \t\t@ %(filename)s: %(funcName)s: %(lineno)d', datefmt='%m/%d/%Y %I:%M:%S',)
     formatter = logging.Formatter("[%(levelname)8s] --- %(message)s (%(filename)s:%(lineno)s)", "%Y-%m-%d %H:%M:%S")
 
-    # formatter = logging.Formatter('%(message)s [%(levelname)8s] --- %(lineno)s', datefmt='%m/%d/%Y %I:%M:%S',)
     logging.getLogger().setLevel(logging.DEBUG)
 
     stdout_handler = logging.StreamHandler(sys.stdout)
