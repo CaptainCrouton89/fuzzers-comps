@@ -4,7 +4,7 @@ import pandas
 nltk.downloader.download(["vader_lexicon"])
 
 
-def get_sentiment(dataFrame, inputColumn: str):
+def get_sentiment(dataFrame, inputColumn: str, learn=True):
     sentiment_analyzer_nltk = nltk.sentiment.SentimentIntensityAnalyzer()
     sentiment_list = []
     for i, sentence in enumerate(dataFrame[inputColumn]):

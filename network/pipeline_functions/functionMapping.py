@@ -4,7 +4,7 @@ of a pandas dataframe.
 
 # df: dataframe object
 # column: dataframe column name
-def example_func(df, column: str):
+def example_func(df, column: str, learn=True):
     # perform normalization or other transformation on column here
     return df[column]
 
