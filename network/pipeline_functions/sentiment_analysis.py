@@ -11,4 +11,4 @@ def get_sentiment(dataFrame, inputColumn: str, learn=True):
         nltk_result = sentiment_analyzer_nltk.polarity_scores(sentence)[
             'compound']
         sentiment_list.append(nltk_result)
-    return pandas.Series(sentiment_list)
+    return pandas.Series(sentiment_list), None
