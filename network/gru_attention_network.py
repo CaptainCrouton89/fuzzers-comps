@@ -1,10 +1,9 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
-# %% [markdown]
+
 # Following this guide: https://pytorch.org/tutorials/beginner/chatbot_tutorial.html
 #
 
-# %%
 from __future__ import absolute_import, unicode_literals, print_function, division
 import logging
 import random
@@ -22,7 +21,6 @@ torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
-# %%
 # Vocabulary Class
 # Default word tokens
 PAD_token = 0  # Used for padding short sentences
@@ -34,12 +32,8 @@ EOS_token = 2  # End-of-sentence token
 # URL_TOKEN = 6
 # EMAIL_token = 7
 
-# %% [markdown]
-# ## Batching Data
+# Batching Data
 # In order to take advantage of the GPU, we need to send data in batches. These batches need to be of same length, however, and our sentences are not of all the same length, so they need to get padded with extra space so they all take up the same size.
-
-# %%
-
 
 def indexesFromSentence(voc, sentence):
     """Returns an array of indices corresponding to tokens in an input string.
@@ -269,7 +263,7 @@ def maskNLLLoss(inp, target, mask):
     loss = loss.to(device)
     return loss, nTotal.item()
 
-# ### Training Code
+# Training Code
 def train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder, decoder, embedding,
           encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio):
 
@@ -478,7 +472,6 @@ def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     return decoded_words
-
 
 def evaluateInput(encoder, decoder, searcher, voc):
     input_sentence = ''
