@@ -30,6 +30,8 @@ Returns list of added categories
 def apply_mappings_testing(df):
     new_cols = []
     for func, inp_col, out_col, category in function_mapping:
+        if inp_col == 'body':
+            continue
         df[out_col] = func(df, inp_col, False)
         if inp_col != out_col:
             new_cols.append((out_col, category))
