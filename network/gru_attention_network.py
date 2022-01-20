@@ -42,6 +42,15 @@ EOS_token = 2  # End-of-sentence token
 
 
 def indexesFromSentence(voc, sentence):
+    """Returns an array of indices corresponding to tokens in an input string.
+
+    Keyword arguments:
+    voc -- the voc object corresponding to the vocabulary of our langauge
+    sentence -- the input string to be indiced
+
+    Returns:
+    An array of indices
+    """
     return [voc.word2index[word] for word in sentence.split(' ')] + [EOS_token]
 
 
@@ -62,6 +71,18 @@ def binaryMatrix(l, value=PAD_token):
 
 # Returns padded input sequence tensor and lengths
 def inputVar(l, voc):
+    """Returns a 2 dimensional array of indices corresponding to an array of sentences.
+
+    Since all arrays must be of same length, it adds zeros to the ends of sentences
+    that are not as long as the our max length.
+
+    Keyword arguments:
+    l -- the array of sentences
+    voc -- the voc object corresponding to the vocabulary of our langauge
+
+    Returns:
+    A 2d array of indices
+    """
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     lengths = torch.tensor([len(indexes) for indexes in indexes_batch])
     padList = zeroPadding(indexes_batch)
@@ -70,6 +91,15 @@ def inputVar(l, voc):
 
 # Returns padded target sequence tensor, padding mask, and max target length
 def outputVar(l, voc):
+    """
+
+    Keyword arguments:
+    l -- the array of sentences
+    voc -- the voc object corresponding to the vocabulary of our langauge
+
+    Returns:
+    A 2d array of indices
+    """
     indexes_batch = [indexesFromSentence(voc, sentence) for sentence in l]
     max_target_len = max([len(indexes) for indexes in indexes_batch])
     padList = zeroPadding(indexes_batch)
@@ -163,6 +193,11 @@ class Attn(nn.Module):
 
 
 class LuongAttnDecoderRNN(nn.Module):
+    """Our attention decoder network. 
+
+    See torch documentation on details. Our implementation follows the guide found at
+    https://pytorch.org/tutorials/beginner/chatbot_tutorial.html
+    """
     def __init__(self, attn_model, embedding, hidden_size, output_size, n_layers=1, batchsize=64, dropout=0.1, meta_data_size=0):
         super(LuongAttnDecoderRNN, self).__init__()
         # Keep for reference
@@ -218,9 +253,15 @@ class LuongAttnDecoderRNN(nn.Module):
         # Return output and final hidden state
         return output, hidden
 
-
-# %%
 def maskNLLLoss(inp, target, mask):
+    """Loss function used by the network for variable length sentences.
+
+    The network has to learn to match words to the target sentence, but also should
+    not be penalized too harshly if it gives a good reply but is of a different total
+    length. This function uses the mask array to "cancel out" the loss from mismatching
+    sentence lengths.
+    """
+
     nTotal = mask.sum()
     crossEntropy = - \
         torch.log(torch.gather(inp, 1, target.view(-1, 1)).squeeze(1))
@@ -228,12 +269,7 @@ def maskNLLLoss(inp, target, mask):
     loss = loss.to(device)
     return loss, nTotal.item()
 
-# %% [markdown]
 # ### Training Code
-
-# %%
-
-
 def train(input_variable, lengths, target_variable, mask, max_target_len, meta_data, encoder, decoder, embedding,
           encoder_optimizer, decoder_optimizer, batch_size, clip, teacher_forcing_ratio):
 
@@ -342,6 +378,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
 # %%
 def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encoder_optimizer, decoder_optimizer,
                embedding, config, loadFilename=None, checkpoint=None):
+    """Iteratively trains the network, saving at preconfigured checkpoints."""
 
     min_loss = np.inf
     iter_since_min_loss = 0
@@ -424,9 +461,8 @@ def trainIters(model_name, voc, pairs, category_indices, encoder, decoder, encod
             if iter_since_min_loss > training_config["learning_stop_count"]:
                 return
 
-
-# %%
 def evaluate(encoder, decoder, searcher, voc, sentence, max_length):
+    
     # Format input sentence as a batch
     # words -> indexes
     indexes_batch = [indexesFromSentence(voc, sentence)]

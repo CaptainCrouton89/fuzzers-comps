@@ -22,51 +22,39 @@ device = torch.device("cuda" if USE_CUDA else "cpu")
 
 def create_network(config, vocab, pairs, category_indices):
     """
-    1. Create new columns using inp, out, func_list
-    2. During batching, apply other normalization
-    3. Onehot encode everything necessary
-    """
-    # Example for validation
-    small_batch_size = 5
-    batches = gru_attention_network.batch2TrainData(vocab, [random.choice(pairs)
-                                                            for _ in range(small_batch_size)], category_indices)
-    input_variable, lengths, target_variable, mask, max_target_len, meta_data = batches
+    Creates and trains the network using parameters from config.
 
-    
-    logging.debug(f"input_variable: {input_variable}", )
-    logging.debug(f"lengths: {lengths}")
-    logging.debug(f"target_variable: {target_variable}")
-    logging.debug(f"mask: {mask}")
-    logging.debug(f"max_target_len: {max_target_len}")
-    logging.debug(f"meta_data: {meta_data}")
+    Keyword arguments:
+    config -- the config dictionary
+    vocab -- the voc object containing the entire vocabulary
+    pairs -- all sentence comment-reply pairs
+    category_indices -- an array of indices in the table at which to draw meta data values from
+
+    Returns:
+    null
+    """
 
     # Configure models
     data_config = config["data"]
     model_config = config["model"]
 
     model_name = data_config['model_name']
-
     hidden_size = model_config['hidden_size']
     encoder_n_layers = model_config['encoder_n_layers']
     dropout = model_config['dropout']
     hidden_size = model_config['hidden_size']
-    # decoder_hidden_size = hidden_size
-    # decoder_hidden_size = hidden_size + 2 # We add 2 because the hidden layer now includes
     attn_model = model_config['attn_model']
     encoder_n_layers = model_config["encoder_n_layers"]
     decoder_n_layers = model_config["encoder_n_layers"]
-
     meta_data_size = len(category_indices["static_inputs"])
-
+    
     # Configuring optimizer
     learning_rate = model_config["learning_rate"]
     decoder_learning_ratio = model_config["decoder_learning_ratio"]
 
-    logging.info('Building encoder and decoder ...')
-    # Initialize word embeddings
-    embedding = nn.Embedding(vocab.num_words, hidden_size)
-
     # Initialize encoder & decoder models
+    logging.debug('Instantiating encoder, decoder, and embedding ...')# Initialize word embeddings
+    embedding = nn.Embedding(vocab.num_words, hidden_size)
     encoder = gru_attention_network.EncoderRNN(
         hidden_size, embedding, encoder_n_layers, dropout)
     decoder = gru_attention_network.LuongAttnDecoderRNN(
@@ -75,14 +63,13 @@ def create_network(config, vocab, pairs, category_indices):
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)
-    logging.info('Models built and ready to go!')
 
     # Ensure dropout layers are in train mode
     encoder.train()
     decoder.train()
 
     # Initialize optimizers
-    logging.info('Building optimizers ...')
+    logging.debug('Instantiating and initializing optimizers ...')
     encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
     decoder_optimizer = optim.Adam(
         decoder.parameters(), lr=learning_rate * decoder_learning_ratio)

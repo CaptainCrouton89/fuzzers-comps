@@ -5,6 +5,13 @@ from datetime import datetime
 
 # Configure logger
 def init_logger(log_path, level, config_path):
+    """Customizes logger to our desired functionality.
+    
+    Keyword arguments:
+    log_path -- the file path to save log files
+    level -- debug level at which to show messages in console
+    config_path -- the model config with which logger is being used
+    """
     os.makedirs(log_path, exist_ok=True)
 
     width = os.get_terminal_size().columns
