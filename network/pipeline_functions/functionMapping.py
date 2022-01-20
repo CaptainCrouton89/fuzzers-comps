@@ -4,9 +4,12 @@ of a pandas dataframe.
 
 # df: dataframe object
 # column: dataframe column name
+
+
 def example_func(df, column: str, learn=True):
     # perform normalization or other transformation on column here
-    return df[column]
+    return df[column], None
+
 
 class MapFunc():
     # This isn't being used for anything, but I'm keeping it anyways in case we want to come back.

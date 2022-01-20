@@ -47,13 +47,14 @@ def create_network(config, vocab, pairs, category_indices):
     encoder_n_layers = model_config["encoder_n_layers"]
     decoder_n_layers = model_config["encoder_n_layers"]
     meta_data_size = len(category_indices["static_inputs"])
-    
+
     # Configuring optimizer
     learning_rate = model_config["learning_rate"]
     decoder_learning_ratio = model_config["decoder_learning_ratio"]
 
     # Initialize encoder & decoder models
-    logging.debug('Instantiating encoder, decoder, and embedding ...')# Initialize word embeddings
+    # Initialize word embeddings
+    logging.debug('Instantiating encoder, decoder, and embedding ...')
     embedding = nn.Embedding(vocab.num_words, hidden_size)
     encoder = gru_attention_network.EncoderRNN(
         hidden_size, embedding, encoder_n_layers, dropout)
@@ -107,11 +108,13 @@ def main():
     with open(args.config) as f:
         config = json.load(f)
     data_config = config["data"]
+    model_config = config["model"]
     corpus = data_config["corpus_name"]
 
     # initialize logger
 
-    init_logger(os.path.join("logs", corpus), args.loglevel, config_path=config)
+    init_logger(os.path.join("logs", corpus),
+                args.loglevel, config_path=config)
 
     # Build file save path
     os.makedirs(data_config["network_save_path"], exist_ok=True)
@@ -121,14 +124,15 @@ def main():
         (replace_user_and_subreddit, "parent_body", "parent_body", "encoder_inputs"),
         (replace_user_and_subreddit, "body", "body", "target"),
         (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
-        # (get_normal, "delay", "delay", "static_inputs"),
+        (get_normal, "delay", "delay", "static_inputs"),
+        (get_normal, "gilded", "gilded", "static_inputs"),
         (get_normal_string, "body", "body", "target"),
         (get_normal_string, "parent_body", "parent_body", "encoder_inputs")
     ]
 
     # Build data pairs
     vocab, pairs, category_indices = data_pipeline.load_prepare_data(
-        data_config, function_mapping, use_processed=False)
+        data_config, model_config, function_mapping, use_processed=False)
 
     # Build network
     create_network(config, vocab, pairs, category_indices)

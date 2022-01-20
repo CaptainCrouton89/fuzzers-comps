@@ -3,6 +3,9 @@ import pandas as pd
 import unicodedata
 import re
 import warnings
+import os
+import torch
+import json
 
 # %% [markdown]
 # # Assembling Vocabulary, Formatting Input
@@ -144,7 +147,7 @@ def filterPairs(pairs, max_len, indices):
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 
 
-def load_prepare_data(data_config, function_mapping=[], use_processed=True):
+def load_prepare_data(data_config, model_config, function_mapping=[], use_processed=True):
     logging.info("Start preparing training data ...")
 
     format = data_config["data_format"]
@@ -163,9 +166,18 @@ def load_prepare_data(data_config, function_mapping=[], use_processed=True):
     # Add additional columns, if necessary
     if not use_processed:
         for func, inp_col, out_col, category in function_mapping:
-            df[out_col] = func(df, inp_col)
+            df[out_col], constants_to_save = func(df, inp_col)
             if inp_col != out_col:
                 data_config[category].append(out_col)
+            if constants_to_save != None:
+                directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
+                    model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), func.__name__)
+                save_path = os.path.join(
+                    directory, '{}.json'.format(inp_col))
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                with open(save_path, 'w') as out_file:
+                    json.dump(constants_to_save, out_file)
 
         # Save file to <path>_processed for future use
         path = path.replace(f".{format}", f"_processed.{format}")
