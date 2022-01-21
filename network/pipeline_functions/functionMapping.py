@@ -6,9 +6,9 @@ of a pandas dataframe.
 # column: dataframe column name
 
 
-def example_func(df, column: str, learn=True):
+def example_func(dataFrame, inputColumn: str, learn, data_config, model_config):
     # perform normalization or other transformation on column here
-    return df[column], None
+    return dataFrame[inputColumn], None
 
 
 class MapFunc():

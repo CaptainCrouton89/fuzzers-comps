@@ -184,7 +184,7 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
     return decoded_words
 
 
-def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs):
+def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs):
     while True:
         try:
             # Get input sentence
@@ -201,10 +201,10 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs, en
             data_df = pd.DataFrame(columns=encoder_inputs + static_inputs)
             data_df.loc[0] = content
             logging.debug(f"data_df:\n{data_df}")
-            new_cols = apply_mappings_testing(data_df)
+            new_cols = apply_mappings_testing(data_df, config)
             logging.debug(f"data_df after mappings:\n{data_df}")
-            content = list(data_df.iloc(0))
-            logging.debug("content:\n{content}")
+            content = data_df.values.tolist()[0]
+            logging.debug(f"content:\n{content}")
             # Parse the sentence into a tuple representing the content and
             # input metadata ~somehow~
 
@@ -276,10 +276,12 @@ def main():
     voc = Voc(corpus_name)
     encoder_sd = checkpoint['encoder']
     decoder_sd = checkpoint['decoder']
-    encoder_optimizer_sd = checkpoint['encoder_opt']
-    decoder_optimizer_sd = checkpoint['decoder_opt']
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
+
+    # encoder_optimizer_sd = checkpoint['encoder_opt']
+    # decoder_optimizer_sd = checkpoint['decoder_opt']
+    # I don't think these are needed but i'm leaving them here commented out just in case.
 
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
@@ -302,7 +304,7 @@ def main():
     # Initialize search module
     searcher = GreedySearchDecoder(encoder, decoder, top_n)
 
-    evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs)
+    evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs)
 
 
 if __name__ == "__main__":

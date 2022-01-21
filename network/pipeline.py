@@ -131,8 +131,7 @@ def main():
     ]
 
     # Build data pairs
-    vocab, pairs, category_indices = data_pipeline.load_prepare_data(
-        data_config, model_config, function_mapping, use_processed=False)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, function_mapping, use_processed=False)
 
     # Build network
     create_network(config, vocab, pairs, category_indices)

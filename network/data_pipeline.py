@@ -7,6 +7,8 @@ import os
 import torch
 import json
 
+from function_mapping_handler import apply_mappings
+
 # %% [markdown]
 # # Assembling Vocabulary, Formatting Input
 # All text must be converted to numbers that can be embedded into vectors for the model."
@@ -104,30 +106,7 @@ def preprocess(df, data_config):
             data_config["target"] + data_config["static_inputs"]]
     return df
 
-
-# def unicodeToAscii(s):
-#     return ''.join(
-#         c for c in unicodedata.normalize('NFD', s)
-#         if unicodedata.category(c) != 'Mn'
-#     )
-
-# Lowercase, trim, and remove non-letter characters
-
-
-# def normalizeString(s):
-#     s = unicodeToAscii(s.lower().strip())
-#     s = re.sub(r"([.!?])", r" \1", s)
-#     s = re.sub(r"[^a-zA-Z.!?<>]+", r" ", s)
-#     s = re.sub(r"\s+", r" ", s).strip()
-#     return s
-
-
-# def normalizeStrings(pair):
-#     return (normalizeString(pair[0]), normalizeString(pair[1]))
-
 # Returns True if both sentences in a pair 'p' are under the max_len threshold
-
-
 def filterPair(p, max_len, indices):
     # Input sequences need to preserve the last word for EOS token
     for index in indices:
@@ -147,7 +126,8 @@ def filterPairs(pairs, max_len, indices):
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 
 
-def load_prepare_data(data_config, model_config, function_mapping=[], use_processed=True):
+def load_prepare_data(config, function_mapping=[], use_processed=True):
+    data_config = config['data']
     logging.info("Start preparing training data ...")
 
     format = data_config["data_format"]
@@ -165,19 +145,20 @@ def load_prepare_data(data_config, model_config, function_mapping=[], use_proces
 
     # Add additional columns, if necessary
     if not use_processed:
-        for func, inp_col, out_col, category in function_mapping:
-            df[out_col], constants_to_save = func(df, inp_col)
-            if inp_col != out_col:
-                data_config[category].append(out_col)
-            if constants_to_save != None:
-                directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
-                    model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), func.__name__)
-                save_path = os.path.join(
-                    directory, '{}.json'.format(inp_col))
-                if not os.path.exists(directory):
-                    os.makedirs(directory)
-                with open(save_path, 'w') as out_file:
-                    json.dump(constants_to_save, out_file)
+        apply_mappings(df, config)
+        # for func, inp_col, out_col, category in function_mapping:
+        #     df[out_col], constants_to_save = func(df, inp_col)
+        #     if inp_col != out_col:
+        #         data_config[category].append(out_col)
+        #     if constants_to_save != None:
+        #         directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
+        #             model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), func.__name__)
+        #         save_path = os.path.join(
+        #             directory, '{}.json'.format(inp_col))
+        #         if not os.path.exists(directory):
+        #             os.makedirs(directory)
+        #         with open(save_path, 'w') as out_file:
+        #             json.dump(constants_to_save, out_file)
 
         # Save file to <path>_processed for future use
         path = path.replace(f".{format}", f"_processed.{format}")
@@ -204,7 +185,7 @@ def load_prepare_data(data_config, model_config, function_mapping=[], use_proces
     # Building vocabulary
     logging.info("Counting words...")
     voc = Voc(data_config["corpus_name"])
-    # Add all text from input and output collumns
+    # Add all text from input and output columns
     for pair in pairs:
         # Likely only a single input column: `content`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]:
