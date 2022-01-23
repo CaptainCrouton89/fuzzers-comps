@@ -10,7 +10,7 @@ from data_pipeline import Voc
 from pipeline_functions.string_normalize import normalize_one_string
 import random
 import pandas as pd
-from function_mapping_handler import apply_mappings_testing
+from function_mapping_handler import apply_mappings_testing, get_num_added_columns
 
 # %%
 
@@ -202,7 +202,7 @@ def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_in
             data_df.loc[0] = content
             logging.debug(f"data_df:\n{data_df}")
             new_cols = apply_mappings_testing(data_df, config)
-            logging.debug(f"data_df after mappings:\n{data_df}")
+            logging.info(f"data_df after mappings:\n{data_df}")
             content = data_df.values.tolist()[0]
             logging.debug(f"content:\n{content}")
             # Parse the sentence into a tuple representing the content and
@@ -250,6 +250,8 @@ def main():
     max_length = data_config['max_len']
 
     meta_data_size = len(static_inputs)
+    meta_data_size += get_num_added_columns(config)
+
 
     checkpoint = test_config['checkpoint']
     top_n = test_config['top_n']
@@ -264,6 +266,7 @@ def main():
         str(decoder_n_layers) + "_" + str(hidden_size+meta_data_size)
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
+
 
     init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, args.config)
     logging.debug(f"Using model at {model_path}")

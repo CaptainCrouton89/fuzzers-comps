@@ -1,3 +1,4 @@
+from torch import functional
 from pipeline_functions.sentiment_analysis import get_sentiment
 from pipeline_functions.reddit_replace import replace_user_and_subreddit
 from pipeline_functions.normalize import get_normal
@@ -13,7 +14,9 @@ function_mapping = [
     (get_normal, "delay", "delay", "static_inputs"),
     (get_normal, "gilded", "gilded", "static_inputs"),
     (get_normal_string, "body", "body", "target"),
-    (get_normal_string, "parent_body", "parent_body", "encoder_inputs")
+    (get_normal_string, "parent_body", "parent_body", "encoder_inputs"),
+    (get_normal, "score", "score", "static_inputs"),
+    (get_normal, "parent_score", "parent_score", "static_inputs"),
 ]
 
 '''
@@ -22,8 +25,11 @@ Returns list of added categories
 def apply_mappings(df, config):
     data_config = config['data']
     model_config = config['model']
+    function_indices = data_config['function_indices']
+    allowed_functions = [function_mapping[i] for i in function_indices]
+    logging.debug(f"allowed_functions: {allowed_functions}")
     new_cols = []
-    for func, inp_col, out_col, category in function_mapping:
+    for func, inp_col, out_col, category in allowed_functions:
         df[out_col], constants_to_save = func(df, inp_col, True, data_config, model_config)
         if inp_col != out_col:
             new_cols.append((out_col, category))
@@ -46,8 +52,10 @@ Returns list of added categories
 def apply_mappings_testing(df, config):
     data_config = config['data']
     model_config = config['model']
+    function_indices = data_config['function_indices']
+    allowed_functions = [function_mapping[i] for i in function_indices]
     new_cols = []
-    for func, inp_col, out_col, category in function_mapping:
+    for func, inp_col, out_col, category in allowed_functions:
         if inp_col == 'body':
             continue
         df[out_col], constants_to_save = func(df, inp_col, False, data_config, model_config)
@@ -55,3 +63,16 @@ def apply_mappings_testing(df, config):
         if inp_col != out_col:
             new_cols.append((out_col, category))
     return new_cols
+
+
+'''
+Returns number of added categories
+'''
+def get_num_added_columns(config):
+    function_indices = config['data']['function_indices']
+    allowed_functions = [function_mapping[i] for i in function_indices]
+    count = 0
+    for func, inp_col, out_col, category in allowed_functions:
+        if inp_col != out_col:
+            count += 1
+    return count

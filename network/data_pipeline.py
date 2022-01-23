@@ -145,7 +145,9 @@ def load_prepare_data(config, function_mapping=[], use_processed=True):
 
     # Add additional columns, if necessary
     if not use_processed:
-        apply_mappings(df, config)
+        added_cols = apply_mappings(df, config)
+        for col, cat in added_cols:
+            data_config[cat].append(col)
         # for func, inp_col, out_col, category in function_mapping:
         #     df[out_col], constants_to_save = func(df, inp_col)
         #     if inp_col != out_col:
