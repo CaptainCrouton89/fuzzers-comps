@@ -494,3 +494,6 @@ def evaluateInput(encoder, decoder, searcher, voc):
 
         except KeyError:
             logging.warning("Error: Encountered unknown word.")
+
+
+

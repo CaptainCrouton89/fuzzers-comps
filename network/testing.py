@@ -9,6 +9,8 @@ from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN, indexesFromSe
 from data_pipeline import Voc
 from pipeline_functions.string_normalize import normalize_one_string
 import random
+import pandas as pd
+from function_mapping_handler import apply_mappings_testing, get_num_added_columns
 
 # %%
 
@@ -182,7 +184,7 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
     return decoded_words
 
 
-def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
+def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs):
     while True:
         try:
             # Get input sentence
@@ -195,6 +197,14 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
             for field in static_inputs:
                 content.append(input(field + "> "))
 
+            # data_df = pd.DataFrame(list(zip(encoder_inputs + static_inputs, content)))
+            data_df = pd.DataFrame(columns=encoder_inputs + static_inputs)
+            data_df.loc[0] = content
+            logging.debug(f"data_df:\n{data_df}")
+            new_cols = apply_mappings_testing(data_df, config)
+            logging.info(f"data_df after mappings:\n{data_df}")
+            content = data_df.values.tolist()[0]
+            logging.debug(f"content:\n{content}")
             # Parse the sentence into a tuple representing the content and
             # input metadata ~somehow~
 
@@ -206,8 +216,8 @@ def evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs):
                 x == 'EOS' or x == 'PAD')]
             print('Bot:', ' '.join(output_words))
 
-        except KeyError:
-            logging.warning("Error: Encountered unknown word.")
+        except KeyError as e:
+            logging.warning(f"Error: Encountered unknown word {e}.")
 
 
 USE_CUDA = torch.cuda.is_available()
@@ -236,9 +246,12 @@ def main():
     corpus_name = data_config['corpus_name']
     model_name = data_config['model_name']
     static_inputs = data_config['static_inputs']
+    encoder_inputs = data_config['encoder_inputs']
     max_length = data_config['max_len']
 
     meta_data_size = len(static_inputs)
+    meta_data_size += get_num_added_columns(config)
+
 
     checkpoint = test_config['checkpoint']
     top_n = test_config['top_n']
@@ -254,6 +267,7 @@ def main():
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
 
+
     init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, args.config)
     logging.debug(f"Using model at {model_path}")
     # If loading on same machine the model was trained on
@@ -265,10 +279,12 @@ def main():
     voc = Voc(corpus_name)
     encoder_sd = checkpoint['encoder']
     decoder_sd = checkpoint['decoder']
-    encoder_optimizer_sd = checkpoint['encoder_opt']
-    decoder_optimizer_sd = checkpoint['decoder_opt']
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
+
+    # encoder_optimizer_sd = checkpoint['encoder_opt']
+    # decoder_optimizer_sd = checkpoint['decoder_opt']
+    # I don't think these are needed but i'm leaving them here commented out just in case.
 
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
@@ -291,7 +307,7 @@ def main():
     # Initialize search module
     searcher = GreedySearchDecoder(encoder, decoder, top_n)
 
-    evaluateInput(encoder, decoder, searcher, voc, max_length, static_inputs)
+    evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs)
 
 
 if __name__ == "__main__":

@@ -3,11 +3,11 @@ import unicodedata
 import re
 
 
-def get_normal_string(dataFrame, inputColumn: str, learn=True):
+def get_normal_string(dataFrame, inputColumn: str, learn, data_config, model_config):
     string_to_normalize = dataFrame[inputColumn]
     string_to_normalize = [normalize_one_string(
         s) for s in string_to_normalize]
-    return pandas.Series(string_to_normalize)
+    return pandas.Series(string_to_normalize), None
 
 
 def normalize_one_string(s):
