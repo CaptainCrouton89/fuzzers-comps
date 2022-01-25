@@ -19,7 +19,7 @@ function_mapping = [
     (get_normal, "parent_score", "parent_score", "static_inputs"),
     (get_normal_string, "content", "content", "encoder_inputs"),
     (get_sentiment, "content", "sentiment_content", "static_inputs"),
-    (get_normal, "thumbsUpContent", "thumbsUpContent", "static_inputs"),
+    (get_normal, "thumbsUpCount", "thumbsUpContent", "static_inputs"),
     (get_normal, "score", "score", "static_inputs"),
     (get_normal_string, "replyContent", "replyContent", "target")
 ]

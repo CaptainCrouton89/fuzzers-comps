@@ -44,7 +44,6 @@
         "batch_size": 64
     },
     "training": {
-        "batch_size": 64,
         "n_iteration": 100000,
         "print_every": 1,
         "save_every": 500,
