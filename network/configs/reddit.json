@@ -13,6 +13,9 @@
         ],
         "target": [
             "body"
+        ],
+        "function_indices": [
+            0, 1, 5, 6
         ]
     },
     "model": {
@@ -28,11 +31,10 @@
     },
     "training": {
         "batch_size": 64,
-        "n_iteration": 4000,
-        "checkpoint_iter": 4000,
+        "n_iteration": 8000,
         "print_every": 1,
         "save_every": 500,
-        "learning_stop_count": 100
+        "learning_stop_count": 200
     },
     "testing": {
         "checkpoint": "4000_checkpoint.tar",
