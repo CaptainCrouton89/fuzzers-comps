@@ -17,6 +17,11 @@ function_mapping = [
     (get_normal_string, "parent_body", "parent_body", "encoder_inputs"),
     (get_normal, "score", "score", "static_inputs"),
     (get_normal, "parent_score", "parent_score", "static_inputs"),
+    (get_normal_string, "content", "content", "encoder_inputs"),
+    (get_sentiment, "content", "sentiment_content", "static_inputs"),
+    (get_normal, "thumbsUpContent", "thumbsUpContent", "static_inputs"),
+    (get_normal, "score", "score", "static_inputs"),
+    (get_normal_string, "replyContent", "replyContent", "target")
 ]
 
 '''
@@ -35,7 +40,7 @@ def apply_mappings(df, config):
             new_cols.append((out_col, category))
         if constants_to_save != None:
             directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
-                model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), func.__name__)
+                model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])+get_num_added_columns(config)), func.__name__)
             save_path = os.path.join(
                 directory, '{}.json'.format(inp_col))
             if not os.path.exists(directory):

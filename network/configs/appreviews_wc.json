@@ -10,12 +10,14 @@
             "content"
         ],
         "static_inputs": [
+            "thumbsUpCount",
+            "score"
         ],
         "target": [
             "replyContent"
         ],
         "function_indices": [
-            9, 13
+            9, 10, 11, 12, 13
         ]
     },
     "model": {
