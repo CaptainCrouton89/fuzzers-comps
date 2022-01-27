@@ -1,0 +1,43 @@
+{
+    "data": {
+        "max_len": "max length to trim to",
+        "data_path": "data path",
+        "data_format": "data format",
+        "network_save_path": "save path",
+        "corpus_name": "network name",
+        "model_name": "type of network",
+        "encoder_inputs": [
+            "input1",
+            "input2"
+        ],
+        "static_inputs": [
+            "metadata input1",
+            "metadata input2"
+        ],
+        "target": [
+            "output goal"
+        ]
+    },
+    "model": {
+        "attn_model": "dot",
+        "hidden_size": 500,
+        "encoder_n_layers": 2,
+        "decoder_n_layers": 2,
+        "dropout": 0.1,
+        "clip": 50.0,
+        "teacher_forcing_ratio": 0.5,
+        "learning_rate": 0.0001,
+        "decoder_learning_ratio": 5.0
+    },
+    "training": {
+        "batch_size": 64,
+        "n_iteration": 4000,
+        "print_every": 1,
+        "save_every": 500,
+        "learning_stop_count": 100
+    },
+    "testing": {
+        "checkpoint": "checkpoint",
+        "top_n": "how many to pick from when decoding"
+    }
+}
