@@ -1,22 +1,9 @@
 import logging
 import pandas as pd
-import unicodedata
-import re
 import warnings
-import os
-import torch
-import json
 
 from function_mapping_handler import apply_mappings
 
-# %% [markdown]
-# # Assembling Vocabulary, Formatting Input
-# All text must be converted to numbers that can be embedded into vectors for the model."
-
-
-# %%
-# Vocabulary Class
-# Default word tokens
 PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
 EOS_token = 2  # End-of-sentence token
@@ -81,24 +68,33 @@ class Voc:
         for word in keep_words:
             self.addWord(word)
 
-# %% [markdown]
-# ## Assembling Vocabulary and Formatting Pairs
+def trimRareWords(voc, pairs, MIN_COUNT):
+    # Trim words used under the MIN_COUNT from the voc
+    voc.trim(MIN_COUNT)
+    # Filter out pairs with trimmed words
+    keep_pairs = []
+    for pair in pairs:
+        input_sentence = pair[0]
+        output_sentence = pair[1]
+        keep_input = True
+        keep_output = True
+        # Check input sentence
+        for word in input_sentence.split(' '):
+            if word not in voc.word2index:
+                keep_input = False
+                break
+        # Check output sentence
+        for word in output_sentence.split(' '):
+            if word not in voc.word2index:
+                keep_output = False
+                break
 
+        # Only keep pairs that do not contain trimmed word(s) in their input or output sentence
+        if keep_input and keep_output:
+            keep_pairs.append(pair)
 
-# %%
-def validate(df):
-    return
-    # This shit needs to get significantly changed.
-    assert df.dtypes[0] == "object", "Column 1 must be of type string, and should be input content"
-    assert df.dtypes[1] == "object", "Column 2 must be of type string, and should be output content"
-    content = list(df)[0]
-    replyContent = list(df)[1]
-    if content != "content":
-        warnings.warn("First column in dataframe should be input_text. \
-The current column is named {}".format(content))
-    if replyContent != "replyContent":
-        warnings.warn("Second column in dataframe should be target text. \
-It should be named `replyContent`. The current column is named {}".format(replyContent))
+    print("Trimmed from {} pairs to {}, {:.4f} of total".format(len(pairs), len(keep_pairs), len(keep_pairs) / len(pairs)))
+    return keep_pairs
 
 
 def preprocess(df, data_config):
@@ -141,7 +137,6 @@ def load_prepare_data(config, function_mapping=[], use_processed=True):
         df = pd.read_json(path, orient="split")
 
     df = preprocess(df, data_config)
-    validate(df)
 
     # Add additional columns, if necessary
     if not use_processed:
@@ -195,5 +190,10 @@ def load_prepare_data(config, function_mapping=[], use_processed=True):
         # Likely only a single output column: `replyContent`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
             voc.addSentence(pair[col])
-    logging.info(f"Counted words: {voc.num_words}")
+    logging.info(f"Pre-trim counted words: {voc.num_words}")
+    all_words_counts = list(voc.word2count.values())
+    all_words_counts.sort()
+    min_count = all_words_counts[-10000]
+    pairs = trimRareWords(voc, pairs, min_count)
+    logging.info(f"Post-trim counted words: {voc.num_words}")
     return voc, pairs, category_indices

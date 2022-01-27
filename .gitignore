@@ -139,3 +139,6 @@ embedding/
 
 # python testing script
 t*st.py
+
+# passwords
+reddit-key*.json
