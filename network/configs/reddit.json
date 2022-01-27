@@ -27,17 +27,17 @@
         "clip": 50.0,
         "teacher_forcing_ratio": 0.5,
         "learning_rate": 0.0001,
-        "decoder_learning_ratio": 5.0
+        "decoder_learning_ratio": 5.0,
+        "batch_size": 64
     },
     "training": {
-        "batch_size": 64,
         "n_iteration": 8000,
         "print_every": 1,
         "save_every": 500,
         "learning_stop_count": 200
     },
     "testing": {
-        "checkpoint": "4000_checkpoint.tar",
+        "checkpoint": "8000_checkpoint.tar",
         "top_n": 1
     }
 }

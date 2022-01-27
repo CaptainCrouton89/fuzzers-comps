@@ -250,7 +250,7 @@ def main():
     max_length = data_config['max_len']
 
     meta_data_size = len(static_inputs)
-    meta_data_size += get_num_added_columns(config)
+    meta_data_size += get_num_added_columns(data_config)
 
 
     checkpoint = test_config['checkpoint']

@@ -19,7 +19,7 @@ function_mapping = [
     (get_normal, "parent_score", "parent_score", "static_inputs"),
     (get_normal_string, "content", "content", "encoder_inputs"),
     (get_sentiment, "content", "sentiment_content", "static_inputs"),
-    (get_normal, "thumbsUpContent", "thumbsUpContent", "static_inputs"),
+    (get_normal, "thumbsUpCount", "thumbsUpCount", "static_inputs"), # change index 2 to 'thumbsUpContent' if running on the appreview_wc trained 1/24
     (get_normal, "score", "score", "static_inputs"),
     (get_normal_string, "replyContent", "replyContent", "target")
 ]
@@ -40,7 +40,7 @@ def apply_mappings(df, config):
             new_cols.append((out_col, category))
         if constants_to_save != None:
             directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
-                model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])+get_num_added_columns(config)), func.__name__)
+                model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])+get_num_added_columns(data_config)), func.__name__)
             save_path = os.path.join(
                 directory, '{}.json'.format(inp_col))
             if not os.path.exists(directory):
@@ -61,7 +61,7 @@ def apply_mappings_testing(df, config):
     allowed_functions = [function_mapping[i] for i in function_indices]
     new_cols = []
     for func, inp_col, out_col, category in allowed_functions:
-        if inp_col == 'body':
+        if category == 'target':
             continue
         df[out_col], constants_to_save = func(df, inp_col, False, data_config, model_config)
         logging.debug(f"Just ran function {func}")
@@ -73,8 +73,8 @@ def apply_mappings_testing(df, config):
 '''
 Returns number of added categories
 '''
-def get_num_added_columns(config):
-    function_indices = config['data']['function_indices']
+def get_num_added_columns(data_config):
+    function_indices = data_config['function_indices']
     allowed_functions = [function_mapping[i] for i in function_indices]
     count = 0
     for func, inp_col, out_col, category in allowed_functions:

@@ -5,7 +5,6 @@ import os
 import logging
 import json
 
-
 def get_normal(dataFrame, inputColumn: str, learn, data_config, model_config):
     if learn:
         series, constants = get_normal_series(dataFrame, inputColumn, data_config, model_config)
@@ -37,8 +36,9 @@ def get_normal_series(dataFrame, inputColumn: str, data_config, model_config):
 #     return value
 
 def get_normal_single(dataFrame, inputColumn, data_config, model_config):
+    from function_mapping_handler import get_num_added_columns
     directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
-                model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), 'get_normal')
+        model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])+get_num_added_columns(data_config)), 'get_normal')
     save_path = os.path.join(directory, '{}.json'.format(inputColumn))
     if not os.path.exists(directory):
         logging.ERROR("normalize data non existent.")
