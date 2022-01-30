@@ -16,61 +16,62 @@ from function_mapping_handler import apply_mappings_testing, get_num_added_colum
 
 
 class GreedySearchDecoder(nn.Module):
-    def __init__(self, encoder, decoder, top_n):
+    def __init__(self, encoder, decoder, top_n, threshold):
         super(GreedySearchDecoder, self).__init__()
         self.encoder = encoder
         self.decoder = decoder
         self.top_n = top_n
+        self.threshold = threshold
 
-    def forward(self, input_seq, input_length, max_length):
-        # Forward input through encoder model
-        logging.debug(f"input seq: {input_seq}")
-        logging.debug(f"input length: {input_length}")
-        encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
-        logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
-        logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
+    # def forward(self, input_seq, input_length, max_length):
+    #     # Forward input through encoder model
+    #     logging.debug(f"input seq: {input_seq}")
+    #     logging.debug(f"input length: {input_length}")
+    #     encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
+    #     logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
+    #     logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
 
-        # Prepare encoder's final hidden layer to be first hidden input to the decoder
-        decoder_hidden = encoder_hidden[:self.decoder.n_layers]
-        logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+    #     # Prepare encoder's final hidden layer to be first hidden input to the decoder
+    #     decoder_hidden = encoder_hidden[:self.decoder.n_layers]
+    #     logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
 
-        # Initialize decoder input with SOS_token
-        decoder_input = torch.ones(
-            1, 1, device=device, dtype=torch.long) * SOS_token
-        logging.debug(f"decoder input shape:{decoder_input.shape}")
+    #     # Initialize decoder input with SOS_token
+    #     decoder_input = torch.ones(
+    #         1, 1, device=device, dtype=torch.long) * SOS_token
+    #     logging.debug(f"decoder input shape:{decoder_input.shape}")
 
-        # Initialize tensors to append decoded words to
-        all_tokens = torch.zeros([0], device=device, dtype=torch.long)
-        all_scores = torch.zeros([0], device=device)
-        # Iteratively decode one word token at a time
-        for _ in range(max_length):
-            # Forward pass through decoder
-            logging.debug(f"decoder input shape:{decoder_input.shape}")
-            logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
-            logging.debug(f"encoder output shape:{encoder_outputs.shape}")
-            decoder_output, decoder_hidden = self.decoder(
-                decoder_input, decoder_hidden, encoder_outputs)
-            # Obtain most likely word token and its softmax score
-            # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
+    #     # Initialize tensors to append decoded words to
+    #     all_tokens = torch.zeros([0], device=device, dtype=torch.long)
+    #     all_scores = torch.zeros([0], device=device)
+    #     # Iteratively decode one word token at a time
+    #     for _ in range(max_length):
+    #         # Forward pass through decoder
+    #         logging.debug(f"decoder input shape:{decoder_input.shape}")
+    #         logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+    #         logging.debug(f"encoder output shape:{encoder_outputs.shape}")
+    #         decoder_output, decoder_hidden = self.decoder(
+    #             decoder_input, decoder_hidden, encoder_outputs)
+    #         # Obtain most likely word token and its softmax score
+    #         # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
 
-            scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
-            r = self.pickIndex(scores, indexs, decoder_input)
+    #         scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
+    #         r = self.pickIndex(scores, indexs, decoder_input)
 
-            decoder_scores = torch.transpose(scores, 0, 1)[r]
-            decoder_input = torch.transpose(indexs, 0, 1)[r]
+    #         decoder_scores = torch.transpose(scores, 0, 1)[r]
+    #         decoder_input = torch.transpose(indexs, 0, 1)[r]
 
-            # print("score: %f, index: %d" %(decoder_scores, decoder_input))
-            # Record token and score
-            all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
-            all_scores = torch.cat((all_scores, decoder_scores), dim=0)
-            # Prepare current token to be next decoder input (add a dimension)
-            decoder_input = torch.unsqueeze(decoder_input, 0)
-            if decoder_input[0].item() == EOS_token:
-                break
-        # Return collections of word tokens and scores
-        return all_tokens, all_scores
+    #         # print("score: %f, index: %d" %(decoder_scores, decoder_input))
+    #         # Record token and score
+    #         all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
+    #         all_scores = torch.cat((all_scores, decoder_scores), dim=0)
+    #         # Prepare current token to be next decoder input (add a dimension)
+    #         decoder_input = torch.unsqueeze(decoder_input, 0)
+    #         if decoder_input[0].item() == EOS_token:
+    #             break
+    #     # Return collections of word tokens and scores
+    #     return all_tokens, all_scores
 
-    def custom_forward(self, input_seq, metadata, input_length, max_length):
+    def forward(self, input_seq, metadata, input_length, max_length):
         # Forward input through encoder model
         logging.debug(f"input seq: {input_seq}")
         logging.debug(f"metadata: {metadata}")
@@ -144,6 +145,10 @@ class GreedySearchDecoder(nn.Module):
         probs = scores[0].tolist()
         opts = list(range(len(indexs[0])))
 
+        probs = [p if p >= self.threshold else 0 for p in probs]
+        if probs[0] == 0:
+            probs[0] = 1
+
         r = random.choices(opts, probs)[0]
         logging.debug(indexs[0][r].item())
         if (indexs[0][r] == previous[0].item()):
@@ -177,7 +182,7 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
 
 
     # Decode sentence with searcher
-    tokens, scores = searcher.custom_forward(input_batch, metadata, lengths, max_length)
+    tokens, scores = searcher.forward(input_batch, metadata, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     logging.debug(list(zip(tokens, decoded_words)))
@@ -255,6 +260,7 @@ def main():
 
     checkpoint = test_config['checkpoint']
     top_n = test_config['top_n']
+    threshold = test_config['threshold']
 
     encoder_n_layers = model_config['encoder_n_layers']
     dropout = model_config['dropout']
@@ -305,7 +311,7 @@ def main():
     decoder.eval()
 
     # Initialize search module
-    searcher = GreedySearchDecoder(encoder, decoder, top_n)
+    searcher = GreedySearchDecoder(encoder, decoder, top_n, threshold)
 
     evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs)
 

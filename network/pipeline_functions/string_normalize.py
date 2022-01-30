@@ -13,7 +13,7 @@ def get_normal_string(dataFrame, inputColumn: str, learn, data_config, model_con
 def normalize_one_string(s):
     s = unicode_to_ascii(s.lower().strip())
     s = re.sub(r"([.!?;:@#$%^&])\1+", r" \1", s)
-    s = re.sub(r"[^a-zA-Z.!?.!?;:@#$%^&*<>]+", r" ", s)
+    s = re.sub(r"[^a-zA-Z.!?;:@#$%^&*<>']+", r" ", s)
     s = re.sub(r"\s+", r" ", s).strip()
     return s
 

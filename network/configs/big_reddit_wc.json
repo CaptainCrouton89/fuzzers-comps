@@ -47,7 +47,8 @@
         "learning_stop_count": 200
     },
     "testing": {
-        "checkpoint": "16000_checkpoint.tar",
-        "top_n": 10 
+        "checkpoint": "72000_checkpoint.tar",
+        "top_n": 10,
+        "threshold":0.05
     }
 }
