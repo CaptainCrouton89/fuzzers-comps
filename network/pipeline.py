@@ -119,19 +119,8 @@ def main():
     # Build file save path
     os.makedirs(data_config["network_save_path"], exist_ok=True)
 
-    # Set function mapping
-    function_mapping = [
-        (replace_user_and_subreddit, "parent_body", "parent_body", "encoder_inputs"),
-        (replace_user_and_subreddit, "body", "body", "target"),
-        (get_sentiment, "parent_body", "sentiment_content", "static_inputs"),
-        (get_normal, "delay", "delay", "static_inputs"),
-        (get_normal, "gilded", "gilded", "static_inputs"),
-        (get_normal_string, "body", "body", "target"),
-        (get_normal_string, "parent_body", "parent_body", "encoder_inputs")
-    ]
-
     # Build data pairs
-    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, function_mapping, use_processed=False)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, use_processed=False)
 
     # Build network
     create_network(config, vocab, pairs, category_indices)

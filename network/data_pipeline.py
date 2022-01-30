@@ -122,7 +122,7 @@ def filterPairs(pairs, max_len, indices):
 # function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
 
 
-def load_prepare_data(config, function_mapping=[], use_processed=True):
+def load_prepare_data(config, use_processed=True):
     data_config = config['data']
     logging.info("Start preparing training data ...")
 

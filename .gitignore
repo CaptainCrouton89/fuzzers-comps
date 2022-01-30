@@ -141,4 +141,4 @@ embedding/
 t*st.py
 
 # passwords
-reddit-key*.json
+RedditBot/reddit-key*.json
