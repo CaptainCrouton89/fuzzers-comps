@@ -137,5 +137,8 @@ embedding/
 # network_saves
 *.tar
 
-# Reddit key
-reddit-key
+# python testing script
+t*st.py
+
+# passwords
+reddit-key*.json

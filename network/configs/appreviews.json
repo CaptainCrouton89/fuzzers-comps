@@ -1,0 +1,43 @@
+{
+    "data": {
+        "max_len": 50,
+        "data_path": "../data/app_review_data/parsed_data_with_responses.json",
+        "data_format": "json",
+        "network_save_path": "../data/network_saves/",
+        "corpus_name": "AppReviewsResponses",
+        "model_name": "simple_attention_rnn",
+        "encoder_inputs": [
+            "content"
+        ],
+        "static_inputs": [
+        ],
+        "target": [
+            "replyContent"
+        ],
+        "function_indices": [
+            9, 13
+        ]
+    },
+    "model": {
+        "attn_model": "dot",
+        "hidden_size": 500,
+        "encoder_n_layers": 2,
+        "decoder_n_layers": 2,
+        "dropout": 0.1,
+        "clip": 50.0,
+        "teacher_forcing_ratio": 0.5,
+        "learning_rate": 0.0001,
+        "decoder_learning_ratio": 5.0,
+        "batch_size": 64
+    },
+    "training": {
+        "n_iteration": 8000,
+        "print_every": 1,
+        "save_every": 500,
+        "learning_stop_count": 200
+    },
+    "testing": {
+        "checkpoint": "8000_checkpoint.tar",
+        "top_n": 1
+    }
+}
