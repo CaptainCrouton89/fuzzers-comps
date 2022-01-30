@@ -1,6 +1,5 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
-
 # Following this guide: https://pytorch.org/tutorials/beginner/chatbot_tutorial.html
 #
 
@@ -21,6 +20,10 @@ torch.manual_seed(1)
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
+# # Assembling Vocabulary, Formatting Input
+# All text must be converted to numbers that can be embedded into vectors for the model."
+
+# %%
 # Vocabulary Class
 # Default word tokens
 PAD_token = 0  # Used for padding short sentences
