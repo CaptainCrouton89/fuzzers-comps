@@ -136,3 +136,6 @@ embedding/
 
 # network_saves
 *.tar
+
+# Reddit key
+reddit-key
