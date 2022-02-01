@@ -136,6 +136,7 @@ embedding/
 
 # network_saves
 *.tar
+data/network_saves/
 
 # python testing script
 t*st.py
