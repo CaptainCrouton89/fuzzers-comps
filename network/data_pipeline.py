@@ -7,11 +7,6 @@ from function_mapping_handler import apply_mappings
 PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
 EOS_token = 2  # End-of-sentence token
-APP_NAME_token = 3
-DIGITS_token = 4
-USERNAME_token = 5
-URL_TOKEN = 6
-EMAIL_token = 7
 
 
 class Voc:
@@ -20,11 +15,9 @@ class Voc:
         self.trimmed = False
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS",
-                           APP_NAME_token: "ANT", DIGITS_token: "DGT", USERNAME_token: "UNT",
-                           URL_TOKEN: "URT", EMAIL_token: "EMT"}
+        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS"}
         # <appname>, <digits>, <username>, <url>, <email>
-        self.num_words = 8  # Count SOS, EOS, PAD
+        self.num_words = 3  # Count SOS, EOS, PAD
 
     def addSentence(self, sentence):
         for word in sentence.split(' '):
@@ -59,15 +52,17 @@ class Voc:
         # Reinitialize dictionaries
         self.word2index = {}
         self.word2count = {}
-        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS",
-                           APP_NAME_token: "ANT", DIGITS_token: "DGT", USERNAME_token: "UNT",
-                           URL_TOKEN: "URT", EMAIL_token: "EMT"}
+        self.index2word = {PAD_token: "PAD", SOS_token: "SOS", EOS_token: "EOS"}
         # <appname>, <digits>, <username>, <url>, <email>
-        self.num_words = 8  # Count default tokens
+        self.num_words = 3  # Count default tokens
 
         for word in keep_words:
             self.addWord(word)
 
+'''
+Trim words used under the MIN_COUNT from the voc,
+and remove pairs containing those words.
+'''
 def trimRareWords(voc, pairs, MIN_COUNT):
     # Trim words used under the MIN_COUNT from the voc
     voc.trim(MIN_COUNT)
@@ -96,7 +91,10 @@ def trimRareWords(voc, pairs, MIN_COUNT):
     print("Trimmed from {} pairs to {}, {:.4f} of total".format(len(pairs), len(keep_pairs), len(keep_pairs) / len(pairs)))
     return keep_pairs
 
-
+'''
+Filters out columns of the data frame that are not 
+relevant to the model.
+'''
 def preprocess(df, data_config):
     df = df[data_config["encoder_inputs"] +
             data_config["target"] + data_config["static_inputs"]]
@@ -110,18 +108,15 @@ def filterPair(p, max_len, indices):
             return False
     return True
 
-# Filter pairs using filterPair condition
-
-
 def filterPairs(pairs, max_len, indices):
     return [pair for pair in pairs if filterPair(pair, max_len, indices)]
 
-# [[func, inp_col, out_col], [func2, inp_col, out_col]]
-
 # Using the functions defined above, return a populated voc object and pairs list
-# function_mapping is dict with format {"column_name": [map_func1, map_func2], column_name2...}
-
-
+'''
+Loads, prepares, (and processes) data as per the config.
+Pairs is a misnomer - a single 'pair' includes input, output, and metadata.
+returns: voc, pairs, category_indices
+'''
 def load_prepare_data(config, use_processed=True):
     data_config = config['data']
     logging.info("Start preparing training data ...")
@@ -138,25 +133,12 @@ def load_prepare_data(config, use_processed=True):
 
     df = preprocess(df, data_config)
 
-    # Add additional columns, if necessary
+    # Process data and add additional columns, if necessary
     if not use_processed:
+        # Mappings are defined in function_mapping_handler.py
         added_cols = apply_mappings(df, config)
         for col, cat in added_cols:
             data_config[cat].append(col)
-        # for func, inp_col, out_col, category in function_mapping:
-        #     df[out_col], constants_to_save = func(df, inp_col)
-        #     if inp_col != out_col:
-        #         data_config[category].append(out_col)
-        #     if constants_to_save != None:
-        #         directory = os.path.join(data_config["network_save_path"], data_config["model_name"], data_config["corpus_name"], '{}-{}_{}'.format(
-        #             model_config["encoder_n_layers"], model_config["decoder_n_layers"], model_config["hidden_size"]+len(data_config["static_inputs"])), func.__name__)
-        #         save_path = os.path.join(
-        #             directory, '{}.json'.format(inp_col))
-        #         if not os.path.exists(directory):
-        #             os.makedirs(directory)
-        #         with open(save_path, 'w') as out_file:
-        #             json.dump(constants_to_save, out_file)
-
         # Save file to <path>_processed for future use
         path = path.replace(f".{format}", f"_processed.{format}")
         if format == "ft":
@@ -184,16 +166,16 @@ def load_prepare_data(config, use_processed=True):
     voc = Voc(data_config["corpus_name"])
     # Add all text from input and output columns
     for pair in pairs:
-        # Likely only a single input column: `content`
+        # Likely only a single input column: `parent_body`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]:
             voc.addSentence(pair[col])
-        # Likely only a single output column: `replyContent`
+        # Likely only a single output column: `body`
         for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
             voc.addSentence(pair[col])
     logging.info(f"Pre-trim counted words: {voc.num_words}")
     all_words_counts = list(voc.word2count.values())
     all_words_counts.sort()
-    min_count = all_words_counts[-10000]
+    min_count = all_words_counts[-10000] if len(all_words_counts)>10000 else 3
     pairs = trimRareWords(voc, pairs, min_count)
     logging.info(f"Post-trim counted words: {voc.num_words}")
     return voc, pairs, category_indices

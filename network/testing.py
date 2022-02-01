@@ -14,8 +14,17 @@ from function_mapping_handler import apply_mappings_testing, get_num_added_colum
 
 # %%
 
-
+'''
+Defines a greedy search decoder to query the neural network.
+'''
 class GreedySearchDecoder(nn.Module):
+    '''
+    :param encoder: the trained encoder to use
+    :param decoder: the trained decoder to use
+    :param top_n: how many options to consider
+    :param threshold: minimum score to be considered
+    :returns: none
+    '''
     def __init__(self, encoder, decoder, top_n, threshold):
         super(GreedySearchDecoder, self).__init__()
         self.encoder = encoder
@@ -23,6 +32,13 @@ class GreedySearchDecoder(nn.Module):
         self.top_n = top_n
         self.threshold = threshold
 
+    '''
+    :param input_seq: the seed content, converted into indices in the vocab
+    :param metadata: metadata
+    :param input_length: length of the input 'string'
+    :param max_length: longest sentence to output
+    :returns: list of words (index form) and their scores
+    '''
     def forward(self, input_seq, metadata, input_length, max_length):
         # Forward input through encoder model
         logging.debug(f"input seq: {input_seq}")
@@ -51,17 +67,13 @@ class GreedySearchDecoder(nn.Module):
             logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
             logging.debug(f"encoder output shape:{encoder_outputs.shape}")
 
-            # We get the total amount of metadata that will be concatenated
-            meta_data_size = len(metadata)
+            # Create a tensor containing the meta data information
+            # this next chunk definitely won't scale to other network sizes
             meta_data_tensor = torch.LongTensor(
                 [[[meta_data_list for meta_data_list in metadata]] for _ in range(2)])
             meta_data_tensor.to(device)
             logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
             logging.debug(f"decoder input shape:{decoder_input.shape}")
-
-            # if (meta_data_size > 0):
-            #     embedded = torch.cat(
-            #         (embedded, torch.zeros(1, 64, meta_data_size).to(device)), 2)
 
             logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
             decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
@@ -71,21 +83,19 @@ class GreedySearchDecoder(nn.Module):
             logging.debug(f"decoder_input shape:{decoder_input.shape}")
             logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
             logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
-            # self.decoder.meta_data_size = meta_data_size
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
-            # Obtain most likely word token and its softmax score
-            # decoder_scores, decoder_input = torch.max(decoder_output, dim=1)
-            logging.debug("made it past self.decoder")
+
+            # Obtain most likely word tokens and their softmax scores
             scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
             r = self.pickIndex(scores, indexs, decoder_input)
 
-            decoder_scores = torch.transpose(scores, 0, 1)[r]
+            decoder_score = torch.transpose(scores, 0, 1)[r]
             decoder_input = torch.transpose(indexs, 0, 1)[r]
 
             # Record token and score
             all_tokens = torch.cat((all_tokens, decoder_input), dim=0)
-            all_scores = torch.cat((all_scores, decoder_scores), dim=0)
+            all_scores = torch.cat((all_scores, decoder_score), dim=0)
             # Prepare current token to be next decoder input (add a dimension)
             decoder_input = torch.unsqueeze(decoder_input, 0)
             if decoder_input[0].item() == EOS_token:
@@ -93,6 +103,10 @@ class GreedySearchDecoder(nn.Module):
         # Return collections of word tokens and scores
         return all_tokens, all_scores
 
+    '''
+    Given an array of scores, randomly pick the assosciated index.
+    Ensures you don't duplicate the previous token.
+    '''
     def pickIndex(self, scores, indexs, previous):
         probs = scores[0].tolist()
         opts = list(range(len(indexs[0])))
@@ -103,18 +117,16 @@ class GreedySearchDecoder(nn.Module):
 
         r = random.choices(opts, probs)[0]
         logging.debug(indexs[0][r].item())
-        if (indexs[0][r] == previous[0].item()):
+        if (indexs[0][r] == previous[0].item() and len(probs) != 1):
             probs[r] = 0
             r = random.choices(opts, probs)[0]
 
         return r
 
 
-def evaluate(encoder, decoder, searcher, voc, content, max_length):
-    
+def evaluate(searcher, voc, content, max_length):
     # Format input content as a batch
     # words -> indexes
-    # indexes_batch = [indexesFromSentence(voc, content)]
     sentence = [indexesFromSentence(voc, content[0])]
     metadata = list(map(int, content[1:]))
     logging.debug(f"sentence: {sentence}")
@@ -134,14 +146,14 @@ def evaluate(encoder, decoder, searcher, voc, content, max_length):
 
 
     # Decode sentence with searcher
-    tokens, scores = searcher.forward(input_batch, metadata, lengths, max_length)
+    tokens, _ = searcher.forward(input_batch, metadata, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     logging.debug(list(zip(tokens, decoded_words)))
     return decoded_words
 
 
-def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs):
+def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inputs):
     while True:
         try:
             # Get input sentence
@@ -154,20 +166,17 @@ def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_in
             for field in static_inputs:
                 content.append(input(field + "> "))
 
-            # data_df = pd.DataFrame(list(zip(encoder_inputs + static_inputs, content)))
             data_df = pd.DataFrame(columns=encoder_inputs + static_inputs)
             data_df.loc[0] = content
             logging.debug(f"data_df:\n{data_df}")
-            new_cols = apply_mappings_testing(data_df, config)
+            _ = apply_mappings_testing(data_df, config)
             logging.info(f"data_df after mappings:\n{data_df}")
             content = data_df.values.tolist()[0]
             logging.debug(f"content:\n{content}")
             # Parse the sentence into a tuple representing the content and
-            # input metadata ~somehow~
 
             # Evaluate sentence
-            output_words = evaluate(
-                encoder, decoder, searcher, voc, content, max_length)
+            output_words = evaluate(searcher, voc, content, max_length)
             # Format and print response sentence
             output_words[:] = [x for x in output_words if not (
                 x == 'EOS' or x == 'PAD')]
@@ -175,11 +184,6 @@ def evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_in
 
         except KeyError as e:
             logging.warning(f"Error: Encountered unknown word {e}.")
-
-
-USE_CUDA = torch.cuda.is_available()
-device = torch.device("cuda" if USE_CUDA else "cpu")
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -240,14 +244,11 @@ def main():
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
 
-    # encoder_optimizer_sd = checkpoint['encoder_opt']
-    # decoder_optimizer_sd = checkpoint['decoder_opt']
-    # I don't think these are needed but i'm leaving them here commented out just in case.
-
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) # We use batchsize of 1 since we are testing only one item
+        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) 
+        # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)
@@ -265,10 +266,10 @@ def main():
     # Initialize search module
     searcher = GreedySearchDecoder(encoder, decoder, top_n, threshold)
 
-    evaluateInput(config, encoder, decoder, searcher, voc, max_length, static_inputs, encoder_inputs)
+    evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inputs)
 
 
+USE_CUDA = torch.cuda.is_available()
+device = torch.device("cuda" if USE_CUDA else "cpu")
 if __name__ == "__main__":
     main()
-
-# %%
