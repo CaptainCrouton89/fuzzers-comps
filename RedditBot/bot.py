@@ -1,38 +1,35 @@
 # %%
 import requests
 import json
+import praw
 
-personal_id_dict = json.load(open("reddit-key-silas.json", "r"))
-bot_id_dict = json.load(open("reddit-key-bot-agent.json", "r"))
+credentials = json.load(open("reddit-key-bot-agent.json", "r"))
 
-# note that CLIENT_ID refers to 'personal use script' and SECRET_TOKEN to 'token'
-auth = requests.auth.HTTPBasicAuth(bot_id_dict["U"], bot_id_dict["P"])
+reddit = praw.Reddit(
+    client_id=credentials["client_id"],
+    client_secret=credentials["client_secret"],
+    user_agent=credentials["user_agent"],
+    redirect_uri=credentials["redirect_uri"],
+    refresh_token=credentials["refresh_token"]
+)
 
-# here we pass our login method (password), username, and password
-data = {'grant_type': 'password',
-        'username': personal_id_dict["U"],
-        'password': personal_id_dict["P"]}
+subr = 'pythonsandlot' # Choose your subreddit
+ 
+subreddit = reddit.subreddit(subr) # Initialize the subreddit to a variable
+ 
+title = 'Just Made My first Post on Reddit Using Python.'
+ 
+selftext = '''
+I am learning how to use the Reddit API with Python using the PRAW wrapper.
+By following the tutorial on https://www.jcchouinard.com/post-on-reddit-api-with-python-praw/
+This post was uploaded from my Python Script
+'''
 
-# setup our header info, which gives reddit a brief description of our app
-headers = {'User-Agent': 'MyBot/0.0.1'}
-
-# send our request for an OAuth token
-res = requests.post('https://www.reddit.com/api/v1/access_token',
-                    auth=auth, data=data, headers=headers)
-
-# convert response to JSON and pull access_token value
-TOKEN = res.json()['access_token']
-
-# add authorization to our headers dictionary
-headers = {**headers, **{'Authorization': f"bearer {TOKEN}"}}
+subreddit.submit(title,selftext=selftext)
 
 
-res = requests.get("https://oauth.reddit.com/r/python/hot",
-                   headers=headers)
-
-data = res.json()
-json.dump(data, open("pythonSubredditData.json", "w+"))
+# json.dump(data, open("pythonSubredditData.json", "w+"))
 # %%
 
 
-print(data["data"].keys())  # let's see what we get
+# print(data["data"].keys())  # let's see what we get
