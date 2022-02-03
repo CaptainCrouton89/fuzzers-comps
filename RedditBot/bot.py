@@ -3,7 +3,7 @@ import requests
 import json
 import praw
 
-credentials = json.load(open("reddit-key-bot-agent.json", "r"))
+credentials = json.load(open("credentials.json", "r"))
 
 reddit = praw.Reddit(
     client_id=credentials["client_id"],

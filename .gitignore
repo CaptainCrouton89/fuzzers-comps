@@ -142,4 +142,4 @@ data/network_saves/
 t*st.py
 
 # passwords
-key*.json
+credentials.json
