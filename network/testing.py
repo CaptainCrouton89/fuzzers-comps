@@ -61,7 +61,7 @@ class GreedySearchDecoder(nn.Module):
         all_tokens = torch.zeros([0], device=device, dtype=torch.long)
         all_scores = torch.zeros([0], device=device)
         # Iteratively decode one word token at a time
-        for _ in range(max_length):
+        for i in range(max_length):
             # Forward pass through decoder
             logging.debug(f"decoder input shape:{decoder_input.shape}")
             logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
@@ -87,8 +87,8 @@ class GreedySearchDecoder(nn.Module):
                 decoder_input, decoder_hidden, encoder_outputs)
 
             # Obtain most likely word tokens and their softmax scores
-            scores, indexs = torch.topk(decoder_output, self.top_n, dim=1)
-            r = self.pickIndex(scores, indexs, decoder_input)
+            scores, indexs = torch.topk(decoder_output, self.top_n+1, dim=1)
+            r = self.pickIndex(scores, indexs, decoder_input, i)
 
             decoder_score = torch.transpose(scores, 0, 1)[r]
             decoder_input = torch.transpose(indexs, 0, 1)[r]
@@ -107,9 +107,21 @@ class GreedySearchDecoder(nn.Module):
     Given an array of scores, randomly pick the assosciated index.
     Ensures you don't duplicate the previous token.
     '''
-    def pickIndex(self, scores, indexs, previous):
+    def pickIndex(self, scores, indexs, previous, length):
         probs = scores[0].tolist()
         opts = list(range(len(indexs[0])))
+
+        # Decrease chance to predict EOS early
+        if 2 in opts and length < 10:
+            probs[opts.index(2)] /= (10/(length+1))
+
+        # Remove least likely element
+        min, ind = 1, 0
+        for i in range(len(probs)):
+            if probs[i] < min:
+                min = probs[i]
+                ind = i
+        probs[ind] = 0
 
         probs = [p if p >= self.threshold else 0 for p in probs]
         if probs[0] == 0:
@@ -273,3 +285,5 @@ USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 if __name__ == "__main__":
     main()
+
+# %%
