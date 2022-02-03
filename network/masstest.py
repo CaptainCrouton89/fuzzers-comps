@@ -14,6 +14,7 @@ from function_mapping_handler import apply_mappings_testing, get_num_added_colum
 import testing
 import data_pipeline
 import gru_attention_network
+from utils import get_model_path
 
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
@@ -102,15 +103,15 @@ def main():
     # Initialize search module
     searcher = testing.GreedySearchDecoder(encoder, decoder, top_n, threshold)
 
-    _, pairs, category_indices = data_pipeline.load_prepare_data(config, use_processed=False)
-    pairs = random.sample(pairs, len(pairs)//50)
+    pairs = json.load(open(os.path.join(get_model_path(config, True), "test_data.json"), "r"))
+
+    f = open("response.txt", "w")
 
     pairs = [pair[0:1] + pair[2:] for pair in pairs]
-
-    f = open("mass_test_output.txt", "w+")
+    
     for pair in pairs:
         try:
-            output_words = testing.evaluate(encoder, decoder, searcher, voc, pair, max_length)
+            output_words = testing.evaluate(searcher, voc, pair, max_length)
 
             output_words[:] = [x for x in output_words if not (
                         x == 'EOS' or x == 'PAD')]

@@ -1,8 +1,11 @@
 import logging
 import pandas as pd
-import warnings
+import os
+import json
+from utils import get_model_path
 
 from function_mapping_handler import apply_mappings
+from function_mapping_handler import get_num_added_columns
 
 PAD_token = 0  # Used for padding short sentences
 SOS_token = 1  # Start-of-sentence token
@@ -177,5 +180,14 @@ def load_prepare_data(config, use_processed=True):
     all_words_counts.sort()
     min_count = all_words_counts[-10000] if len(all_words_counts)>10000 else 3
     pairs = trimRareWords(voc, pairs, min_count)
+
+    count = len(pairs)
+    train = pairs[:int(count * .9)]
+    test = pairs[int(count * .9):]
+
+    model_path = os.path.join(get_model_path(config, False), "test_data.json")
+
+    json.dump(test, open(model_path, 'w'))
+
     logging.info(f"Post-trim counted words: {voc.num_words}")
-    return voc, pairs, category_indices
+    return voc, train, category_indices

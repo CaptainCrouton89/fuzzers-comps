@@ -30,5 +30,3 @@ def init_logger(log_path, level, config_path):
 
     logging.basicConfig(
         handlers=[file_handler, stdout_handler])
-        
-    logging.info(f"Running pipeline with {config_path}")
