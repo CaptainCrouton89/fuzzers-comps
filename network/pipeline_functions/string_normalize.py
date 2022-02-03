@@ -15,7 +15,8 @@ def get_normal_string(dataFrame, inputColumn: str, learn, data_config, model_con
 def normalize_one_string(s):
     s = unicode_to_ascii(s.lower().strip())
     s = re.sub(r"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)", r' <url> ', s)
-    s = re.sub(r"([.!?])+", r" \1 ", s)
+    s = re.sub(r"([.!?])\1+", r" \1 ", s)
+    s = re.sub(r"([.!?])", r" \1 ", s) # no, this isn't redundant 
     s = re.sub(r"(\'s)", r" \1 ", s)
     s = re.sub(r"(n\'t)", r" \1 ", s)
     s = re.sub(r"(\'ll)", r" \1 ", s)
@@ -41,7 +42,8 @@ if __name__ == '__main__':
         "The dude's stuff was taken",
         "Wouldn't it be nice if they'd help they'll you're couldn't won't bobby's thing's stuff",
         ":Lk9827)*#&$T(!2l3j o2 p2oi3 hoPO*#H ;2j4i3 ;",
-        "Check my mom out @ www.thiccmoms.com "
+        "Check my mom out @ www.thiccmoms.com ",
+        "I !!!! love !!! my !!!??? punctuation ...???!!!"
     ]
 
     for string in strings:

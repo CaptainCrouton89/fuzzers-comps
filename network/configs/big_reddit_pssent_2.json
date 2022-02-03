@@ -1,22 +1,16 @@
 {
     "data": {
         "max_len": 50,
-        "data_path": "../data/reddit_data/small_reddit_df.ft",
+        "data_path": "../data/reddit_data/big_reddit_df.ft",
         "data_format": "ft",
-        "network_save_path": "../data/network_saves/testing_wc/",
+        "network_save_path": "../data/network_saves/big_reddit_pssent_2/",
         "corpus_name": "RedditComments",
         "model_name": "simple_attention_rnn",
         "encoder_inputs": [
             "parent_body"
         ],
-        "static_inputs2": [],
         "static_inputs": [
-            "gilded",
-            "score",
-            "parent_score",
-            "delay",
-            "edited"
-        ],
+            "parent_score"        ],
         "target": [
             "body"
         ],
@@ -24,12 +18,10 @@
             0,
             1,
             2,
-            3,
-            4,
+
             5,
-            6,
-            7,
-            8
+            6,8
+
         ]
     },
     "model": {
@@ -45,14 +37,14 @@
         "batch_size": 64
     },
     "training": {
-        "n_iteration": 25,
+        "n_iteration": 100000,
         "print_every": 1,
-        "save_every": 2,
-        "learning_stop_count": 100
+        "save_every": 500,
+        "learning_stop_count": 200
     },
     "testing": {
-        "checkpoint": "24_checkpoint.tar",
-        "top_n": 1,
-        "threshold": 0.5
+        "checkpoint": "72000_checkpoint.tar",
+        "top_n": 10,
+        "threshold":0.05
     }
 }

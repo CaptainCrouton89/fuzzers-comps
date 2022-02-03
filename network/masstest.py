@@ -105,7 +105,7 @@ def main():
 
     pairs = json.load(open(os.path.join(get_model_path(config, True), "test_data.json"), "r"))
 
-    f = open("response.txt", "w")
+    f = open(os.path.join(get_model_path(config, True), "responses.txt"), "w")
 
     pairs = [pair[0:1] + pair[2:] for pair in pairs]
     

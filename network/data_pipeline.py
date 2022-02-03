@@ -91,7 +91,7 @@ def trimRareWords(voc, pairs, MIN_COUNT):
         if keep_input and keep_output:
             keep_pairs.append(pair)
 
-    print("Trimmed from {} pairs to {}, {:.4f} of total".format(len(pairs), len(keep_pairs), len(keep_pairs) / len(pairs)))
+    logging.info("Trimmed from {} pairs to {}, {:.4f} of total".format(len(pairs), len(keep_pairs), len(keep_pairs) / len(pairs)))
     return keep_pairs
 
 '''
