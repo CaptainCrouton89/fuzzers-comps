@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 import os
 import json
+import random
 from utils import get_model_path
 
 from function_mapping_handler import apply_mappings
@@ -182,6 +183,7 @@ def load_prepare_data(config, use_processed=True):
     pairs = trimRareWords(voc, pairs, min_count)
 
     count = len(pairs)
+    random.shuffle(pairs)
     train = pairs[:int(count * .9)]
     test = pairs[int(count * .9):]
 

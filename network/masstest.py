@@ -105,20 +105,25 @@ def main():
 
     pairs = json.load(open(os.path.join(get_model_path(config, True), "test_data.json"), "r"))
 
-    f = open(os.path.join(get_model_path(config, True), "responses.txt"), "w")
+    f1 = open(os.path.join(get_model_path(config, True), "responses.txt"), "w")
+    f2 = open(os.path.join(get_model_path(config, True), "responsesWithInput.txt"), "w")
 
+    real_response = [pair[1] for pair in pairs]
     pairs = [pair[0:1] + pair[2:] for pair in pairs]
     
-    for pair in pairs:
+    for i, pair in enumerate(pairs):
         try:
             output_words = testing.evaluate(searcher, voc, pair, max_length)
 
             output_words[:] = [x for x in output_words if not (
                         x == 'EOS' or x == 'PAD')]
-            f.write(' '.join(output_words) + "\n")
+            f2.write("input: " + str(pair[0]) + "\n")
+            f1.write("response: " + ' '.join(output_words) + "\n")
+            f2.write("response: " + ' '.join(output_words) + "\n")
         except KeyError as e:
             print(f"Key {e} not found")
-    f.close()
+    f1.close()
+    f2.close()
 
 if __name__ == "__main__":
     main()
