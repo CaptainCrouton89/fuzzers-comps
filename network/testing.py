@@ -11,6 +11,7 @@ from pipeline_functions.string_normalize import normalize_one_string
 import random
 import pandas as pd
 from function_mapping_handler import apply_mappings_testing, get_num_added_columns
+import re
 
 # %%
 
@@ -113,7 +114,7 @@ class GreedySearchDecoder(nn.Module):
 
         # Decrease chance to predict EOS early
         if 2 in opts and length < 10:
-            probs[opts.index(2)] /= (10/(length+1))
+            probs[opts.index(2)] /= (100/(length+1))
 
         # Remove least likely element
         min, ind = 1, 0
@@ -136,7 +137,23 @@ class GreedySearchDecoder(nn.Module):
         return r
 
 
-def evaluate(searcher, voc, content, max_length):
+def denormalize(s):
+    s = re.sub(r" ([.!?])", r"\1", s)
+    s = re.sub(r" (\'s)", r"\1", s)
+    s = re.sub(r" (n\'t)", r"\1", s)
+    s = re.sub(r" (\'ll)", r"\1", s)
+    s = re.sub(r" (\'re)", r"\1", s)
+    s = re.sub(r" (\'d)", r"\1", s)
+    s = re.sub(r" i ", r"I ", s)
+
+    for c in '.!?':
+        temp = s.split(c+' ')
+        for i in range(len(temp)):
+            temp[i] = temp[i][0].upper() + temp[i][1:]
+        s = (c+' ').join(temp)
+    return s
+
+def evaluate(searcher, voc, content, max_length, do_denormalize=True):
     # Format input content as a batch
     # words -> indexes
     sentence = [indexesFromSentence(voc, content[0])]
@@ -162,7 +179,13 @@ def evaluate(searcher, voc, content, max_length):
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
     logging.debug(list(zip(tokens, decoded_words)))
-    return decoded_words
+
+    decoded_words[:] = [x for x in decoded_words if not (
+        x == 'EOS' or x == 'PAD')]
+    decoded_sentence = ' '.join(decoded_words)
+    if do_denormalize:
+        decoded_sentence = denormalize(decoded_sentence)
+    return decoded_sentence
 
 
 def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inputs):
@@ -188,11 +211,9 @@ def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inpu
             # Parse the sentence into a tuple representing the content and
 
             # Evaluate sentence
-            output_words = evaluate(searcher, voc, content, max_length)
+            response = evaluate(searcher, voc, content, max_length)
             # Format and print response sentence
-            output_words[:] = [x for x in output_words if not (
-                x == 'EOS' or x == 'PAD')]
-            print('Bot:', ' '.join(output_words))
+            print('Bot:', response)
 
         except KeyError as e:
             logging.warning(f"Error: Encountered unknown word {e}.")
