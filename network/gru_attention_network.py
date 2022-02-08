@@ -219,21 +219,21 @@ class LuongAttnDecoderRNN(nn.Module):
         self.attn = Attn(attn_model, hidden_size)
 
     def forward(self, input_step, last_hidden, encoder_outputs):
-        logging.debug(f"Hidden layer size: {last_hidden.size()}")
+        # logging.debug(f"Hidden layer size: {last_hidden.size()}")
         # Note: we run this one step (word) at a time
         # Get embedding of current input word
         embedded = self.embedding(input_step)
         embedded = self.embedding_dropout(embedded)
         # Forward through unidirectional GRU
-        logging.debug(f"Embedded layer size{embedded.size()}")
+        # logging.debug(f"Embedded layer size{embedded.size()}")
         # Maybe we add some zeros to the end of embedded
         if (self.meta_data_size > 0):
             embedded = torch.cat(
                 (embedded, torch.zeros(1, self.batchsize, self.meta_data_size).to(device)), 2)
-        logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
-        logging.debug(f"meta_data_size: {self.meta_data_size}")
-        logging.debug(f"embedded shape: {embedded.shape}")
-        logging.debug(f"last_hidden shape: {last_hidden.shape}")
+        # logging.debug(f"gru = {self.gru.input_size}, {self.gru.proj_size}, {self.gru.hidden_size}")
+        # logging.debug(f"meta_data_size: {self.meta_data_size}")
+        # logging.debug(f"embedded shape: {embedded.shape}")
+        # logging.debug(f"last_hidden shape: {last_hidden.shape}")
         rnn_output, hidden = self.gru(embedded, last_hidden)
         # Calculate attention weights from the current GRU output
         attn_weights = self.attn(rnn_output, encoder_outputs)
@@ -297,20 +297,20 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     decoder_input = torch.LongTensor([[SOS_token for _ in range(batch_size)]])
     decoder_input = decoder_input.to(device)
 
-    logging.debug(f"hidden layer size before meta_data [seq_len, batch_size, features]: {encoder_hidden.size()}")
+    # logging.debug(f"hidden layer size before meta_data [seq_len, batch_size, features]: {encoder_hidden.size()}")
     
     # Concatonating other embeddings to hidden layer
     meta_data_tensor = torch.FloatTensor(
         [[meta_data_list for meta_data_list in meta_data] for _ in range(4)])
 
-    logging.debug(f"hidden layer size [seq_len, batch_size, features]: {meta_data_tensor.size()}")
-    logging.debug(f"meta_data: {meta_data}")
-    logging.debug(f"meta_data_tensor size: {meta_data_tensor.size()}")
-    logging.debug(f"meta_data_tensor: {meta_data_tensor}")
-    logging.debug(f"encoder_hidden size: {encoder_hidden.size()}")
+    # logging.debug(f"hidden layer size [seq_len, batch_size, features]: {meta_data_tensor.size()}")
+    # logging.debug(f"meta_data: {meta_data}")
+    # logging.debug(f"meta_data_tensor size: {meta_data_tensor.size()}")
+    # logging.debug(f"meta_data_tensor: {meta_data_tensor}")
+    # logging.debug(f"encoder_hidden size: {encoder_hidden.size()}")
 
     first_hidden = torch.cat((encoder_hidden, meta_data_tensor.to(device)), 2)
-    logging.debug(f"first_hidden size [seq_len, batch_size, features]: {first_hidden.size()}")
+    # logging.debug(f"first_hidden size [seq_len, batch_size, features]: {first_hidden.size()}")
 
     # Set initial decoder hidden state to the encoder's final hidden state
     decoder_hidden = first_hidden[:decoder.n_layers]

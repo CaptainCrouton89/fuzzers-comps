@@ -42,21 +42,21 @@ class GreedySearchDecoder(nn.Module):
     '''
     def forward(self, input_seq, metadata, input_length, max_length):
         # Forward input through encoder model
-        logging.debug(f"input seq: {input_seq}")
-        logging.debug(f"metadata: {metadata}")
-        logging.debug(f"input length: {input_length}")
+        # logging.debug(f"input seq: {input_seq}")
+        # logging.debug(f"metadata: {metadata}")
+        # logging.debug(f"input length: {input_length}")
         encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
-        logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
-        logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
+        # logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
+        # logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
 
         # Prepare encoder's final hidden layer to be first hidden input to the decoder
         decoder_hidden = encoder_hidden[:self.decoder.n_layers]
-        logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+        # logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
 
         # Initialize decoder input with SOS_token
         decoder_input = torch.ones(
             1, 1, device=device, dtype=torch.long) * SOS_token
-        logging.debug(f"decoder input shape:{decoder_input.shape}")
+        # logging.debug(f"decoder input shape:{decoder_input.shape}")
 
         # Initialize tensors to append decoded words to
         all_tokens = torch.zeros([0], device=device, dtype=torch.long)
@@ -64,26 +64,26 @@ class GreedySearchDecoder(nn.Module):
         # Iteratively decode one word token at a time
         for i in range(max_length):
             # Forward pass through decoder
-            logging.debug(f"decoder input shape:{decoder_input.shape}")
-            logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
-            logging.debug(f"encoder output shape:{encoder_outputs.shape}")
+            # logging.debug(f"decoder input shape:{decoder_input.shape}")
+            # logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+            # logging.debug(f"encoder output shape:{encoder_outputs.shape}")
 
             # Create a tensor containing the meta data information
             # this next chunk definitely won't scale to other network sizes
             meta_data_tensor = torch.LongTensor(
                 [[[meta_data_list for meta_data_list in metadata]] for _ in range(2)])
             meta_data_tensor.to(device)
-            logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
-            logging.debug(f"decoder input shape:{decoder_input.shape}")
+            # logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
+            # logging.debug(f"decoder input shape:{decoder_input.shape}")
 
-            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            # logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
             decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
             decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             encoder_outputs = decoder_hidden
 
-            logging.debug(f"decoder_input shape:{decoder_input.shape}")
-            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
-            logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
+            # logging.debug(f"decoder_input shape:{decoder_input.shape}")
+            # logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            # logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
 
@@ -129,7 +129,7 @@ class GreedySearchDecoder(nn.Module):
             probs[0] = 1
 
         r = random.choices(opts, probs)[0]
-        logging.debug(indexs[0][r].item())
+        # logging.debug(indexs[0][r].item())
         if (indexs[0][r] == previous[0].item() and len(probs) != 1):
             probs[r] = 0
             r = random.choices(opts, probs)[0]
@@ -158,19 +158,19 @@ def evaluate(searcher, voc, content, max_length, do_denormalize=True):
     # words -> indexes
     sentence = [indexesFromSentence(voc, content[0])]
     metadata = list(map(int, content[1:]))
-    logging.debug(f"sentence: {sentence}")
-    logging.debug(f"metadata: {metadata}")
+    # logging.debug(f"sentence: {sentence}")
+    # logging.debug(f"metadata: {metadata}")
 
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in sentence])
     # Transpose dimensions of batch to match models' expectations
-    logging.debug(f"lengths: {lengths}")
-    logging.debug(f"sentence last: {sentence}")
+    # logging.debug(f"lengths: {lengths}")
+    # logging.debug(f"sentence last: {sentence}")
     input_batch = torch.LongTensor(sentence).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
-    logging.debug(f"input_batch : {input_batch}")
+    # logging.debug(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
 
 
@@ -178,7 +178,7 @@ def evaluate(searcher, voc, content, max_length, do_denormalize=True):
     tokens, _ = searcher.forward(input_batch, metadata, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
-    logging.debug(list(zip(tokens, decoded_words)))
+    # logging.debug(list(zip(tokens, decoded_words)))
 
     decoded_words[:] = [x for x in decoded_words if not (
         x == 'EOS' or x == 'PAD')]
