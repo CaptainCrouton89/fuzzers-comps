@@ -88,11 +88,8 @@ def main():
         attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
-
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
+    encoder.load_state_dict(encoder_sd, strict=False)
+    decoder.load_state_dict(decoder_sd, strict=False)
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)

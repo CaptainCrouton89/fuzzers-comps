@@ -71,13 +71,13 @@ class GreedySearchDecoder(nn.Module):
             # Create a tensor containing the meta data information
             # this next chunk definitely won't scale to other network sizes
             meta_data_tensor = torch.LongTensor(
-                [[[meta_data_list for meta_data_list in metadata]] for _ in range(2)])
+                [[[meta_data_list for meta_data_list in metadata]] for _ in range(self.decoder.n_layers)])
             meta_data_tensor.to(device)
             # logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
             # logging.debug(f"decoder input shape:{decoder_input.shape}")
 
             # logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
-            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
+            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, self.encoder.hidden_size)
             decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             encoder_outputs = decoder_hidden
 
@@ -138,18 +138,23 @@ class GreedySearchDecoder(nn.Module):
 
 
 def denormalize(s):
+    s = re.sub(r" i ", r" I ", s)
     s = re.sub(r" ([.!?])", r"\1", s)
     s = re.sub(r" (\'s)", r"\1", s)
     s = re.sub(r" (n\'t)", r"\1", s)
     s = re.sub(r" (\'ll)", r"\1", s)
     s = re.sub(r" (\'re)", r"\1", s)
     s = re.sub(r" (\'d)", r"\1", s)
-    s = re.sub(r" i ", r"I ", s)
 
     for c in '.!?':
         temp = s.split(c+' ')
         for i in range(len(temp)):
-            temp[i] = temp[i][0].upper() + temp[i][1:]
+            if len(temp[i]) == 0:
+                continue
+            elif len(temp[i]) == 1:
+                temp[i] = temp[i][0].upper()
+            else:
+                temp[i] = temp[i][0].upper() + temp[i][1:]
         s = (c+' ').join(temp)
     return s
 
@@ -284,11 +289,9 @@ def main():
         # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
+    encoder.load_state_dict(encoder_sd, strict=False)
+    decoder.load_state_dict(decoder_sd, strict=False)
 
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)
