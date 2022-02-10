@@ -11,6 +11,7 @@ from pipeline_functions.string_normalize import normalize_one_string
 import random
 import pandas as pd
 from function_mapping_handler import apply_mappings_testing, get_num_added_columns
+import re
 
 # %%
 
@@ -41,21 +42,21 @@ class GreedySearchDecoder(nn.Module):
     '''
     def forward(self, input_seq, metadata, input_length, max_length):
         # Forward input through encoder model
-        logging.debug(f"input seq: {input_seq}")
-        logging.debug(f"metadata: {metadata}")
-        logging.debug(f"input length: {input_length}")
+        # logging.debug(f"input seq: {input_seq}")
+        # logging.debug(f"metadata: {metadata}")
+        # logging.debug(f"input length: {input_length}")
         encoder_outputs, encoder_hidden = self.encoder(input_seq, input_length)
-        logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
-        logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
+        # logging.debug(f"encoder_output shape:{encoder_outputs.shape}")
+        # logging.debug(f"encoder_hidden shape:{encoder_hidden.shape}")
 
         # Prepare encoder's final hidden layer to be first hidden input to the decoder
         decoder_hidden = encoder_hidden[:self.decoder.n_layers]
-        logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+        # logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
 
         # Initialize decoder input with SOS_token
         decoder_input = torch.ones(
             1, 1, device=device, dtype=torch.long) * SOS_token
-        logging.debug(f"decoder input shape:{decoder_input.shape}")
+        # logging.debug(f"decoder input shape:{decoder_input.shape}")
 
         # Initialize tensors to append decoded words to
         all_tokens = torch.zeros([0], device=device, dtype=torch.long)
@@ -63,26 +64,26 @@ class GreedySearchDecoder(nn.Module):
         # Iteratively decode one word token at a time
         for i in range(max_length):
             # Forward pass through decoder
-            logging.debug(f"decoder input shape:{decoder_input.shape}")
-            logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
-            logging.debug(f"encoder output shape:{encoder_outputs.shape}")
+            # logging.debug(f"decoder input shape:{decoder_input.shape}")
+            # logging.debug(f"decoder hidden shape:{decoder_hidden.shape}")
+            # logging.debug(f"encoder output shape:{encoder_outputs.shape}")
 
             # Create a tensor containing the meta data information
             # this next chunk definitely won't scale to other network sizes
             meta_data_tensor = torch.LongTensor(
-                [[[meta_data_list for meta_data_list in metadata]] for _ in range(2)])
+                [[[meta_data_list for meta_data_list in metadata]] for _ in range(self.decoder.n_layers)])
             meta_data_tensor.to(device)
-            logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
-            logging.debug(f"decoder input shape:{decoder_input.shape}")
+            # logging.debug(f"meta_data_tensor shape:{meta_data_tensor.shape}")
+            # logging.debug(f"decoder input shape:{decoder_input.shape}")
 
-            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
-            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, 500)
+            # logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            decoder_hidden = torch.narrow(decoder_hidden, 2, 0, self.encoder.hidden_size)
             decoder_hidden = torch.cat((decoder_hidden, meta_data_tensor), 2)
             encoder_outputs = decoder_hidden
 
-            logging.debug(f"decoder_input shape:{decoder_input.shape}")
-            logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
-            logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
+            # logging.debug(f"decoder_input shape:{decoder_input.shape}")
+            # logging.debug(f"decoder_hidden shape:{decoder_hidden.shape}")
+            # logging.debug(f"encoder_outputs shape:{encoder_outputs.shape}")
             decoder_output, decoder_hidden = self.decoder(
                 decoder_input, decoder_hidden, encoder_outputs)
 
@@ -113,7 +114,7 @@ class GreedySearchDecoder(nn.Module):
 
         # Decrease chance to predict EOS early
         if 2 in opts and length < 10:
-            probs[opts.index(2)] /= (10/(length+1))
+            probs[opts.index(2)] /= (100/(length+1))
 
         # Remove least likely element
         min, ind = 1, 0
@@ -128,7 +129,7 @@ class GreedySearchDecoder(nn.Module):
             probs[0] = 1
 
         r = random.choices(opts, probs)[0]
-        logging.debug(indexs[0][r].item())
+        # logging.debug(indexs[0][r].item())
         if (indexs[0][r] == previous[0].item() and len(probs) != 1):
             probs[r] = 0
             r = random.choices(opts, probs)[0]
@@ -136,24 +137,45 @@ class GreedySearchDecoder(nn.Module):
         return r
 
 
-def evaluate(searcher, voc, content, max_length):
+def denormalize(s):
+    s = re.sub(r" i ", r" I ", s)
+    s = re.sub(r" ([.!?])", r"\1", s)
+    s = re.sub(r" (\'s)", r"\1", s)
+    s = re.sub(r" (n\'t)", r"\1", s)
+    s = re.sub(r" (\'ll)", r"\1", s)
+    s = re.sub(r" (\'re)", r"\1", s)
+    s = re.sub(r" (\'d)", r"\1", s)
+
+    for c in '.!?':
+        temp = s.split(c+' ')
+        for i in range(len(temp)):
+            if len(temp[i]) == 0:
+                continue
+            elif len(temp[i]) == 1:
+                temp[i] = temp[i][0].upper()
+            else:
+                temp[i] = temp[i][0].upper() + temp[i][1:]
+        s = (c+' ').join(temp)
+    return s
+
+def evaluate(searcher, voc, content, max_length, do_denormalize=True):
     # Format input content as a batch
     # words -> indexes
     sentence = [indexesFromSentence(voc, content[0])]
     metadata = list(map(int, content[1:]))
-    logging.debug(f"sentence: {sentence}")
-    logging.debug(f"metadata: {metadata}")
+    # logging.debug(f"sentence: {sentence}")
+    # logging.debug(f"metadata: {metadata}")
 
 
     # Create lengths tensor
     lengths = torch.tensor([len(indexes) for indexes in sentence])
     # Transpose dimensions of batch to match models' expectations
-    logging.debug(f"lengths: {lengths}")
-    logging.debug(f"sentence last: {sentence}")
+    # logging.debug(f"lengths: {lengths}")
+    # logging.debug(f"sentence last: {sentence}")
     input_batch = torch.LongTensor(sentence).transpose(0, 1)
     # Use appropriate device
     input_batch = input_batch.to(device)
-    logging.debug(f"input_batch : {input_batch}")
+    # logging.debug(f"input_batch : {input_batch}")
     lengths = lengths.to("cpu")
 
 
@@ -161,8 +183,14 @@ def evaluate(searcher, voc, content, max_length):
     tokens, _ = searcher.forward(input_batch, metadata, lengths, max_length)
     # indexes -> words
     decoded_words = [voc.index2word[token.item()] for token in tokens]
-    logging.debug(list(zip(tokens, decoded_words)))
-    return decoded_words
+    # logging.debug(list(zip(tokens, decoded_words)))
+
+    decoded_words[:] = [x for x in decoded_words if not (
+        x == 'EOS' or x == 'PAD')]
+    decoded_sentence = ' '.join(decoded_words)
+    if do_denormalize:
+        decoded_sentence = denormalize(decoded_sentence)
+    return decoded_sentence
 
 
 def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inputs):
@@ -188,11 +216,9 @@ def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inpu
             # Parse the sentence into a tuple representing the content and
 
             # Evaluate sentence
-            output_words = evaluate(searcher, voc, content, max_length)
+            response = evaluate(searcher, voc, content, max_length)
             # Format and print response sentence
-            output_words[:] = [x for x in output_words if not (
-                x == 'EOS' or x == 'PAD')]
-            print('Bot:', ' '.join(output_words))
+            print('Bot:', response)
 
         except KeyError as e:
             logging.warning(f"Error: Encountered unknown word {e}.")
@@ -263,11 +289,9 @@ def main():
         # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
+    encoder.load_state_dict(encoder_sd, strict=False)
+    decoder.load_state_dict(decoder_sd, strict=False)
 
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)

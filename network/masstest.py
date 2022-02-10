@@ -88,11 +88,8 @@ def main():
         attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
-
-    encoder.load_state_dict(encoder_sd)
-    decoder.load_state_dict(decoder_sd)
+    encoder.load_state_dict(encoder_sd, strict=False)
+    decoder.load_state_dict(decoder_sd, strict=False)
     # Use appropriate device
     encoder = encoder.to(device)
     decoder = decoder.to(device)
@@ -110,16 +107,14 @@ def main():
 
     real_response = [pair[1] for pair in pairs]
     pairs = [pair[0:1] + pair[2:] for pair in pairs]
-    
+
     for i, pair in enumerate(pairs):
         try:
-            output_words = testing.evaluate(searcher, voc, pair, max_length)
+            response = testing.evaluate(searcher, voc, pair, max_length)
 
-            output_words[:] = [x for x in output_words if not (
-                        x == 'EOS' or x == 'PAD')]
             f2.write("input: " + str(pair[0]) + "\n")
-            f1.write("response: " + ' '.join(output_words) + "\n")
-            f2.write("response: " + ' '.join(output_words) + "\n")
+            f1.write("response: " + response + "\n")
+            f2.write("response: " + response + "\n")
         except KeyError as e:
             print(f"Key {e} not found")
     f1.close()

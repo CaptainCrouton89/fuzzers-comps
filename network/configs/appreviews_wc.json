@@ -33,13 +33,14 @@
         "batch_size": 64
     },
     "training": {
-        "n_iteration": 8000,
+        "n_iteration": 100000,
         "print_every": 1,
         "save_every": 500,
         "learning_stop_count": 200
     },
     "testing": {
         "checkpoint": "8000_checkpoint.tar",
-        "top_n": 1
+        "top_n": 1,
+        "threshold": 0.05
     }
 }

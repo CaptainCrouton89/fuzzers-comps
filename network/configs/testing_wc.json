@@ -24,23 +24,23 @@
     "model": {
         "attn_model": "dot",
         "hidden_size": 500,
-        "encoder_n_layers": 2,
-        "decoder_n_layers": 2,
+        "encoder_n_layers": 10,
+        "decoder_n_layers": 10,
         "dropout": 0.1,
         "clip": 50.0,
         "teacher_forcing_ratio": 0.5,
         "learning_rate": 0.0001,
         "decoder_learning_ratio": 5.0,
-        "batch_size": 64
+        "batch_size": 1024
     },
     "training": {
-        "n_iteration": 25,
+        "n_iteration": 10,
         "print_every": 1,
         "save_every": 2,
         "learning_stop_count": 100
     },
     "testing": {
-        "checkpoint": "25_checkpoint.tar",
+        "checkpoint": "2_checkpoint.tar",
         "top_n": 1,
         "threshold": 0.5
     }

@@ -10,6 +10,7 @@ from torch import optim
 import data_pipeline
 import gru_attention_network
 from custom_logger import init_logger
+from utils import get_model_path
 from pipeline_functions.sentiment_analysis import get_sentiment
 from pipeline_functions.reddit_replace import replace_user_and_subreddit
 from pipeline_functions.normalize import get_normal
@@ -110,6 +111,7 @@ def main():
     data_config = config["data"]
     model_config = config["model"]
     corpus = data_config["corpus_name"]
+    logging.info(f"Using {device}.")
 
     # initialize logger
 
@@ -117,7 +119,8 @@ def main():
                 args.loglevel, config_path=config)
 
     # Build file save path
-    os.makedirs(data_config["network_save_path"], exist_ok=True)
+    # os.makedirs(data_config["network_save_path"], exist_ok=True)
+    os.makedirs(get_model_path(config, True), exist_ok=True)
 
     # Build data pairs
     vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, use_processed=False)
