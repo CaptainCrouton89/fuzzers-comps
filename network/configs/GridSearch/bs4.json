@@ -5,7 +5,7 @@
         "data_format": "ft",
         "network_save_path": "../data/network_saves/gridsearch/",
         "corpus_name": "RedditComments",
-        "model_name": "bs16",
+        "model_name": "bs4",
         "encoder_inputs": [
             "parent_body"
         ],
@@ -43,7 +43,7 @@
         "learning_stop_count": 200000
     },
     "testing": {
-        "checkpoint": "6500_checkpoint.tar",
+        "checkpoint": "160000_checkpoint.tar",
         "top_n": 5,
         "threshold": 0.05
     }
