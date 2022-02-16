@@ -22,6 +22,7 @@ def normalize_one_string(s):
     s = re.sub(r"(\'ll)", r" \1 ", s)
     s = re.sub(r"(\'re)", r" \1 ", s)
     s = re.sub(r"(\'d)", r" \1 ", s)
+    s = re.sub(r"(\'ve)", r" \1 ", s)
     s = re.sub(r"[^a-zA-Z.!?><']+", r" ", s)
     s = re.sub(r"\s+", r" ", s).strip()
     return s
