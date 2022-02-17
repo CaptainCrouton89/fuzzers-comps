@@ -13,7 +13,7 @@ from custom_logger import init_logger
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN
 from data_pipeline import Voc
 from function_mapping_handler import get_num_added_columns
-from utils import get_model_path
+from pipeline_functions.sentiment_analysis import get_sentiment_single_input
 
 credentials = json.load(open("credentials.json", "r"))
 reddit = praw.Reddit(
@@ -44,14 +44,9 @@ def get_best_comment_at_index(submission, i):
     # Fetch the comments and print each comment body
     print(submission.comments)
     # This must be done _after_ the above lines or they won't take affect.
-    return print(redditcleaner.clean(submission.comments[0].body))
+    return submission.comments[0]
     
 def main():
-    comment = get_best_comment_at_index(new_posts_from_subreddit_at_index("pics", 20), 2)
-    print(comment)
-
-
-def main2():
     parser = argparse.ArgumentParser(
         description='Enables testing of neural network.')
     parser.add_argument("-c", "--config",
@@ -135,16 +130,23 @@ def main2():
     # Initialize search module
     searcher = testing.GreedySearchDecoder(encoder, decoder, top_n, threshold)
 
+    # Get 2nd highest comment from 20th most recent post on subreddit
     comment = get_best_comment_at_index(new_posts_from_subreddit_at_index("pics", 20), 2)
+    cleaned_comment = redditcleaner.clean(comment.body)
     
-    # pair = [comment, sent]
+    sent = get_sentiment_single_input(cleaned_comment)
 
-   
-    output_words = testing.evaluate(searcher, voc, pair, max_length)
+    response = testing.evaluate(searcher, voc, [cleaned_comment, sent], max_length)
 
-    output_words[:] = [x for x in output_words if not (
+    response[:] = [x for x in response if not (
                 x == 'EOS' or x == 'PAD')]
     
+    # Post response
+    response += "\n\nI am a bot trained using a recurrent neural network on many gigabytes of 2015 reddit comment history. If you have any questions or concerns, please shoot me a DM!"
+    comment.reply(response)
 
+    print("Input:", cleaned_comment)
+    print("Response:", response)
+    
 if __name__ == "__main__":
     main()

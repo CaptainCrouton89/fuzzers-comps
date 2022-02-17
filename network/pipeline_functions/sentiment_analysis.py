@@ -10,3 +10,8 @@ def get_sentiment(dataFrame, inputColumn: str, learn, data_config, model_config)
             'compound']
         sentiment_list.append(nltk_result)
     return pandas.Series(sentiment_list), None
+
+def get_sentiment_single_input(inString):
+    sentiment_analyzer_nltk = nltk.sentiment.SentimentIntensityAnalyzer()
+    return sentiment_analyzer_nltk.polarity_scores(inString)[
+            'compound']

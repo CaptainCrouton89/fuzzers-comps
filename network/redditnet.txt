@@ -1,5 +1,0 @@
-redditnet
-
-- Train on top responses
-- Take top 20% of replies
-- Maybe filter only to top 80% of comments on thread
