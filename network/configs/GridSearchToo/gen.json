@@ -1,0 +1,50 @@
+{
+    "data": {
+        "max_len": 50,
+        "data_path": "../data/reddit_data/small_reddit_df.ft",
+        "data_format": "ft",
+        "network_save_path": "../data/network_saves/gridsearch2/",
+        "corpus_name": "RedditComments",
+        "model_name": "gen",
+        "encoder_inputs": [
+            "parent_body"
+        ],
+        "static_inputs": [
+            "parent_score"
+        ],
+        "target": [
+            "body"
+        ],
+        "function_indices": [
+            0,
+            1,
+            2,
+            5,
+            6,
+            8
+        ]
+    },
+    "model": {
+        "attn_model": "general",
+        "hidden_size": 500,
+        "encoder_n_layers": 2,
+        "decoder_n_layers": 2,
+        "dropout": 0.1,
+        "clip": 50.0,
+        "teacher_forcing_ratio": 0.95,
+        "learning_rate": 0.0001,
+        "decoder_learning_ratio": 5.0,
+        "batch_size": 64
+    },
+    "training": {
+        "n_iteration": 10000,
+        "print_every": 100,
+        "save_every": 5000,
+        "learning_stop_count": 100000
+    },
+    "testing": {
+        "checkpoint": "10000_checkpoint.tar",
+        "top_n": 5,
+        "threshold": 0.05
+    }
+}

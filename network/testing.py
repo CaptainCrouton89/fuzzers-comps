@@ -277,8 +277,8 @@ def main():
         checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 
     voc = Voc(corpus_name)
-    encoder_sd = checkpoint['encoder']
-    decoder_sd = checkpoint['decoder']
+    encoder_sd = checkpoint['encoder'] # change to 'en' for old_app
+    decoder_sd = checkpoint['decoder'] # change to 'de' for old_app
     embedding_sd = checkpoint['embedding']
     voc.__dict__ = checkpoint['voc_dict']
 
@@ -289,8 +289,8 @@ def main():
         # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
-    encoder.load_state_dict(encoder_sd, strict=False)
-    decoder.load_state_dict(decoder_sd, strict=False)
+    encoder.load_state_dict(encoder_sd)
+    decoder.load_state_dict(decoder_sd)
 
     # Use appropriate device
     encoder = encoder.to(device)
