@@ -38,6 +38,7 @@
     },
     "testing": {
         "checkpoint": "checkpoint",
-        "top_n": "how many to pick from when decoding"
+        "top_n": "how many to pick from when decoding",
+        "threshold": "min value to consider"
     }
 }
