@@ -181,6 +181,7 @@ def load_prepare_data(config, use_processed=True):
     all_words_counts.sort()
     min_count = all_words_counts[-10000] if len(all_words_counts)>10000 else 3
     pairs = trimRareWords(voc, pairs, min_count)
+    df.to_feather(path)
 
     count = len(pairs)
     random.shuffle(pairs)
