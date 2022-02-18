@@ -103,6 +103,9 @@ def main():
     parser.add_argument("-l", "--loglevel",
                         help="Level at which to log events.",
                         default="INFO")
+    parser.add_argument("-p", '--processed',
+                        help="whether or not using processed data. True if this is a repeat run of previous model.",
+                        default=False)
     args = parser.parse_args()
 
     # Get Configs
@@ -121,9 +124,8 @@ def main():
     # Build file save path
     # os.makedirs(data_config["network_save_path"], exist_ok=True)
     os.makedirs(get_model_path(config, True), exist_ok=True)
-
     # Build data pairs
-    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, use_processed=False)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, args.processed)
 
     # Build network
     create_network(config, vocab, pairs, category_indices)

@@ -122,15 +122,13 @@ Loads, prepares, (and processes) data as per the config.
 Pairs is a misnomer - a single 'pair' includes input, output, and metadata.
 returns: voc, pairs, category_indices
 '''
-def load_prepare_data(config, use_processed=True):
-    if False: # make this true
+def load_prepare_data(config, use_processed):
+    if not use_processed:
         data_config = config['data']
         logging.info("Start preparing training data ...")
 
         format = data_config["data_format"]
         path = data_config["data_path"]
-        if use_processed:
-            path.replace(f".{format}", f"_processed.{format}")
 
         if format == "ft":
             df = pd.read_feather(path)
@@ -140,17 +138,10 @@ def load_prepare_data(config, use_processed=True):
         df = preprocess(df, data_config)
 
         # Process data and add additional columns, if necessary
-        if not use_processed:
-            # Mappings are defined in function_mapping_handler.py
-            added_cols = apply_mappings(df, config)
-            for col, cat in added_cols:
-                data_config[cat].append(col)
-            # Save file to <path>_processed for future use
-            path = path.replace(f".{format}", f"_processed.{format}")
-            if format == "ft":
-                df.to_feather(path)
-            elif format == "json":
-                df.to_json(path, orient="split")
+        # Mappings are defined in function_mapping_handler.py
+        added_cols = apply_mappings(df, config)
+        for col, cat in added_cols:
+            data_config[cat].append(col)
 
         pairs = df.to_numpy().tolist()
         logging.info("Read {!s} sentence pairs".format(len(pairs)))
@@ -159,7 +150,10 @@ def load_prepare_data(config, use_processed=True):
                             "target": [df.columns.get_loc(col_name) for col_name in data_config["target"]],
                             "static_inputs": [df.columns.get_loc(col_name) for col_name in data_config["static_inputs"]]
                             }
-        print(category_indices)
+
+        cat_ind_path = os.path.join(get_model_path(config, False), "category_indices.json")
+        json.dump(category_indices, open(cat_ind_path, "w"))
+
         pairs = filterPairs(
             pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
         logging.info("Trimmed to {!s} sentence pairs".format(len(pairs)))
@@ -173,39 +167,45 @@ def load_prepare_data(config, use_processed=True):
         # Add all text from input and output columns
         for pair in pairs:
             # Likely only a single input column: `parent_body`
-            for col in [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]]:
+            for col in category_indices["encoder_inputs"]:
                 voc.addSentence(pair[col])
             # Likely only a single output column: `body`
-            for col in [df.columns.get_loc(col_name) for col_name in data_config["target"]]:
+            for col in category_indices["target"]:
                 voc.addSentence(pair[col])
         logging.info(f"Pre-trim counted words: {voc.num_words}")
         all_words_counts = list(voc.word2count.values())
         all_words_counts.sort()
         min_count = all_words_counts[-10000] if len(all_words_counts)>10000 else 3
         pairs = trimRareWords(voc, pairs, min_count)
+        logging.info(f"Post-trim counted words: {voc.num_words}")
+
+        # Save processed and trimmed data to pickle for future use
         pickle.dump(pairs, open(path + '.pkl', "wb"))
     else:  
         data_config = config['data']
         path = data_config["data_path"]
-        print(path)
-        path = path.replace(f".ft", f"_processed.ft.pkl")
-        print(path)
+        path = path.replace(f".ft", f".ft.pkl")
         pairs = pickle.load(open(path, "rb"))
+
+        cat_ind_path = os.path.join(get_model_path(config, True), "category_indices.json")
+        category_indices = json.load(open(cat_ind_path, "r"))
 
         voc = Voc(data_config["corpus_name"])
         for pair in pairs:
-            voc.addSentence(pair[0])
-            voc.addSentence(pair[1])
+            # Likely only a single input column: `parent_body`
+            for col in category_indices["encoder_inputs"]:
+                voc.addSentence(pair[col])
+            # Likely only a single output column: `body`
+            for col in category_indices["target"]:
+                voc.addSentence(pair[col])
 
+    count = len(pairs)
+    random.shuffle(pairs)
+    train = pairs[:int(count * .9)]
+    test = pairs[int(count * .9):]
 
-        count = len(pairs)
-        random.shuffle(pairs)
-        train = pairs[:int(count * .9)]
-        test = pairs[int(count * .9):]
+    model_path = os.path.join(get_model_path(config, use_processed), "test_data.json")
 
-        model_path = os.path.join(get_model_path(config, True), "test_data.json")
+    json.dump(test, open(model_path, 'w'))
 
-        json.dump(test, open(model_path, 'w'))
-
-        logging.info(f"Post-trim counted words: {voc.num_words}")
-        return voc, train, {'encoder_inputs': [0], 'target': [1], 'static_inputs': [2]}
+    return voc, train, category_indices
