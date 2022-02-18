@@ -301,7 +301,7 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, meta_d
     
     # Concatonating other embeddings to hidden layer
     meta_data_tensor = torch.FloatTensor(
-        [[meta_data_list for meta_data_list in meta_data] for _ in range(2*encoder.n_layers)])
+        [[meta_data_list for meta_data_list in meta_data] for _ in range(2*encoder.n_layers)]).to(device)
 
     # logging.debug(f"hidden layer size [seq_len, batch_size, features]: {meta_data_tensor.size()}")
     # logging.debug(f"meta_data: {meta_data}")
