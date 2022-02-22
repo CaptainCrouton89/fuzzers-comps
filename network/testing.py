@@ -201,6 +201,9 @@ def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inpu
             # Check if it is quit case
             if content == 'q' or content == 'quit':
                 break
+            elif content == 'clear':
+                os.system('cls' if os.name == 'nt' else 'clear')
+                continue
             content = [normalize_one_string(content)]
 
             for field in static_inputs:
