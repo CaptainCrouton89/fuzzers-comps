@@ -34,7 +34,7 @@
         "batch_size": 4
     },
     "training": {
-        "n_iteration": 2,
+        "n_iteration": 300,
         "print_every": 1,
         "save_every": 2,
         "learning_stop_count": 100

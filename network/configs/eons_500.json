@@ -3,28 +3,25 @@
         "max_len": 50,
         "data_path": "../data/reddit_data/big_reddit_goth_df.ft",
         "data_format": "ft",
-        "network_save_path": "../data/network_saves/gridsearch2/",
+        "network_save_path": "../data/network_saves/",
         "corpus_name": "RedditComments",
-        "model_name": "big_reddit_1000",
+        "model_name": "eons_500",
         "encoder_inputs": [
             "parent_body"
         ],
         "static_inputs": [
+            "parent_score"
         ],
         "target": [
             "body"
         ],
         "function_indices": [
-            0,
-            1,
-            2,
-            5,
-            6
+            0, 1, 2, 5, 6, 8
         ]
     },
     "model": {
         "attn_model": "dot",
-        "hidden_size": 1000,
+        "hidden_size": 500,
         "encoder_n_layers": 2,
         "decoder_n_layers": 2,
         "dropout": 0.1,
@@ -32,7 +29,7 @@
         "teacher_forcing_ratio": 0.95,
         "learning_rate": 0.0001,
         "decoder_learning_ratio": 5.0,
-        "batch_size": 512
+        "batch_size": 64
     },
     "training": {
         "n_iteration": 200000,

@@ -1,19 +1,24 @@
 import json
+
+import pandas
 import praw
 import redditcleaner
 import logging
 import json
 import os
 import argparse
+from sqlalchemy import null
 import torch
 from torch import nn
 import sys
 import testing
 from custom_logger import init_logger
 from gru_attention_network import EncoderRNN, LuongAttnDecoderRNN
-from data_pipeline import Voc
+from data_pipeline import Voc, filterPairs, preprocess
 from function_mapping_handler import get_num_added_columns
 from pipeline_functions.sentiment_analysis import get_sentiment_single_input
+from pipeline_functions.string_normalize import normalize_one_string
+from function_mapping_handler import apply_mappings
 
 credentials = json.load(open("credentials.json", "r"))
 reddit = praw.Reddit(
@@ -26,6 +31,7 @@ reddit = praw.Reddit(
 
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
+
 
 def new_posts_from_subreddit_at_index(sub_name, i):
     # This assumes you have a global "reddit" object.
@@ -45,8 +51,9 @@ def get_best_comment_at_index(submission, i):
     print(submission.comments)
     # This must be done _after_ the above lines or they won't take affect.
     return submission.comments[0]
-    
-def main():
+
+
+def main(config=None, subreddit="pics"):
     parser = argparse.ArgumentParser(
         description='Enables testing of neural network.')
     parser.add_argument("-c", "--config",
@@ -57,8 +64,9 @@ def main():
                         default="INFO")
     args = parser.parse_args()
 
-    with open(str(args.config)) as f:
-        config = json.load(f)
+    if not config:
+        with open(str(args.config)) as f:
+            config = json.load(f)
 
     test_config = config['testing']
     data_config = config['data']
@@ -73,7 +81,6 @@ def main():
 
     meta_data_size = len(static_inputs)
     meta_data_size += get_num_added_columns(data_config)
-
 
     checkpoint = test_config['checkpoint']
     top_n = test_config['top_n']
@@ -90,8 +97,8 @@ def main():
     model_path = os.path.join(
         network_save_path, model_name, corpus_name, model_features, checkpoint)
 
-
-    init_logger(os.path.join("logs", "testing", corpus_name), args.loglevel, args.config)
+    init_logger(os.path.join("logs", "testing", corpus_name),
+                args.loglevel, args.config)
     logging.debug(f"Using model at {model_path}")
     # If loading on same machine the model was trained on
     if torch.cuda.is_available():
@@ -112,7 +119,7 @@ def main():
     embedding = nn.Embedding(voc.num_words, hidden_size)
     encoder = EncoderRNN(hidden_size, embedding, encoder_n_layers, dropout)
     decoder = LuongAttnDecoderRNN(
-        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size) # We use batchsize of 1 since we are testing only one item
+        attn_model, embedding, hidden_size, voc.num_words, decoder_n_layers, 1, dropout, meta_data_size)  # We use batchsize of 1 since we are testing only one item
 
     embedding.load_state_dict(embedding_sd)
     encoder.load_state_dict(encoder_sd)
@@ -131,22 +138,38 @@ def main():
     searcher = testing.GreedySearchDecoder(encoder, decoder, top_n, threshold)
 
     # Get 2nd highest comment from 20th most recent post on subreddit
-    comment = get_best_comment_at_index(new_posts_from_subreddit_at_index("pics", 20), 2)
+    comment = get_best_comment_at_index(
+        new_posts_from_subreddit_at_index(subreddit, 40), 2)
     cleaned_comment = redditcleaner.clean(comment.body)
-    
+    print("Input:", cleaned_comment)
+
+    # df = pandas.DataFrame(
+    #     {"parent_body": [cleaned_comment], "body": ["body text that meets the requirements of having lots of characters?"], "parent_score": [0]})
+    # df = preprocess(df, data_config)
+    # added_cols = apply_mappings(df, config)
+    # for col, cat in added_cols:
+    #     data_config[cat].append(col)
+    # pairs = df.to_numpy().tolist()
+    # category_indices = {"encoder_inputs": [df.columns.get_loc(col_name) for col_name in data_config["encoder_inputs"]],
+    #                     "target": [df.columns.get_loc(col_name) for col_name in data_config["target"]],
+    #                     "static_inputs": [df.columns.get_loc(col_name) for col_name in data_config["static_inputs"]]
+    #                     }
+    # pairs = filterPairs(
+    #     pairs, data_config["max_len"], category_indices["encoder_inputs"] + category_indices["target"])
+
+    cleaned_comment = normalize_one_string(cleaned_comment)
     sent = get_sentiment_single_input(cleaned_comment)
+    pair = [cleaned_comment, sent, 0.6]
+    print(pair)
 
-    response = testing.evaluate(searcher, voc, [cleaned_comment, sent], max_length)
+    response = testing.evaluate(
+        searcher, voc, pair, max_length)
 
-    response[:] = [x for x in response if not (
-                x == 'EOS' or x == 'PAD')]
-    
+    print("Response:", response)
     # Post response
     response += "\n\nI am a bot trained using a recurrent neural network on many gigabytes of 2015 reddit comment history. If you have any questions or concerns, please shoot me a DM!"
     comment.reply(response)
 
-    print("Input:", cleaned_comment)
-    print("Response:", response)
-    
+
 if __name__ == "__main__":
     main()

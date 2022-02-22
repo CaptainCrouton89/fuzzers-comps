@@ -99,7 +99,8 @@ def main():
     parser = argparse.ArgumentParser(
         description='Enables testing of neural network.')
     parser.add_argument("-c", "--config",
-                        help="config file for network_deployable. Should correspond to model.")
+                        help="config file for network_deployable. Should correspond to model.",
+                        default='configs/testing_wc.json')
     parser.add_argument("-l", "--loglevel",
                         help="Level at which to log events.",
                         default="INFO")
