@@ -114,7 +114,7 @@ class GreedySearchDecoder(nn.Module):
 
         # Decrease chance to predict EOS early
         if 2 in opts and length < 10:
-            probs[opts.index(2)] /= (100/(length+1))
+            probs[opts.index(2)] /= (10/(length+1))
 
         # Remove least likely element
         min, ind = 1, 0
@@ -213,7 +213,7 @@ def evaluateInput(config, searcher, voc, max_length, static_inputs, encoder_inpu
             data_df.loc[0] = content
             logging.debug(f"data_df:\n{data_df}")
             _ = apply_mappings_testing(data_df, config)
-            logging.info(f"data_df after mappings:\n{data_df}")
+            # logging.info(f"data_df after mappings:\n{data_df}")
             content = data_df.values.tolist()[0]
             logging.debug(f"content:\n{content}")
             # Parse the sentence into a tuple representing the content and

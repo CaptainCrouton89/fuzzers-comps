@@ -107,8 +107,11 @@ def main():
     parser.add_argument("-p", '--processed',
                         help="whether or not using processed data. True if this is a repeat run of previous model.",
                         default=False)
+    parser.add_argument("-r", '--resume',
+                        help="load from a previous checkpoint.",
+                        default=0)
     args = parser.parse_args()
-
+    
     # Get Configs
     with open(args.config) as f:
         config = json.load(f)
@@ -126,7 +129,7 @@ def main():
     # os.makedirs(data_config["network_save_path"], exist_ok=True)
     os.makedirs(get_model_path(config, True), exist_ok=True)
     # Build data pairs
-    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, args.processed)
+    vocab, pairs, category_indices = data_pipeline.load_prepare_data(config, args.processed, args.resume)
 
     # Build network
     create_network(config, vocab, pairs, category_indices)

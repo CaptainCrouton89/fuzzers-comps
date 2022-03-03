@@ -5,6 +5,7 @@ import json
 import random
 from utils import get_model_path
 import pickle
+import torch
 
 from function_mapping_handler import apply_mappings
 from function_mapping_handler import get_num_added_columns
@@ -122,7 +123,24 @@ Loads, prepares, (and processes) data as per the config.
 Pairs is a misnomer - a single 'pair' includes input, output, and metadata.
 returns: voc, pairs, category_indices
 '''
-def load_prepare_data(config, use_processed):
+def load_prepare_data(config, use_processed, resume):
+
+    resume = 0 # not implemented yet
+    # Set checkpoint to load from; set to None if starting from scratch
+    if not resume:
+        loadFilename = os.path.join(get_model_path(config, False), '{}_checkpoint.tar'.format(resume))
+
+        # If loading on same machine the model was trained on
+        checkpoint = torch.load(loadFilename)
+        # If loading a model trained on GPU to CPU
+        #checkpoint = torch.load(loadFilename, map_location=torch.device('cpu'))
+        encoder_sd = checkpoint['en']
+        decoder_sd = checkpoint['de']
+        encoder_optimizer_sd = checkpoint['en_opt']
+        decoder_optimizer_sd = checkpoint['de_opt']
+        embedding_sd = checkpoint['embedding']
+        voc.__dict__ = checkpoint['voc_dict']
+
     if not use_processed:
         data_config = config['data']
         logging.info("Start preparing training data ...")
@@ -201,7 +219,7 @@ def load_prepare_data(config, use_processed):
 
     count = len(pairs)
     random.shuffle(pairs)
-    train = pairs[:int(count * .9)]
+    train = pairs[:int(count * .9)] # 90/10 split out test data
     test = pairs[int(count * .9):]
 
     model_path = os.path.join(get_model_path(config, use_processed), "test_data.json")

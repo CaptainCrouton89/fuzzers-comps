@@ -9,5 +9,4 @@ def replace_user_and_subreddit(dataFrame, inputColumn: str, learn, data_config, 
     url_regex = '\[(.*?)\]\(.*?\)'
     result = series.map(lambda x: re.sub(subreddit_regex, '<subreddit>', re.sub(
         user_regex, '<user>', re.sub(url_regex, r'\1', x))))
-    print(result.head())
     return pd.Series(result), None

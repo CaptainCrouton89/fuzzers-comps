@@ -5,7 +5,7 @@
         "data_format": "ft",
         "network_save_path": "../data/network_saves/",
         "corpus_name": "RedditComments",
-        "model_name": "eons_500",
+        "model_name": "eons_normal",
         "encoder_inputs": [
             "parent_body"
         ],
