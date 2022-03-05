@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Building a Conversatoinal Bot Using a Novel Neural Network Architecture</title>
+
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="styles.css?v=1.0">
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="headerText">
+            <h1>
+                Building a Conversational Bot Using a Novel Neural Network Architecture
+            </h1>
+            <h2>
+                Soren DeHaan, Elliot Heyman, Silas Rhyneer, Carl Tankersley
+            </h2>
+        </div>
+    </div>
+    <div class="body">
+        <h2>
+            Introduction
+        </h2>
+        <p>
+            Our journey started with a single <a href="https://xin-xia.github.io/publication/ase193.pdf">paper</a>. Thespecific idea that had us intrigued was the concept of adding metadata into a recurrent neural network. Recurrent neural networks are relatively easy to create, but what would be a good example of a recurrent neural network that would benefit by adding extra information to them?
+        </p>
+        <h2>
+            App Reviews with the Basic Architecture
+        </h2>
+        <p>
+            Our first goal after selecting a paper was to get a basic neural network up and running, which we were able to do relatively quickly and easily with a <a href="https://pytorch.org/tutorials/beginner/chatbot_tutorial.html">tutorial</a> that we found. By following that and modifying it a bit to get it working with our app review and developer response data set, we were able to get a basic proof of concept network running relatively quickly. However, while the network worked fine in a technical sense, we weren't getting the quality and variety of results that we wanted. We noticed that the vast majority of the developer responses that we were training our network on were just copied and pasted templates, so our network was only learning to reproduce these templates. We realized that we needed another data set that had more variety.
+        </p>
+        <h2>
+            Scaling to Reddit
+        </h2>
+        <p>
+            Since we had terrible data coming from our app reviews, we decided to switch to a bigger dataset—all of Reddit's comment history from 2015. With bigger data came new issues. We had to compress files, write new functions to normalize the data, and clean our data in new ways. With all of this new complexity, we realized we needed a better pipeline for our network so that we could just point our network at some data and have it run. We put together a template for config files, and made our code much more robust, so that we only had to alter a few values in a JSON file to change the behavior of our network.
+        </p>
+        <h2>
+            Including Metadata
+        </h2>
+        <p>
+            With a larger dataset and no more errors, we could begin working on including metadata. There were several ways we could have included this data in our network, but we settled on concatenating it to every hidden layer in the network as the decoder iterated forward. That way the data was always accessible, and never faded. Although thischanged over the course of the project, we eventually only included sentiment analysis and upvotes our training data.
+        </p>
+        <h2>
+            Improving Performance
+        </h2>
+        <p>
+            Now that the neural network was technically functional, the next step was to make it better. This mainlyconsisted of hyperparameter tuning. The hyperparameter we found to have the biggest impact was the teacher forcing ratio. The data we trained on (Reddit) had multiple 'correct' responses for each input, which by default led to the network constructing some amalgamation of these correct responses which never looked good. Increasing the teacher forcing ratio helped the network recognize multiple 'correct' responses.
+        </p>
+        <h2>
+            Results
+        </h2>
+        <p>
+            <a href="responsesWithInput.txt">Here</a> is a demo of our bot's hypothetical response to about 9,000 reddit comments. Comments labeled as “input” come from randomly selected reddit comments, and comments labeled as “response” are our bot's response to the input above it. The comments have no relation to each other. Disclaimer: these sample responses are not representative of our beliefs; they're just what the bot has learned from Reddit.
+        </p>
+        <h2>
+            Github Repo
+        </h2>
+        <p>
+            <a href="https://github.com/CaptainCrouton89/fuzzers-comps">Link to repository</a>
+        </p>
+    </div>
+</body>
+
+
+</html>
